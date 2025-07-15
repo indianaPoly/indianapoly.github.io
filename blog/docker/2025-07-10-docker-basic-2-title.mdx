@@ -1,0 +1,52 @@
+---
+title: Docker Basic(2)
+authors: [hyeonlim]
+tags: [TIL, Docker]
+---
+
+cloudwave 6기 수업에서 들은 내용을 정리한 글입니다.
+
+### Docker Network
+
+네트워크를 사용하는 이유는 Data 송수신 및 접근 제어를 하기 위함입니다.
+
+```
+docker network create [OPTIONS] NETWORK
+```
+
+주요 옵션에는 --driver(-d), --label이 있습니다.
+
+--driver의 종류
+
+- bridge : 동일한 host 컴퓨터 내에서 컨테이너끼리 통신하기 위해서 사용을 합니다
+- host : 컨테이너가 host와 동일한 네트워크를 사용합니다. (인스턴스 별로 한개만 생성)
+- none
+
+```bash
+docker network connect [OPTIONS] NETWORK CONTAINER
+```
+
+주요 옵션에는 --alias, --ip가 있습니다.
+--alias는 네트워크 alias를 추가하는 것으로 일종의 추상화입니다.
+
+네트워크 연결을 제거하기 위해서는 `disconnect`를 쓰고, 삭제를 하기 위해서는 `rm`을 사용합니다. 모든 네트워크를 삭제하기 위해서는 `prune`을 사용합니다.
+
+### buildx
+
+동일한 기능에 다른 아키텍처를 빌드하기 위해서 사용합니다.
+
+**Multi-platform용 builder 생성**
+
+플랫폼 옵션을 통해서 이미지를 빌드할 수 있는 빌더를 생성할 수 있습니다.
+
+```bash
+docker buildx create --driver docker-container --name multi-builder --platform linux/amd64,linux/arm64
+```
+
+**이미지 빌드하기**
+
+플랫폼 옵션을 활용하여 각 아키텍처에 맞는 이미지를 제작할 수 있습니다.
+
+```bash
+docker buildx build --platform linux/amd64,linux/arm64 -t <이름태그 설정> .
+```

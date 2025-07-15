@@ -1,0 +1,80 @@
+---
+title: Docker Basic(1)
+authors: [hyeonlim]
+tags: [TIL, Docker]
+---
+
+cloudwave 6기 수업에서 들은 내용을 정리한 글입니다.
+
+> [Docker DOCS](https://docs.docker.com/manuals/)
+
+### Docker를 사용하는 이유
+
+도커를 활용하는 이유는 크게 보면 서비스의 추상화입니다. HOST 환경과 서비스를 격리 시킴으로서
+
+1. 서비스를 편하게 사용할 수 있습니다.
+
+2. 격자의 역할로 이들을 조립하여 새로운 결과물을 만들 수 있습니다.
+
+이와 같은 이점이 있어 도커를 사용합니다.
+
+### Dockerfile
+
+```Dockerfile
+# BASE_IMAGE에 @를 활용한 tag를 지정하지 않으면 latest를 사용합니다.
+# FROM은 기본적으로 한 번만 사용이 되는데 2번 이상 사용에 대해서는 아래에서 설명을 하겠습니다.
+FROM BASE_IMAGE
+
+# 컨테이너 내의 working directory를 변경합니다.
+WORKDIR <경로>
+
+# 포트를 외부로 노출을 합니다.
+EXPOSE <포트번호>
+
+# ADD의 경우에는 github과 같은 RemotePath가 가능합니다.
+# 넣고자 하는 파일: 상대 경로
+# 컨테이너 내 경로 : 절대 경로 사용
+ADD <넣고자하는 파일의 경로> <컨테이너 내 경로>
+COPY <넣고자하는 파일의 경로> <컨테이너 내 경로>
+
+# 이미지를 빌드하는 과정에 명령어를 실행
+RUN <명령어>
+
+# CMD 같은 경우에는 docker run시 변경이 가능하지만 ENTRYPOINT는 변경이 불가능하다.
+CMD <명령어 정의>
+ENTRYPOINT <필수 실행 명령어>
+```
+
+- 이미지에서는 tag와 digest를 사용할 수 있습니다. tag의 경우에는 시점에 따라서 이미지가 상이할 수 있습니다. 하지만 digest는 완전히 고정이 되어있습니다.
+
+- 통용되진 않지만 **ARG와 같은 명령어를 제외**한다면 한줄의 도커 파일 명령어 한 줄마다 레이어가 되며, 레이어드르인 기본적으로 Read Only 상태를 가지게 됩니다.
+
+  > ARG 값을 Application 내부에서 사용을 하지 않기 때문에 굳이 Layer로 만들 필요가 없습니다.
+
+- 레이어의 최상단에는 **container layer**가 존재하는데 해당 레이어는 Read Write 상태를 가지게 됩니다. 컨테이너가 삭제가 된다면 container layer 역시 삭제가 됩니다.
+
+### Dockerfile 이미지 생성
+
+> docker build 시에 -f 로 Dockerfile을 지정해주지 않으면 기본적으론 Dockerfile을 사용합니다.
+
+Dockerfile의 목적은 이미지를 만드는 것입니다.
+
+### Multi Stage
+
+아래 예시는 golang을 image를 활용하여 Go application을 컴파일을 진행합니다. 그리고 위의 결과물을 Scratch 이미지로 가져와 Scratch를 실행합니다.
+
+```Dockerfile
+FROM golang:1.19-alpine as build
+WORKDIR /app
+COPY src ./
+RUN CGO_ENABLED=0 go build -o main
+
+FROM scratch as release
+COPY --from=build /app/main /app/
+WORKDIR /app
+CMD ["/app/main"]
+```
+
+첫 번째로 사용된 FROM은 임시로 쓰이고 버려집니다. --from을 활용해서 첫 번째 FROM의 결과물을 넣을 수 있습니다. 이렇게 실행을 하게되면 alpine보다 scratch 이미지의 크기가 작다는 이점이 존재합니다.
+
+Production 환경에서는 보안성 증대 및 이미지 경량화를 위해 사용하는 경우가 많이 있습니다.

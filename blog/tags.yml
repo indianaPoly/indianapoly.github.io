@@ -1,0 +1,14 @@
+til:
+  label: TIL
+  permalink: /til
+  description: Today I Lean
+
+docker:
+  label: Docker
+  permalink: /docker
+  description: docker
+
+kubernetes:
+  label: Kubernetes
+  permalink: /kubernetes
+  description: kubernetes

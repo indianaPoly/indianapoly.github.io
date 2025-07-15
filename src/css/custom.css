@@ -1,0 +1,22 @@
+:root {
+  --ifm-color-primary: #8b5e3c; /* 브라운 */
+  --ifm-color-primary-dark: #7a4f30; /* 어두운 브라운 */
+  --ifm-color-primary-darker: #6b442b; /* 더 어두운 브라운 */
+  --ifm-color-primary-darkest: #593623; /* 가장 어두운 브라운 */
+  --ifm-color-primary-light: #9a6a44; /* 밝은 브라운 */
+  --ifm-color-primary-lighter: #a8764e; /* 더 밝은 브라운 */
+  --ifm-color-primary-lightest: #c48c5f; /* 가장 밝은 브라운 */
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] {
+  --ifm-color-primary: #d2a679; /* 연한 브라운 */
+  --ifm-color-primary-dark: #c4976a;
+  --ifm-color-primary-darker: #b6855a;
+  --ifm-color-primary-darkest: #9c6d45;
+  --ifm-color-primary-light: #e1b68a;
+  --ifm-color-primary-lighter: #eac59d;
+  --ifm-color-primary-lightest: #f4d7b0;
+  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.1);
+}
