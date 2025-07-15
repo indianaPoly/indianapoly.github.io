@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="rss.xsl"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>KO HYEON LIM Blog</title>
+        <link>https://indianapoly.github.io/blog</link>
+        <description>KO HYEON LIM Blog</description>
+        <lastBuildDate>Tue, 15 Jul 2025 00:00:00 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <language>ko</language>
+        <item>
+            <title><![CDATA[kubernetes-basic (1)]]></title>
+            <link>https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title</link>
+            <guid>https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title</guid>
+            <pubDate>Tue, 15 Jul 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[Deployment]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="deployment">Deployment<a href="https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title#deployment" class="hash-link" aria-label="Deployment에 대한 직접 링크" title="Deployment에 대한 직접 링크">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="1-recreate-재가동-방식-v1--v2">1. RECREATE (재가동 방식: v1 → v2)<a href="https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title#1-recreate-%EC%9E%AC%EA%B0%80%EB%8F%99-%EB%B0%A9%EC%8B%9D-v1--v2" class="hash-link" aria-label="1. RECREATE (재가동 방식: v1 → v2)에 대한 직접 링크" title="1. RECREATE (재가동 방식: v1 → v2)에 대한 직접 링크">​</a></h3>
+<p>특징: 서비스 중단 발생</p>
+<p>장점: 설정이 쉬움</p>
+<p>비고: 현업에서 가장 흔히 사용되며, 서비스 중단을 감수해야 하는 방식</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="2-ramped-rolling-update">2. RAMPED (Rolling Update)<a href="https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title#2-ramped-rolling-update" class="hash-link" aria-label="2. RAMPED (Rolling Update)에 대한 직접 링크" title="2. RAMPED (Rolling Update)에 대한 직접 링크">​</a></h3>
+<p>특징: 순차적으로 연결 시도 → 무중단 서비스 제공</p>
+<p>설정 방법:</p>
+<div class="language-yml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-yml codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">type</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> RollingUpdate</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">maxSurge</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> 예) 1 → replicas + maxSurge 만큼 pod 생성 가능</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">maxUnavailable</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> 예) 1 → replicas 중 동시에 중단 가능한 pod 수</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">⇒ 위 2개의 옵션을 통해서 재가동 속도를 제어할 수 있음</span><br></span></code></pre></div></div>
+<p>추가 설정<!-- -->:Sticky<!-- --> session: 버전 간 이동 방지</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="3-blue--green-배포">3. Blue / Green 배포<a href="https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title#3-blue--green-%EB%B0%B0%ED%8F%AC" class="hash-link" aria-label="3. Blue / Green 배포에 대한 직접 링크" title="3. Blue / Green 배포에 대한 직접 링크">​</a></h3>
+<p>특징: selector의 버전 변경으로 전체 교체</p>
+<p>사용 목적:개발 버전을 운영에 바로 반영해야 하는 상황</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="4-canary-배포">4. Canary 배포<a href="https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title#4-canary-%EB%B0%B0%ED%8F%AC" class="hash-link" aria-label="4. Canary 배포에 대한 직접 링크" title="4. Canary 배포에 대한 직접 링크">​</a></h3>
+<p>특징: ramped와 유사하지만, 일부 트래픽으로 먼저 안정성 검증 후 전체 이전</p>
+<p>설정: replicas: 9(v1), 1(v2) 설정, RouteRule의 route → weight 설정으로 손쉽게 설정 가능</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="5-ab-테스트">5. A/B 테스트<a href="https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title#5-ab-%ED%85%8C%EC%8A%A4%ED%8A%B8" class="hash-link" aria-label="5. A/B 테스트에 대한 직접 링크" title="5. A/B 테스트에 대한 직접 링크">​</a></h3>
+<p>특징 : header, cookie 기반으로 사용자 그룹 분리</p>
+<p>사용 목적: UI나 기능 개선의 효과를 확인하고자 할 때 (새로운 UI가 구매율을 높이는지 확인)</p>
+<p>설정: match에 header 조건 추가</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="6-shadow-트래픽-미러링">6. Shadow 트래픽 (미러링)<a href="https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title#6-shadow-%ED%8A%B8%EB%9E%98%ED%94%BD-%EB%AF%B8%EB%9F%AC%EB%A7%81" class="hash-link" aria-label="6. Shadow 트래픽 (미러링)에 대한 직접 링크" title="6. Shadow 트래픽 (미러링)에 대한 직접 링크">​</a></h3>
+<p>사용 목적: 기존 성능 개선을 위해 (예시 : Monolith → Microservice 구조 전환 시 유용)</p>
+<p>설정: mirror 설정으로 실제 요청을 복제하여 테스트 환경으로 전달</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="service">Service<a href="https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title#service" class="hash-link" aria-label="Service에 대한 직접 링크" title="Service에 대한 직접 링크">​</a></h2>
+<p>쿠버네티스의 서비스는 기본적으로 네트워크이다. (물리적인 것이 아니다.)</p>
+<p>(쿠버네티스의 pod가 죽고 다른 노드로 이동하면 IP가 변동이되는데, 쿠버네티스 안에는 규칙 기반의 DNS 서버스가 있다.)</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="cluster-ip">cluster IP<a href="https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title#cluster-ip" class="hash-link" aria-label="cluster IP에 대한 직접 링크" title="cluster IP에 대한 직접 링크">​</a></h3>
+<p>디폴트 서비스, layer4 =&gt; 내부에만 접속이 가능하다.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="node-port">Node Port<a href="https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title#node-port" class="hash-link" aria-label="Node Port에 대한 직접 링크" title="Node Port에 대한 직접 링크">​</a></h3>
+<p>트래픽이 오면 노드의 특정 포트에 도착하고, 클러스터 IP로 가고 이를 분기 시킨다.</p>
+<ul>
+<li>개발자들이 확인하기 위해서 주로 사용하고 웬만하면 사용하지 않는다.</li>
+<li>노드를 만드는 이유는?<!-- -->
+<ul>
+<li>트래픽이 몰리는 것을 반응하기 위함이다.</li>
+<li>어떤 노드에 규칙을 적용해서 작업하기 위함이다.</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="load-balancer">Load Balancer<a href="https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title#load-balancer" class="hash-link" aria-label="Load Balancer에 대한 직접 링크" title="Load Balancer에 대한 직접 링크">​</a></h3>
+<p>트래픽이 들어오면 나놈. cluster ip와 다른 점은 cluster ip는 내부에 있고 로드밸런서는 외부에 위치해있다.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ingress">Ingress<a href="https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title#ingress" class="hash-link" aria-label="Ingress에 대한 직접 링크" title="Ingress에 대한 직접 링크">​</a></h3>
+<p>외부에 위치에 있음. 로드 밸런서와의 차이점은 로드 밸런서는 layer4이고 Ingress는 layer7이다. (layer1~layer7까지 확인을 해볼 수 있다.)</p>
+<p>사용자가 xxx.xxx.xxx.com이 접속을 하면
+igw를 통해 ingress(퍼블릭 도메인이 자동 활동, ALB, NLB)에 들어오고 k8s 서비스에 접속이 된다. 첫 번째 껍데기는 replicaset 두 번째 껍데기는 deployment
+ingress만 생성하는 것이 아니라 내부 서비스를 생성해야 통신이 된다.</p>
+<p>쿠버네티스 안에 LB controller가 ingress를 생성하고, 상태를 감시한다. 그리고 삭제도 해준다.</p>
+<ul>
+<li>ingress를 삭제하고 테라폼을 삭제하는 것이 더 빠르다. ingress는 외부 서비스이기 때문이다.</li>
+</ul>
+<p>✅ <strong>왜 ELB IP가 3개 나오는가?</strong></p>
+<img src="https://indianapoly.github.io/img/blog/kubernetes/2025-07-15/img1.png" alt="설명" width="600">
+<p>AWS에서 Network Load Balancer(NLB)는 <strong>서브넷이 존재하는 모든 가용영역(AZ)</strong> 에 <strong>자동으로
+IP를 할당</strong>합니다. 이는 고가용성(High Availability)을 보장하기 위한 기본 동작이다.</p>
+<ol>
+<li>서울 리전(<code>ap-northeast-2</code>)에서 VPC 생성</li>
+</ol>
+<ul>
+<li>아래와 같이 <strong>3개의 프라이빗 서브넷 생성</strong>:</li>
+</ul>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">variable "private_subnet_cidrs" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  type = map(string)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  default = {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    a = "10.1.4.0/24"  // ap-northeast-2a (8층)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    b = "10.1.5.0/24"  // ap-northeast-2b (9층)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    c = "10.1.6.0/24"  // ap-northeast-2c (10층)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<ol start="2">
+<li>EKS 클러스터 생성</li>
+</ol>
+<p><img src="https://indianapoly.github.io/img/blog/kubernetes/2025-07-15/img2.png" alt="설명" width="600">-</p>
+<p>EKS클러스터를 생성하면 노드 그룹을 구성 - 노드는 2개에만 배치가 된다.</p>
+<ol start="3">
+<li>Ingress 생성</li>
+</ol>
+<ul>
+<li>Ingress 리소서를 생성을 하면 AWS에서 NLB 자동 생성</li>
+<li>NLB는 연결된 서브넷에 있는 모든 AZ에 IP를 할당</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="headless-service">Headless service<a href="https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title#headless-service" class="hash-link" aria-label="Headless service에 대한 직접 링크" title="Headless service에 대한 직접 링크">​</a></h3>
+<p>아래와 같이 설정을 하면 headless service가 된다.</p>
+<div class="language-yml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-yml codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">clusterIP</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> None</span><br></span></code></pre></div></div>
+<p>Headless를 하면 pod로 가는게 아니라 pod의 backend의 IP주소를 준다.</p>
+<p>어디에 쓰는지? 왜 쓰는지?
+분산형 데이터 저장 서비스(DB, Messeage Queue, InMemory DB)</p>
+<ol>
+<li>클라이언트 연결</li>
+<li>몇 개가 살아있는지 확인하기 위해서</li>
+<li><strong>특정 노드의 데이터를 확인해야할 때 -&gt; 이게 핵심</strong></li>
+</ol>
+<p>분산형 데이터베이스 (Cassandra, Mongo, Redis)에 저장이 될 때 데이터를 저장하기 위해서는 Hash Algorithm을 쓴다. 이 때 노드에 저장을 하기 위해서는 노드의 정보를 알야아하는데 어를 때 노드의 정보를 반환하기 위해서 Headless를 이용한다.</p>
+<ul>
+<li>Hash Algorithm을 사용할 때 Node의 갯수가 약 10 이상의 소수인 경우에 even하게 값이 분산이 되는 것을 확인할 수 있다.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="volume">volume<a href="https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title#volume" class="hash-link" aria-label="volume에 대한 직접 링크" title="volume에 대한 직접 링크">​</a></h3>
+<p>docker image layer에 hash 값이 있는 이유는 ?</p>
+<p>가상 머신의 디스크를 쓰게 된다면, 하나만 수정해도 전체가 변경이 된다. 이 때 docker 의 layer를 생각을 하면 캐시를 할 수 있다는 점이다. 따라서 변경이 되면 해시 값이 바뀜으로 인해서 변경 사항을 파악 가능하다.</p>
+<p>컨테이너가 종료된다면? 다 사라짐.
+-&gt; 컨테이너가 종료되어도 데이터를 유지할 수 있는 방법은 외부 디스크 볼륨을 마운트 하는 것입니다.</p>
+<ul>
+<li>
+<p>EmptyDir: Pod가 종료되면 영구적으로 삭제됩니다. (즉 Pod와 동일한 LifeCycle을 가지게 됩니다.) --&gt; 그런데 왜 쓸까요? 대규모 기반 정렬 작업, Pod 내의 컨테이너 간 파일 교환, 복구를 위한 임시파일 보관하기 위해서 사용을 합니다.</p>
+</li>
+<li>
+<p>HostPath: pod가 종료되어도 상태가 유지가 됩니다. 다만 Pod는 항상 다른 노드로 이동 가능성이 존재하기 때문에 에러가 날 수 있다는 문제가 있습니다.</p>
+</li>
+<li>
+<p>persistent volume(PV)</p>
+<ul>
+<li>block disk (노트북 c drive) : 동시에 읽을 수는 있지만, 쓸 수 없습니다. | 순서가 제일 빠릅니다.</li>
+<li>network file disk(systme) = NFS : 여러 사용자가 접근하여 동시에 쓸 수 있고, 읽을 수 있습니다. | 2순위</li>
+<li>object dist (aws S3) : 3순위 =&gt; 대규모 작업은 여기서 진행을 합니다. 왜 그럴까요? Append only, 파일을 열어서 수정할 수 없습니다. =&gt; 왜 그럴까요? 분산 작업에 유리하기 때문입니다. (연산 중에 변경을 하면 처음부터 다시 해야하는데, 이런 작업을 애초에 닫아버립니다.)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="실습">실습<a href="https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title#%EC%8B%A4%EC%8A%B5" class="hash-link" aria-label="실습에 대한 직접 링크" title="실습에 대한 직접 링크">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="1-httpd-배포--이미지-업데이트--롤백--삭제">1. HTTPD 배포 → 이미지 업데이트 → 롤백 → 삭제<a href="https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title#1-httpd-%EB%B0%B0%ED%8F%AC--%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%97%85%EB%8D%B0%EC%9D%B4%ED%8A%B8--%EB%A1%A4%EB%B0%B1--%EC%82%AD%EC%A0%9C" class="hash-link" aria-label="1. HTTPD 배포 → 이미지 업데이트 → 롤백 → 삭제에 대한 직접 링크" title="1. HTTPD 배포 → 이미지 업데이트 → 롤백 → 삭제에 대한 직접 링크">​</a></h3>
+<p>아래 파일 통해서 httpd를 설치한다.</p>
+<div class="language-yml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-yml codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">apiVersion</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> apps/v1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">kind</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> Deployment</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">metadata</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> httpd</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">deployment</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">labels</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">app</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> httpd</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">spec</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">replicas</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">selector</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">matchLabels</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">app</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> httpd</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">template</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">metadata</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">labels</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token key atrule" style="color:#00a4db">app</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> httpd</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">spec</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">containers</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> httpd</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">          </span><span class="token key atrule" style="color:#00a4db">image</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> httpd</span><span class="token punctuation" style="color:#393A34">:</span><span class="token number" style="color:#36acaa">2.4</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">          </span><span class="token key atrule" style="color:#00a4db">ports</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">containerPort</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">80</span><br></span></code></pre></div></div>
+<p><strong>1. Deployment</strong></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">kubectl apply -f ./deploy-practice.yml</span><br></span></code></pre></div></div>
+<ul>
+<li>httpd-deployment 라는 이름의 deployment가 생성이 된다.</li>
+<li>POD는 기본 설정에 따라서 적용이 된다.</li>
+</ul>
+<p><strong>2. 변경 사유(Revision 1) 주석(Annotation) 추가</strong></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">kubectl annotate deploy httpd-deployment kubernetes.io/change-cause="first"</span><br></span></code></pre></div></div>
+<ul>
+<li>기록에 "first"라는 설명을 추가한다.</li>
+<li>rollout history 에 Revision 1로 기록이 된다.</li>
+</ul>
+<p><strong>3. 이미지 업데이트 및 변경 사유 등록 (Revision 2)</strong></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">kubectl set image deploy httpd-deployment httpd=httpd:latest</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">kubectl annotate deploy httpd-deployment kubernetes.io/change-cause="update latest"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span></code></pre></div></div>
+<ul>
+<li>httpd 컨터이너의 이미지가 httpd<!-- -->:latest<!-- -->로 업데이트가 된다.</li>
+<li>update latest 로 주석 추가가 된다.</li>
+</ul>
+<p><strong>4. 롤아웃 상태 확인 및 파드 확인</strong></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">kubectl rollout status deploy httpd-deployment</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">kubectl get pods -l app=httpd</span><br></span></code></pre></div></div>
+<ul>
+<li>파드가 정상적으로 배포가 된다.</li>
+</ul>
+<p><strong>5. Scale out</strong></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">kubectl scale deploy httpd-deployment --replicas=5</span><br></span></code></pre></div></div>
+<ul>
+<li>레플리카 수가 5개로 증가가 된다. 기존에서 2개 추가가 된다.</li>
+</ul>
+<p><strong>6. Rollback</strong></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">kubectl rollout undo deploy httpd-deployment</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">kubectl annotate deploy httpd-deployment kubernetes.io/change-cause="rollback"</span><br></span></code></pre></div></div>
+<ul>
+<li>이전 비전으로 롤백이 진행이 된다.</li>
+<li>롤백 사유는 rollback으로 기록</li>
+</ul>]]></content:encoded>
+            <category>TIL</category>
+            <category>Kubernetes</category>
+        </item>
+        <item>
+            <title><![CDATA[Docker Basic(1)]]></title>
+            <link>https://indianapoly.github.io/blog/2025/07/14/docker/docker-basic-1-title</link>
+            <guid>https://indianapoly.github.io/blog/2025/07/14/docker/docker-basic-1-title</guid>
+            <pubDate>Mon, 14 Jul 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[cloudwave 6기 수업에서 들은 내용을 정리한 글입니다.]]></description>
+            <content:encoded><![CDATA[<p>cloudwave 6기 수업에서 들은 내용을 정리한 글입니다.</p>
+<blockquote>
+<p><a href="https://docs.docker.com/manuals/" target="_blank" rel="noopener noreferrer">Docker DOCS</a></p>
+</blockquote>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="docker를-사용하는-이유">Docker를 사용하는 이유<a href="https://indianapoly.github.io/blog/2025/07/14/docker/docker-basic-1-title#docker%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-%EC%9D%B4%EC%9C%A0" class="hash-link" aria-label="Docker를 사용하는 이유에 대한 직접 링크" title="Docker를 사용하는 이유에 대한 직접 링크">​</a></h3>
+<p>도커를 활용하는 이유는 크게 보면 서비스의 추상화입니다. HOST 환경과 서비스를 격리 시킴으로서</p>
+<ol>
+<li>
+<p>서비스를 편하게 사용할 수 있습니다.</p>
+</li>
+<li>
+<p>격자의 역할로 이들을 조립하여 새로운 결과물을 만들 수 있습니다.</p>
+</li>
+</ol>
+<p>이와 같은 이점이 있어 도커를 사용합니다.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="dockerfile">Dockerfile<a href="https://indianapoly.github.io/blog/2025/07/14/docker/docker-basic-1-title#dockerfile" class="hash-link" aria-label="Dockerfile에 대한 직접 링크" title="Dockerfile에 대한 직접 링크">​</a></h3>
+<div class="language-Dockerfile language-dockerfile codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-dockerfile codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># BASE_IMAGE에 @를 활용한 tag를 지정하지 않으면 latest를 사용합니다.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># FROM은 기본적으로 한 번만 사용이 되는데 2번 이상 사용에 대해서는 아래에서 설명을 하겠습니다.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">FROM BASE_IMAGE</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 컨테이너 내의 working directory를 변경합니다.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">WORKDIR &lt;경로&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 포트를 외부로 노출을 합니다.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">EXPOSE &lt;포트번호&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># ADD의 경우에는 github과 같은 RemotePath가 가능합니다.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 넣고자 하는 파일: 상대 경로</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 컨테이너 내 경로 : 절대 경로 사용</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ADD &lt;넣고자하는 파일의 경로&gt; &lt;컨테이너 내 경로&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">COPY &lt;넣고자하는 파일의 경로&gt; &lt;컨테이너 내 경로&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 이미지를 빌드하는 과정에 명령어를 실행</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">RUN &lt;명령어&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># CMD 같은 경우에는 docker run시 변경이 가능하지만 ENTRYPOINT는 변경이 불가능하다.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">CMD &lt;명령어 정의&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ENTRYPOINT &lt;필수 실행 명령어&gt;</span><br></span></code></pre></div></div>
+<ul>
+<li>
+<p>이미지에서는 tag와 digest를 사용할 수 있습니다. tag의 경우에는 시점에 따라서 이미지가 상이할 수 있습니다. 하지만 digest는 완전히 고정이 되어있습니다.</p>
+</li>
+<li>
+<p>통용되진 않지만 <strong>ARG와 같은 명령어를 제외</strong>한다면 한줄의 도커 파일 명령어 한 줄마다 레이어가 되며, 레이어드르인 기본적으로 Read Only 상태를 가지게 됩니다.</p>
+<blockquote>
+<p>ARG 값을 Application 내부에서 사용을 하지 않기 때문에 굳이 Layer로 만들 필요가 없습니다.</p>
+</blockquote>
+</li>
+<li>
+<p>레이어의 최상단에는 <strong>container layer</strong>가 존재하는데 해당 레이어는 Read Write 상태를 가지게 됩니다. 컨테이너가 삭제가 된다면 container layer 역시 삭제가 됩니다.</p>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="dockerfile-이미지-생성">Dockerfile 이미지 생성<a href="https://indianapoly.github.io/blog/2025/07/14/docker/docker-basic-1-title#dockerfile-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%83%9D%EC%84%B1" class="hash-link" aria-label="Dockerfile 이미지 생성에 대한 직접 링크" title="Dockerfile 이미지 생성에 대한 직접 링크">​</a></h3>
+<blockquote>
+<p>docker build 시에 -f 로 Dockerfile을 지정해주지 않으면 기본적으론 Dockerfile을 사용합니다.</p>
+</blockquote>
+<p>Dockerfile의 목적은 이미지를 만드는 것입니다.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="multi-stage">Multi Stage<a href="https://indianapoly.github.io/blog/2025/07/14/docker/docker-basic-1-title#multi-stage" class="hash-link" aria-label="Multi Stage에 대한 직접 링크" title="Multi Stage에 대한 직접 링크">​</a></h3>
+<p>아래 예시는 golang을 image를 활용하여 Go application을 컴파일을 진행합니다. 그리고 위의 결과물을 Scratch 이미지로 가져와 Scratch를 실행합니다.</p>
+<div class="language-Dockerfile language-dockerfile codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-dockerfile codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">FROM golang:1.19-alpine as build</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">WORKDIR /app</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">COPY src ./</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">RUN CGO_ENABLED=0 go build -o main</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">FROM scratch as release</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">COPY --from=build /app/main /app/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">WORKDIR /app</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">CMD ["/app/main"]</span><br></span></code></pre></div></div>
+<p>첫 번째로 사용된 FROM은 임시로 쓰이고 버려집니다. --from을 활용해서 첫 번째 FROM의 결과물을 넣을 수 있습니다. 이렇게 실행을 하게되면 alpine보다 scratch 이미지의 크기가 작다는 이점이 존재합니다.</p>
+<p>Production 환경에서는 보안성 증대 및 이미지 경량화를 위해 사용하는 경우가 많이 있습니다.</p>]]></content:encoded>
+            <category>TIL</category>
+            <category>Docker</category>
+        </item>
+        <item>
+            <title><![CDATA[Docker Basic(2)]]></title>
+            <link>https://indianapoly.github.io/blog/2025/07/10/docker/docker-basic-2-title</link>
+            <guid>https://indianapoly.github.io/blog/2025/07/10/docker/docker-basic-2-title</guid>
+            <pubDate>Thu, 10 Jul 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[cloudwave 6기 수업에서 들은 내용을 정리한 글입니다.]]></description>
+            <content:encoded><![CDATA[<p>cloudwave 6기 수업에서 들은 내용을 정리한 글입니다.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="docker-network">Docker Network<a href="https://indianapoly.github.io/blog/2025/07/10/docker/docker-basic-2-title#docker-network" class="hash-link" aria-label="Docker Network에 대한 직접 링크" title="Docker Network에 대한 직접 링크">​</a></h3>
+<p>네트워크를 사용하는 이유는 Data 송수신 및 접근 제어를 하기 위함입니다.</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">docker network create [OPTIONS] NETWORK</span><br></span></code></pre></div></div>
+<p>주요 옵션에는 --driver(-d), --label이 있습니다.</p>
+<p>--driver의 종류</p>
+<ul>
+<li>bridge : 동일한 host 컴퓨터 내에서 컨테이너끼리 통신하기 위해서 사용을 합니다</li>
+<li>host : 컨테이너가 host와 동일한 네트워크를 사용합니다. (인스턴스 별로 한개만 생성)</li>
+<li>none</li>
+</ul>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">docker network connect [OPTIONS] NETWORK CONTAINER</span><br></span></code></pre></div></div>
+<p>주요 옵션에는 --alias, --ip가 있습니다.
+--alias는 네트워크 alias를 추가하는 것으로 일종의 추상화입니다.</p>
+<p>네트워크 연결을 제거하기 위해서는 <code>disconnect</code>를 쓰고, 삭제를 하기 위해서는 <code>rm</code>을 사용합니다. 모든 네트워크를 삭제하기 위해서는 <code>prune</code>을 사용합니다.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="buildx">buildx<a href="https://indianapoly.github.io/blog/2025/07/10/docker/docker-basic-2-title#buildx" class="hash-link" aria-label="buildx에 대한 직접 링크" title="buildx에 대한 직접 링크">​</a></h3>
+<p>동일한 기능에 다른 아키텍처를 빌드하기 위해서 사용합니다.</p>
+<p><strong>Multi-platform용 builder 생성</strong></p>
+<p>플랫폼 옵션을 통해서 이미지를 빌드할 수 있는 빌더를 생성할 수 있습니다.</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">docker buildx create --driver docker-container --name multi-builder --platform linux/amd64,linux/arm64</span><br></span></code></pre></div></div>
+<p><strong>이미지 빌드하기</strong></p>
+<p>플랫폼 옵션을 활용하여 각 아키텍처에 맞는 이미지를 제작할 수 있습니다.</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">docker buildx build --platform linux/amd64,linux/arm64 -t &lt;이름태그 설정&gt; .</span><br></span></code></pre></div></div>]]></content:encoded>
+            <category>TIL</category>
+            <category>Docker</category>
+        </item>
+    </channel>
+</rss>

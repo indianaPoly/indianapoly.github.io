@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunktil=self.webpackChunktil||[]).push([[430],{4566:e=>{e.exports=JSON.parse('{"tags":[{"label":"TIL","permalink":"/en/blog/tags/til","count":3},{"label":"Kubernetes","permalink":"/en/blog/tags/kubernetes","count":1},{"label":"Docker","permalink":"/en/blog/tags/docker","count":2}]}')}}]);
