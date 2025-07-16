@@ -2,11 +2,183 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://indianapoly.github.io/en/blog</id>
     <title>KO HYEON LIM Blog</title>
-    <updated>2025-07-15T00:00:00.000Z</updated>
+    <updated>2025-07-16T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://indianapoly.github.io/en/blog"/>
     <subtitle>KO HYEON LIM Blog</subtitle>
     <icon>https://indianapoly.github.io/en/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[개발하기 전 아이디어 회의 이렇게 해보자.]]></title>
+        <id>https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title</id>
+        <link href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title"/>
+        <updated>2025-07-16T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[cloudwave에서 진행했던 idea 회의와 관련된 회고에요. 앞으로 도움이 될 거 같아서 기록 해두어요.]]></summary>
+        <content type="html"><![CDATA[<p>cloudwave에서 진행했던 idea 회의와 관련된 회고에요. 앞으로 도움이 될 거 같아서 기록 해두어요.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="주제">주제<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#%EC%A3%BC%EC%A0%9C" class="hash-link" aria-label="Direct link to 주제" title="Direct link to 주제">​</a></h2>
+<p><code>대학생을 위한 완벽한 아침 루틴에 대한 고민</code> 이에요. 이 때 수면을 시간을 잘 지키고 추가적으로 건강한 루틴을 만드는 것이 목표인 것을 잊지 말아야 해요.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="process">process<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#process" class="hash-link" aria-label="Direct link to process" title="Direct link to process">​</a></h2>
+<ol>
+<li>
+<p><code>07시 기상</code>, <code>09시 자리 착석</code> 해당 2개의 시작점과 끝점은 고정을 한 상태에서 통학 시간이 1시간임을 고려해서 각자의 아침 루틴을 만들어요.
+ex. 기상 -&gt; 식사 -&gt; 옷을 입는다 -&gt; 집을 나간다 -&gt; 지하철을 탄다 -&gt; .. -&gt; 자리에 착석한다.</p>
+<p>이렇게 각자만의 루틴을 만들었어요.</p>
+</li>
+<li>
+<p>각자 만든 루틴들을 팀원들에게 설명을 해요. 이때 팀원들은 모든 질문에 대해서 의문을 가지고 하나하나 물어보는 작업을 진행을 해요.</p>
+</li>
+<li>
+<p>그리고 만든 루틴 중 제일 괜찮다 아니면 해보고 싶다 하는 사람이 손을 들어요. 해당 손을 든 사람은 이제 Product Owner가 돼요.</p>
+</li>
+<li>
+<p>각자 만든 루틴들을 모두 합쳐요. 동일한 카테고리에 대해서는 하나의 문제로 처리를 하고, 분야가 다르면 무조건 분리 시키는게 중요해요.</p>
+</li>
+<li>
+<p>4번에서 만든 결과물을 바탕으로 투표를 진행을 해요. 먼저 PO가 아닌 사람들이 x개의 투표권을 가지고 꼭 있어야 하는 것들에 대해서 투표를 진행해요. 그리고 PO는 투표권의 수와 관계 없이 투표를 하는데 이 때 PO가 선택한 것은 무조건 채택이 되기 때문에 PO의 선택으로 제품의 방향성이 바뀔 수도 있어요.</p>
+</li>
+<li>
+<p>투표를 한 것을 바탕으로 4번에 만든 흐름 밑에 검은 줄을 하나 만들고, 해당 프로세스에서 출발 시간을 07시 30분에 출발하는 것으로 변경을 했을 때, 5번의 결과에서 꼭 필요 없는 것들을 아래 칸으로 내려요. 이 때 PO의 선택은 절대 내리지 않아요.</p>
+</li>
+<li>
+<p>6번의 결과물 밑에 검은 줄을 하나 또 만들고, 그 다음에 해당 프로세스를 출 시간이 07시 50분이라고 했을 때 꼭 필요한 것들만 남기고 나머지는 내리는 작업을 진행을 해요.</p>
+</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="우리가-했던-것에-대한-결과물">우리가 했던 것에 대한 결과물<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#%EC%9A%B0%EB%A6%AC%EA%B0%80-%ED%96%88%EB%8D%98-%EA%B2%83%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B2%B0%EA%B3%BC%EB%AC%BC" class="hash-link" aria-label="Direct link to 우리가 했던 것에 대한 결과물" title="Direct link to 우리가 했던 것에 대한 결과물">​</a></h2>
+<ul>
+<li>
+<p>그러면 총 3개의 영역이 나오게 되는데 이 때 07시 50분일 때 꼭 하는 것이 MVP가 되고 이는 fix가 돼요. 그리고 아리 07시 30분에 진행하는 것이 release 1 되고 그 이후는 release 2가 돼요.</p>
+</li>
+<li>
+<p>우리는 해당 과정을 해오면서 기능을 시간 순으로 표시를 했어요. 왜냐하면 완료 시간은 고정이 되어있기 때문이에요. 또한 발산하는 과정을 거치고, 동일한 카테고리에 대해서 의견을 합치면서 수렴하는 과정을 거쳤어요.</p>
+</li>
+<li>
+<p>여기서 중요한 것은 각 release는 1개의 기능을 해야해요. 즉 자동차를 만드는 MVP가 있었다고 한다면. 다음 release는 바퀴를 만드는 것이 아니라 오토바이나 혹은 다른 기능을 하는 것이 만들어져야 하는 것을 의미해요.</p>
+</li>
+<li>
+<p>또한 여기서 우리는 아직 안정한게 있는데 바로 페르소나에요. 대학생을 타겟으로 했는데 어떤 대학생을 타겟으로 했는지 기준이 없어요. 페르소나가 없다면 제품이 어떠한 방향으로 나아가는지에 대해서 불명확해지고 프로젝트가 원하는 방향성으로 흘러가지 못할 수 있어요.</p>
+</li>
+</ul>]]></content>
+        <author>
+            <name>고현림</name>
+            <uri>https://www.linkedin.com/in/%ED%98%84%EB%A6%BC-%EA%B3%A0-b53602221/</uri>
+        </author>
+        <category label="TIL" term="TIL"/>
+        <category label="Etc" term="Etc"/>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Kubernetes Basic(1)]]></title>
+        <id>https://indianapoly.github.io/en/blog/2025/07/16/kubernetes/kubernetes-basic-2-title</id>
+        <link href="https://indianapoly.github.io/en/blog/2025/07/16/kubernetes/kubernetes-basic-2-title"/>
+        <updated>2025-07-16T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[volume]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="volume">volume<a href="https://indianapoly.github.io/en/blog/2025/07/16/kubernetes/kubernetes-basic-2-title#volume" class="hash-link" aria-label="Direct link to volume" title="Direct link to volume">​</a></h2>
+<ul>
+<li>
+<p><code>Persistent Volume Access Mode</code>의 모델은 아래 4개의 모드가 있어요.</p>
+<ul>
+<li>ReadWriteOnce (RWO)</li>
+<li>ReadOnlyMany (ROX) : 로그를 주로 읽을 때 사용해요.</li>
+<li>ReadWriteMany (RWX) : 분산형 데이터베이스에서 주로 사용해요.</li>
+<li>ReadWriteOncePOD (RWOP)</li>
+</ul>
+</li>
+<li>
+<p>컨테이너는 볼륨을 마운트를 하면 POD 안에서는 공유가 가능해져요. 노드 입장에서 보면 해당 노드에 속해있는 POD에 대해서는 같이 읽고 쓸 수 있다는 것을 의미해요.</p>
+</li>
+<li>
+<p>pv-w-pvc 와 pv-w-sc의 차이점을 아시나요?</p>
+<ul>
+<li>pv-w-pvc는 AWS의 Elastic Blokc Store 의 디스크 중 하나를 볼륨으로 설정해요. zone에 해당하는 볼륨을 설정하고 해당 볼륨을 pv로 해야지만 k8s가 해당 볼륨을 인식을 해요.
+pvc를 설장하기 위해서는 storageClassName을 빈문자열로 두면 돼요.</li>
+</ul>
+<div class="language-yml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-yml codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">spec</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">storageClassName</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">""</span><br></span></code></pre></div></div>
+<ul>
+<li>pv-w-sc는 sc(aws에서는 gp2라고 해요.)를 설정만 해두면 pv-w-pvc의 과정을 자동으로 설정해요. 이후 과정은 pvc와 동일하게 진행이 되요. 이렇게 진행을 디스크를 삭제하고 생성하는 책임이 개발자로 역할이 넘어가면서 관리자의 관리 부담이 줄어들어요.</li>
+<li>따라서 pvc는 정적 프로비저닝이라고 하고, sc는 동적 프로비저닝이라고 해요.</li>
+</ul>
+</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="cicd">CICD<a href="https://indianapoly.github.io/en/blog/2025/07/16/kubernetes/kubernetes-basic-2-title#cicd" class="hash-link" aria-label="Direct link to CICD" title="Direct link to CICD">​</a></h2>
+<ul>
+<li>AWS에는 code deploy(CI), commit, code pipe line(CD) 이렇게 3가지의 서비스가 있어요.<!-- -->
+<ul>
+<li>commit은 곧 없어질 예정이에요.</li>
+<li>code deploy를 사용하려면 산출된 결과물(압축 파일)을 S3에 저장을 해야해요. - app.spec.yml 파일이 있어야 해여.</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ci-continuous-integration">CI: continuous Integration<a href="https://indianapoly.github.io/en/blog/2025/07/16/kubernetes/kubernetes-basic-2-title#ci-continuous-integration" class="hash-link" aria-label="Direct link to CI: continuous Integration" title="Direct link to CI: continuous Integration">​</a></h3>
+<p>CI의 순서는 아래와 같아요.</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">빌드 -&gt; 테스트(테스트의 종류에는 유닛 테스트, e2e 테스트, 부하 테스트가 있어요) -&gt; 취약점 검사 (코드 정적 분석) -&gt; 코드 리뷰 | 코드 컨밴션</span><br></span></code></pre></div></div>
+<ul>
+<li>예전에는 최종산출물이 Artifact이 나왔어요. Artifact는 .jar 이런게 있어요.</li>
+<li>요즘에는 최종산출물이 container image가 나와요.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="cd-continuous-delivery-deployment">CD: continuous Delivery, Deployment<a href="https://indianapoly.github.io/en/blog/2025/07/16/kubernetes/kubernetes-basic-2-title#cd-continuous-delivery-deployment" class="hash-link" aria-label="Direct link to CD: continuous Delivery, Deployment" title="Direct link to CD: continuous Delivery, Deployment">​</a></h3>
+<ul>
+<li>
+<p>Delivery는 마지막 배포는 사림이 직접 진행을 해요. 하지만 Deployment는 배포하는 전과정이 자동으로 이루어져요.</p>
+</li>
+<li>
+<p>주로 사용되는 CI,CD 툴은 github action, gitlab runner, Jenkins, CircleCI pipe, bitbucket pipeline 등이 활용이 돼요.</p>
+<ul>
+<li>github action : 많이 사용되는 이유는 접근하기 쉽기 때문이에요. 코드가 공개가 되어있어 보안상 문제가 있을 거 같지만 매일 fetch가 이루어지기 때문에 보안상 안전해요.</li>
+<li>gitlab runner : 설치해서 사용을 해요. (공공기관 같은데에서 주로 사용해요.)</li>
+<li>Circle CI : 오픈소스 프로젝트에서 많이 사용해요.</li>
+<li>Jenkins: 스크립트형으로 작성되기 때문에 명령형이에요.</li>
+</ul>
+</li>
+<li>
+<p>CD만 전문적으로 하는 도구들이 있는데 나온 이유는 컨테이너가 나오면서 배포 전략이 다양하게 생겼기 때문이에요.</p>
+<ul>
+<li>ArgoCD (제일 빠르다는 점 때문에 제일 많이 사용해요.)</li>
+<li>FluxCD</li>
+<li>Spinnake (대규모 시스템이 적합해요.)</li>
+<li>JenkinsX</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1>실습</h1>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="랜덤으로-명언을-보여주는-간단한-서비스empty-dir">랜덤으로 명언을 보여주는 간단한 서비스(empty dir)<a href="https://indianapoly.github.io/en/blog/2025/07/16/kubernetes/kubernetes-basic-2-title#%EB%9E%9C%EB%8D%A4%EC%9C%BC%EB%A1%9C-%EB%AA%85%EC%96%B8%EC%9D%84-%EB%B3%B4%EC%97%AC%EC%A3%BC%EB%8A%94-%EA%B0%84%EB%8B%A8%ED%95%9C-%EC%84%9C%EB%B9%84%EC%8A%A4empty-dir" class="hash-link" aria-label="Direct link to 랜덤으로 명언을 보여주는 간단한 서비스(empty dir)" title="Direct link to 랜덤으로 명언을 보여주는 간단한 서비스(empty dir)">​</a></h3>
+<p>속도가 느리다고 한다면 이것을 사용해서 빠르게 처리할 수 있어요.
+medium: Memory를 설정을 하면 OS의 메모리 기반 파일시스템을 사용해요. 따라서 디스크보다 더 빠른 I/O 성능을 제공해요.</p>
+<div class="language-yml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-yml codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">volumes</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> cache</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">volume</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">emptyDir</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">medium</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> Memory</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">sizeLimit</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> 64Mi</span><br></span></code></pre></div></div>
+<p>해당 프로젝트의 경우 context는 aws로 설정이 되어있어요.</p>
+<p>왜 해당 프로젝트에서는 emptyDir이 적절할까요?</p>
+<ul>
+<li>명언 데이터들은 휘발성/임시 콘텐츠이므로, Pod가 재시작되면 새로 생성되어도 무방해요.</li>
+<li>html-generator가 생성하고, nginx가 읽어야하므로 공유 스토리지가 필요해요. 그런데 외부 스토리지 연동이 불필요하기 때문이기도 해요.</li>
+<li>속도 역시 빠르다는 장점이 있어요.</li>
+</ul>
+<div class="language-yml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-yml codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">apiVersion</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> apps/v1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">kind</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> Deployment</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">metadata</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> fortune</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">deployment</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">labels</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">app</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> fortune</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">spec</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">replicas</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">selector</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">matchLabels</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">app</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> fortune</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">template</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">metadata</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">labels</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token key atrule" style="color:#00a4db">app</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> fortune</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">spec</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">containers</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">image</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> &lt;이미지를 가져와야해요.</span><span class="token punctuation" style="color:#393A34">&gt;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">          </span><span class="token key atrule" style="color:#00a4db">name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> html</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">generator</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">          </span><span class="token key atrule" style="color:#00a4db">volumeMounts</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> html</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">              </span><span class="token key atrule" style="color:#00a4db">mountPath</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> /var/htdocs</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">image</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> nginx</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain">alpine</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">          </span><span class="token key atrule" style="color:#00a4db">name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> web</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">server</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">          </span><span class="token key atrule" style="color:#00a4db">volumeMounts</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> html</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">              </span><span class="token key atrule" style="color:#00a4db">mountPath</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> /usr/share/nginx/html</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">              </span><span class="token key atrule" style="color:#00a4db">readOnly</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token boolean important" style="color:#36acaa">true</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">          </span><span class="token key atrule" style="color:#00a4db">ports</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">containerPort</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">80</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">              </span><span class="token key atrule" style="color:#00a4db">protocol</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> TCP</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">volumes</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> html</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">          </span><span class="token key atrule" style="color:#00a4db">emptyDir</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token punctuation" style="color:#393A34">}</span><br></span></code></pre></div></div>
+<div class="language-yml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-yml codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"># fortune-lb.yml</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">apiVersion</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> v1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">kind</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> Service</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">metadata</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> fortune</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">lb</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic"># annotations을 설정 해주지 않으면 aws에서는 외부에 접속을 허용하지 않아요.</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">annotations</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token comment" style="color:#999988;font-style:italic"># VPC 외부 접속이 가능하도록 해요.</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">service.beta.kubernetes.io/aws-load-balancer-type</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> external</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token comment" style="color:#999988;font-style:italic"># 노드가 아니라 POD IP로 직접 전달해요.</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">service.beta.kubernetes.io/aws-load-balancer-nlb-target-type</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> ip</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token comment" style="color:#999988;font-style:italic"># 공인 IP를 사용할 수 있어요.</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">service.beta.kubernetes.io/aws-load-balancer-scheme</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> internet</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">facing</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">spec</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">selector</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">app</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> fortune</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">ports</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">port</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">80</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">targetPort</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">80</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">type</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> LoadBalancer</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="docker-arg-vs-yaml-env-vs-configmap-env-비교-실습">Docker ARG vs Yaml ENV vs CONFIGMAP ENV 비교 실습<a href="https://indianapoly.github.io/en/blog/2025/07/16/kubernetes/kubernetes-basic-2-title#docker-arg-vs-yaml-env-vs-configmap-env-%EB%B9%84%EA%B5%90-%EC%8B%A4%EC%8A%B5" class="hash-link" aria-label="Direct link to Docker ARG vs Yaml ENV vs CONFIGMAP ENV 비교 실습" title="Direct link to Docker ARG vs Yaml ENV vs CONFIGMAP ENV 비교 실습">​</a></h3>
+<p>Docker ARG의 경우에는 args를 설정하여 넘겨줄 수 있어요.</p>
+<div class="language-Dockerfile language-dockerfile codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-dockerfile codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">containers:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  - image: hyeonlim/fortune:args</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    args: ["5"]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    name: html-generator</span><br></span></code></pre></div></div>
+<p>yml을 통해서도 args를 설정해줄 수 있어요. 설정은 yml 파일에 아래와 같이 설정을 해주면 돼요.</p>
+<div class="language-yml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-yml codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">env</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># 컨테이너의 매개변수가 아니라 환경변수로 들어가요. 따라서 효율적으로 전달을 할 수 있어요.</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> INTERVAL</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">value</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"30"</span><br></span></code></pre></div></div>
+<p>CONFIGMAP을 생성을 해줄 수 있어요. 아래 명령어를 통해 확인도 가능해요.</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">kubectl create configmap fortune-config --from-literal=sleep-interval=7</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">kubectl get cm fortune-config</span><br></span></code></pre></div></div>
+<p>아래 사진의 cli를 입력하게 되면 사진과 같이 값이 들어가 있는 것을 확인할 수 있어요.</p>
+<img src="https://indianapoly.github.io/img/blog/kubernetes/2025-07-16/img1.png">
+<ul>
+<li>Kubernetes Pod에서 ConfigMap의 값을 환경 변수로 주입할 때 사용하지만 목적과 범위가 달라요.</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/kubernetes/2025-07-16/img2.png">
+<ul>
+<li>해당 사진에서는 특정 Key만 환경 변수로 주입이 되고 개별 환경 변수 설정이 필요할 때 주로 사용해요.</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/kubernetes/2025-07-16/img3.png">
+<ul>
+<li>해당 사진은 ConfigMap의 모든 Key를 환경 변수로 자동 주입해요. 모든 설정을 한꺼번에 주입하고 싶을 때 사용해요.</li>
+</ul>]]></content>
+        <author>
+            <name>고현림</name>
+            <uri>https://www.linkedin.com/in/%ED%98%84%EB%A6%BC-%EA%B3%A0-b53602221/</uri>
+        </author>
+        <category label="TIL" term="TIL"/>
+        <category label="Kubernetes" term="Kubernetes"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[kubernetes-basic (1)]]></title>
         <id>https://indianapoly.github.io/en/blog/2025/07/15/kubernetes/kubernetes-basic-1-title</id>
@@ -109,7 +281,7 @@ IP를 할당</strong>합니다. 이는 고가용성(High Availability)을 보장
 -&gt; 컨테이너가 종료되어도 데이터를 유지할 수 있는 방법은 외부 디스크 볼륨을 마운트 하는 것입니다.</p>
 <ul>
 <li>
-<p>EmptyDir: Pod가 종료되면 영구적으로 삭제됩니다. (즉 Pod와 동일한 LifeCycle을 가지게 됩니다.) --&gt; 그런데 왜 쓸까요? 대규모 기반 정렬 작업, Pod 내의 컨테이너 간 파일 교환, 복구를 위한 임시파일 보관하기 위해서 사용을 합니다.</p>
+<p>EmptyDir: Pod가 종료되면 영구적으로 삭제됩니다. (즉 Pod와 동일한 LifeCycle을 가지게 됩니다.) --&gt; 그런데 왜 쓸까요? 대규모 기반 정렬 작업, Pod 내의 컨테이너 간 파일 교환을 하기 위함이에요.</p>
 </li>
 <li>
 <p>HostPath: pod가 종료되어도 상태가 유지가 됩니다. 다만 Pod는 항상 다른 노드로 이동 가능성이 존재하기 때문에 에러가 날 수 있다는 문제가 있습니다.</p>
