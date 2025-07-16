@@ -65,7 +65,7 @@ ex. 기상 -&gt; 식사 -&gt; 옷을 입는다 -&gt; 집을 나간다 -&gt; 지�
         <category label="Etc" term="Etc"/>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Kubernetes Basic(1)]]></title>
+        <title type="html"><![CDATA[Kubernetes Basic(2)]]></title>
         <id>https://indianapoly.github.io/blog/2025/07/16/kubernetes/kubernetes-basic-2-title</id>
         <link href="https://indianapoly.github.io/blog/2025/07/16/kubernetes/kubernetes-basic-2-title"/>
         <updated>2025-07-16T00:00:00.000Z</updated>
@@ -180,7 +180,7 @@ medium: Memory를 설정을 하면 OS의 메모리 기반 파일시스템을 사
         <category label="Kubernetes" term="Kubernetes"/>
     </entry>
     <entry>
-        <title type="html"><![CDATA[kubernetes-basic (1)]]></title>
+        <title type="html"><![CDATA[kubernetes Basic (1)]]></title>
         <id>https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title</id>
         <link href="https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title"/>
         <updated>2025-07-15T00:00:00.000Z</updated>
