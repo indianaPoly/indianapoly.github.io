@@ -2,11 +2,131 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://indianapoly.github.io/blog</id>
     <title>KO HYEON LIM Blog</title>
-    <updated>2025-07-17T00:00:00.000Z</updated>
+    <updated>2025-07-19T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://indianapoly.github.io/blog"/>
     <subtitle>KO HYEON LIM Blog</subtitle>
     <icon>https://indianapoly.github.io/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Terraform으로 EKS 배포 시 발생하는 리소스 충돌 해결 가이드]]></title>
+        <id>https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title</id>
+        <link href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title"/>
+        <updated>2025-07-19T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[🚨 문제 상황]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="-문제-상황">🚨 문제 상황<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#-%EB%AC%B8%EC%A0%9C-%EC%83%81%ED%99%A9" class="hash-link" aria-label="🚨 문제 상황에 대한 직접 링크" title="🚨 문제 상황에 대한 직접 링크">​</a></h2>
+<p>Terraform으로 EKS 클러스터를 배포하던 중 다음과 같은 오류들이 연속으로 발생했어요:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Error: creating EC2 EIP: operation error EC2: AllocateAddress,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">https response error StatusCode: 400, RequestID: &lt;requiest id&gt;,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">api error AddressLimitExceeded: The maximum number of addresses has been reached.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Error: creating KMS Alias (alias/eks/cwave): operation error KMS: CreateAlias,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">https response error StatusCode: 400, RequestID: &lt;requiest id&gt;,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">AlreadyExistsException: An alias with the name arn:aws:kms:ap-northeast-2:368677659737:alias/eks/cwave already exists</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Error: creating EKS Cluster (cwave): operation error EKS: CreateCluster,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">https response error StatusCode: 409, RequestID: &lt;requiest id&gt;,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ResourceInUseException: Cluster already exists with name: cwave</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Error: creating IAM Role (efs-csi): operation error IAM: CreateRole,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">https response error StatusCode: 409, RequestID: &lt;requiest id&gt;,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">EntityAlreadyExists: Role with name efs-csi already exists.</span><br></span></code></pre></div></div>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="-문제-원인-분석">🔍 문제 원인 분석<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#-%EB%AC%B8%EC%A0%9C-%EC%9B%90%EC%9D%B8-%EB%B6%84%EC%84%9D" class="hash-link" aria-label="🔍 문제 원인 분석에 대한 직접 링크" title="🔍 문제 원인 분석에 대한 직접 링크">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="근본-원인-개발-환경-혼동으로-인한-리소스-중복">근본 원인: 개발 환경 혼동으로 인한 리소스 중복<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#%EA%B7%BC%EB%B3%B8-%EC%9B%90%EC%9D%B8-%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%ED%98%BC%EB%8F%99%EC%9C%BC%EB%A1%9C-%EC%9D%B8%ED%95%9C-%EB%A6%AC%EC%86%8C%EC%8A%A4-%EC%A4%91%EB%B3%B5" class="hash-link" aria-label="근본 원인: 개발 환경 혼동으로 인한 리소스 중복에 대한 직접 링크" title="근본 원인: 개발 환경 혼동으로 인한 리소스 중복에 대한 직접 링크">​</a></h3>
+<p><strong>실제 발생 과정:</strong></p>
+<ol>
+<li>개발 환경에 <code>local</code>과 <code>aws</code> 두 개의 폴더가 존재</li>
+<li>지금까지 local 환경과 aws 환경을 착각해서 개발을 진행</li>
+<li>local 환경에서 생성한 Terraform 리소스를 정확하게 삭제하지 않음</li>
+<li>aws 폴더로 이동해서 다시 <code>terraform apply</code>를 시도</li>
+<li><strong>결과</strong>: 동일한 리소스명으로 인한 중복 생성 시도로 충돌 발생했어요</li>
+</ol>
+<p><strong>폴더 구조 예시:</strong></p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">project/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">├── local/          # 로컬 개발용 (기존 리소스 잔존)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│   ├── main.tf</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│   └── terraform.tfstate</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">└── aws/            # AWS 환경용 (새로 배포 시도)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    ├── main.tf</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    └── terraform.tfstate</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="세부-원인들">세부 원인들<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#%EC%84%B8%EB%B6%80-%EC%9B%90%EC%9D%B8%EB%93%A4" class="hash-link" aria-label="세부 원인들에 대한 직접 링크" title="세부 원인들에 대한 직접 링크">​</a></h3>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="1-eip-한도-초과-문제">1. EIP 한도 초과 문제<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#1-eip-%ED%95%9C%EB%8F%84-%EC%B4%88%EA%B3%BC-%EB%AC%B8%EC%A0%9C" class="hash-link" aria-label="1. EIP 한도 초과 문제에 대한 직접 링크" title="1. EIP 한도 초과 문제에 대한 직접 링크">​</a></h4>
+<p>AWS 계정당 EIP(Elastic IP) 할당 한도가 있고 제가 확인했을 때는 5개가 할당 한도가 있었어요.</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># 현재 EIP 사용량 확인</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws ec2 describe-addresses --region ap-northeast-2</span><br></span></code></pre></div></div>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="2-리소스-중복-문제">2. 리소스 중복 문제<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#2-%EB%A6%AC%EC%86%8C%EC%8A%A4-%EC%A4%91%EB%B3%B5-%EB%AC%B8%EC%A0%9C" class="hash-link" aria-label="2. 리소스 중복 문제에 대한 직접 링크" title="2. 리소스 중복 문제에 대한 직접 링크">​</a></h4>
+<p>EKS 클러스터를 삭제했지만 관련 리소스들(IAM 역할, KMS 별칭 등)은 자동으로 삭제되지 않았어요.</p>
+<p><strong>왜 이런 일이 발생하는가?</strong></p>
+<ul>
+<li>EKS 클러스터 삭제 시 <strong>IAM 역할은 자동으로 삭제되지 않아요.</strong></li>
+<li>KMS 별칭도 마찬가지로 수동 삭제가 필요해요.</li>
+</ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="3-terraform-상태-파일-분리로-인한-문제">3. Terraform 상태 파일 분리로 인한 문제<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#3-terraform-%EC%83%81%ED%83%9C-%ED%8C%8C%EC%9D%BC-%EB%B6%84%EB%A6%AC%EB%A1%9C-%EC%9D%B8%ED%95%9C-%EB%AC%B8%EC%A0%9C" class="hash-link" aria-label="3. Terraform 상태 파일 분리로 인한 문제에 대한 직접 링크" title="3. Terraform 상태 파일 분리로 인한 문제에 대한 직접 링크">​</a></h4>
+<ul>
+<li><code>local/terraform.tfstate</code>와 <code>aws/terraform.tfstate</code>가 각각 관리돼요.</li>
+<li>실제 AWS 리소스는 동일하지만 Terraform 상태는 분리되어 있어요.</li>
+<li>새로운 폴더에서 배포 시 기존 리소스를 인식하지 못하는 문제가 있는 것을 파악했어요.</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="️-해결-과정">🛠️ 해결 과정<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#%EF%B8%8F-%ED%95%B4%EA%B2%B0-%EA%B3%BC%EC%A0%95" class="hash-link" aria-label="🛠️ 해결 과정에 대한 직접 링크" title="🛠️ 해결 과정에 대한 직접 링크">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="1단계-eip-사용량-확인-및-분석">1단계: EIP 사용량 확인 및 분석<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#1%EB%8B%A8%EA%B3%84-eip-%EC%82%AC%EC%9A%A9%EB%9F%89-%ED%99%95%EC%9D%B8-%EB%B0%8F-%EB%B6%84%EC%84%9D" class="hash-link" aria-label="1단계: EIP 사용량 확인 및 분석에 대한 직접 링크" title="1단계: EIP 사용량 확인 및 분석에 대한 직접 링크">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># EIP 목록과 연결 상태 확인</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws ec2 describe-addresses --region ap-northeast-2 --output table</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 각 EIP가 무엇에 연결되어 있는지 확인</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws ec2 describe-network-interfaces --region ap-northeast-2 \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  --network-interface-ids eni-xxxx eni-yyyy \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  --query 'NetworkInterfaces[*].{NetworkInterfaceId:NetworkInterfaceId,Description:Description,Status:Status}'</span><br></span></code></pre></div></div>
+<p><strong>결과 분석:</strong></p>
+<div class="language-json codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-json codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token punctuation" style="color:#393A34">[</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token property" style="color:#36acaa">"NetworkInterfaceId"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"eni-id"</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token property" style="color:#36acaa">"Description"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"Interface for NAT Gateway nat-id"</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token property" style="color:#36acaa">"Status"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"in-use"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic">// ... 5개의 EIP가 모두 NAT Gateway에 연결됨</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">]</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="2단계-terraform-상태-확인">2단계: Terraform 상태 확인<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#2%EB%8B%A8%EA%B3%84-terraform-%EC%83%81%ED%83%9C-%ED%99%95%EC%9D%B8" class="hash-link" aria-label="2단계: Terraform 상태 확인에 대한 직접 링크" title="2단계: Terraform 상태 확인에 대한 직접 링크">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># 현재 Terraform에서 관리하는 EIP 확인</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform plan | grep eip</span><br></span></code></pre></div></div>
+<p><strong>결과:</strong></p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">aws_eip.nat["c"]: Refreshing state... [id=eipalloc-id]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws_eip.nat["a"]: Refreshing state... [id=eipalloc-id]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># aws_eip.nat["b"] will be created &lt;- 이 부분이 문제!</span><br></span></code></pre></div></div>
+<p><strong>발견한 문제점:</strong></p>
+<ul>
+<li><code>nat["a"]</code>와 <code>nat["c"]</code>는 이미 Terraform 상태에 존재해요.</li>
+<li><code>nat["b"]</code>만 새로 생성하려고 해서 EIP 한도 초과 발생가 발생했어요.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="3단계-eip-문제-해결">3단계: EIP 문제 해결<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#3%EB%8B%A8%EA%B3%84-eip-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0" class="hash-link" aria-label="3단계: EIP 문제 해결에 대한 직접 링크" title="3단계: EIP 문제 해결에 대한 직접 링크">​</a></h3>
+<p><strong>방법 1: 기존 EIP 재사용</strong></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># 사용 가능한 EIP 확인 (a, c가 아닌 것들)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># eipalloc-id</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># eipalloc-id</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># eipalloc-id</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 특정 EIP가 어떤 NAT Gateway에 연결되어 있는지 확인</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws ec2 describe-nat-gateways --region ap-northeast-2 \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  --query 'NatGateways[?NatGatewayAddresses[0].AllocationId==`eipalloc-id`].{NatGatewayId:NatGatewayId,State:State}'</span><br></span></code></pre></div></div>
+<p><strong>결과:</strong></p>
+<div class="language-json codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-json codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token punctuation" style="color:#393A34">[</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token property" style="color:#36acaa">"NatGatewayId"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"nat-id"</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token property" style="color:#36acaa">"State"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"deleted"</span><span class="token plain"> </span><span class="token comment" style="color:#999988;font-style:italic">// 이미 삭제됨</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token property" style="color:#36acaa">"NatGatewayId"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"nat-id"</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token property" style="color:#36acaa">"State"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"available"</span><span class="token plain"> </span><span class="token comment" style="color:#999988;font-style:italic">// 사용 중</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">]</span><br></span></code></pre></div></div>
+<p><strong>해결 단계:</strong></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># 1. 사용 중인 NAT Gateway 삭제</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws ec2 delete-nat-gateway --nat-gateway-id nat-id --region ap-northeast-2</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 2. 삭제 완료 대기</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws ec2 describe-nat-gateways --region ap-northeast-2 --nat-gateway-ids nat-id --query 'NatGateways[0].State'</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 3. 해제된 EIP를 Terraform으로 가져오기</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform import 'aws_eip.nat["b"]' eipalloc-id</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="4단계-기존-리소스-import">4단계: 기존 리소스 Import<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#4%EB%8B%A8%EA%B3%84-%EA%B8%B0%EC%A1%B4-%EB%A6%AC%EC%86%8C%EC%8A%A4-import" class="hash-link" aria-label="4단계: 기존 리소스 Import에 대한 직접 링크" title="4단계: 기존 리소스 Import에 대한 직접 링크">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># EKS 클러스터 가져오기</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform import module.eks.aws_eks_cluster.this[0] cwave</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># KMS 별칭 가져오기 (따옴표 주의!)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform import 'module.eks.module.kms.aws_kms_alias.this["cluster"]' alias/eks/cwave</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># IAM 역할들 가져오기</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform import module.attach_efs_csi_role.aws_iam_role.this[0] efs-csi</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform import module.ebs_csi_irsa.aws_iam_role.this[0] cwave-ebs-csi-controller</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform import module.lb_controller_role.aws_iam_role.this[0] eks-aws-lb-controller-role</span><br></span></code></pre></div></div>
+<p><strong>Import 시 주의사항:</strong></p>
+<ul>
+<li>인덱스가 있는 리소스는 따옴표로 감싸주는 것이 중요해요.</li>
+<li>정확한 리소스 이름과 ID 확인 필수입니다.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="5단계-terraform-적용">5단계: Terraform 적용<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#5%EB%8B%A8%EA%B3%84-terraform-%EC%A0%81%EC%9A%A9" class="hash-link" aria-label="5단계: Terraform 적용에 대한 직접 링크" title="5단계: Terraform 적용에 대한 직접 링크">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># 계획 확인</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform plan</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 문제없으면 적용</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform apply</span><br></span></code></pre></div></div>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="-kubectl-연결-문제-해결">🔧 kubectl 연결 문제 해결<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#-kubectl-%EC%97%B0%EA%B2%B0-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0" class="hash-link" aria-label="🔧 kubectl 연결 문제 해결에 대한 직접 링크" title="🔧 kubectl 연결 문제 해결에 대한 직접 링크">​</a></h2>
+<p>배포 완료 후 kubectl 명령어 실행 시 DNS 오류 발생:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">kubectl get po</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Error: dial tcp: lookup .gr7.ap-northeast-2.eks.amazonaws.com on 127.0.0.11:53: no such host</span><br></span></code></pre></div></div>
+<p><strong>해결 방법:</strong></p>
+<p>업데이터를 새로 해줌으로써 기존 context를 switch를 진행해주면 정상적으로 동작하는 것을 확인할 수 있어요.</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># kubeconfig 업데이트</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws eks update-kubeconfig --region ap-northeast-2 --name cwave</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 연결 테스트</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">kubectl get nodes</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">kubectl get pods -A</span><br></span></code></pre></div></div>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="-교훈-및-예방-방법">📝 교훈 및 예방 방법<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#-%EA%B5%90%ED%9B%88-%EB%B0%8F-%EC%98%88%EB%B0%A9-%EB%B0%A9%EB%B2%95" class="hash-link" aria-label="📝 교훈 및 예방 방법에 대한 직접 링크" title="📝 교훈 및 예방 방법에 대한 직접 링크">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="1-개발-환경-관리-원칙">1. 개발 환경 관리 원칙<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#1-%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%EA%B4%80%EB%A6%AC-%EC%9B%90%EC%B9%99" class="hash-link" aria-label="1. 개발 환경 관리 원칙에 대한 직접 링크" title="1. 개발 환경 관리 원칙에 대한 직접 링크">​</a></h3>
+<ul>
+<li><strong>환경별 폴더 분리 시 명확한 네이밍 사용</strong></li>
+<li><strong>현재 작업 중인 환경을 항상 확인</strong></li>
+<li><strong>환경 전환 시 기존 리소스 정리 후 진행</strong></li>
+</ul>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># 환경 확인 습관화</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">pwd                    # 현재 작업 디렉터리 확인</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform workspace show  # Terraform 워크스페이스 확인</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws sts get-caller-identity  # 현재 AWS 계정/역할 확인</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="2-안전한-환경-전환-절차">2. 안전한 환경 전환 절차<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#2-%EC%95%88%EC%A0%84%ED%95%9C-%ED%99%98%EA%B2%BD-%EC%A0%84%ED%99%98-%EC%A0%88%EC%B0%A8" class="hash-link" aria-label="2. 안전한 환경 전환 절차에 대한 직접 링크" title="2. 안전한 환경 전환 절차에 대한 직접 링크">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># 기존 환경 정리</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform destroy -auto-approve</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 상태 파일 백업</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cp terraform.tfstate terraform.tfstate.backup</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 새 환경으로 이동</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cd ../aws</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 리소스 확인 후 배포</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform plan</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform apply</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="3-리소스-정리-시-주의점">3. 리소스 정리 시 주의점<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#3-%EB%A6%AC%EC%86%8C%EC%8A%A4-%EC%A0%95%EB%A6%AC-%EC%8B%9C-%EC%A3%BC%EC%9D%98%EC%A0%90" class="hash-link" aria-label="3. 리소스 정리 시 주의점에 대한 직접 링크" title="3. 리소스 정리 시 주의점에 대한 직접 링크">​</a></h3>
+<ul>
+<li>EKS 클러스터 삭제 시 IAM 역할, KMS 별칭 등은 수동으로 삭제해주어야 해요.</li>
+<li>만약 삭제해주어야 하는게 많다면 Terraform import를 활용하여 기존 리소스 재사용할 수 있어요.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="4-eip-관리">4. EIP 관리<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#4-eip-%EA%B4%80%EB%A6%AC" class="hash-link" aria-label="4. EIP 관리에 대한 직접 링크" title="4. EIP 관리에 대한 직접 링크">​</a></h3>
+<ul>
+<li>AWS 계정의 EIP 한도를 미리 확인하는 것이 중요해요.</li>
+<li>불필요한 EIP는 정기적으로 정리하고 필요시 AWS Support를 통해 한도 증가 요청해주어야 합니다.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="5-terraform-상태-관리">5. Terraform 상태 관리<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#5-terraform-%EC%83%81%ED%83%9C-%EA%B4%80%EB%A6%AC" class="hash-link" aria-label="5. Terraform 상태 관리에 대한 직접 링크" title="5. Terraform 상태 관리에 대한 직접 링크">​</a></h3>
+<ul>
+<li><code>terraform plan</code>으로 생성될 리소스를 미리 확인하는 습관이 정말 중요합니다.</li>
+<li>기존 리소스와의 충돌 가능성 검토 및 Import를 활용한 기존 리소스 재사용을 고려할 수 있어요.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="6-안전한-배포-전략">6. 안전한 배포 전략<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#6-%EC%95%88%EC%A0%84%ED%95%9C-%EB%B0%B0%ED%8F%AC-%EC%A0%84%EB%9E%B5" class="hash-link" aria-label="6. 안전한 배포 전략에 대한 직접 링크" title="6. 안전한 배포 전략에 대한 직접 링크">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># 배포 전 체크리스트</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform plan                    # 생성될 리소스 확인</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws ec2 describe-addresses        # EIP 사용량 확인</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws iam list-roles               # 기존 IAM 역할 확인</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws kms list-aliases             # 기존 KMS 별칭 확인</span><br></span></code></pre></div></div>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="-결론">🎯 결론<a href="https://indianapoly.github.io/blog/2025/07/19/terraform/terraform-errorHandling-title#-%EA%B2%B0%EB%A1%A0" class="hash-link" aria-label="🎯 결론에 대한 직접 링크" title="🎯 결론에 대한 직접 링크">​</a></h2>
+<p>이번 문제의 근본 원인은 <strong>개발 환경 혼동으로 인한 리소스 중복</strong>이었습니다. local과 aws 환경을 명확히 구분하지 않고 개발하다가, 기존 리소스를 정리하지 않은 상태에서 새로운 환경에 배포를 시도한 것이 문제의 시작이었습니다.</p>
+<p>Terraform으로 AWS 리소스를 관리할 때는 다음 사항들을 반드시 고려해야 합니다:</p>
+<ol>
+<li><strong>환경 분리와 명확한 식별</strong></li>
+<li><strong>기존 리소스와의 충돌 가능성</strong></li>
+<li><strong>Terraform Import를 활용한 기존 리소스 재사용</strong></li>
+</ol>
+<p>특히 EKS와 같은 복잡한 서비스는 여러 AWS 서비스와 연동되어 있어, 삭제 시에도 일부 리소스가 남을 수 있습니다. 이런 상황에서는 <strong>Terraform Import</strong>를 활용하여 기존 리소스를 재사용하는 것이 가장 안전하고 효율적인 해결책입니다.</p>
+<hr>
+<p><strong>관련 명령어 모음:</strong></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># 환경 확인</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">pwd</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform workspace show</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws sts get-caller-identity</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># EIP 관련</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws ec2 describe-addresses --region ap-northeast-2</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws ec2 release-address --allocation-id eipalloc-xxx --region ap-northeast-2</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Terraform Import</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform import 'resource_address' resource_id</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform state list</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform plan</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># EKS 관련</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws eks update-kubeconfig --region ap-northeast-2 --name cluster-name</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">kubectl config current-context</span><br></span></code></pre></div></div>]]></content>
+        <author>
+            <name>고현림</name>
+            <uri>https://www.linkedin.com/in/%ED%98%84%EB%A6%BC-%EA%B3%A0-b53602221/</uri>
+        </author>
+        <category label="TIL" term="TIL"/>
+        <category label="Terraform" term="Terraform"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Kubernetes Basic(3)]]></title>
         <id>https://indianapoly.github.io/blog/2025/07/17/kubernetes/kubernetes-basic-3-title</id>
@@ -118,63 +238,6 @@
         </author>
         <category label="TIL" term="TIL"/>
         <category label="Kubernetes" term="Kubernetes"/>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[개발하기 전 아이디어 회의 이렇게 해보자.]]></title>
-        <id>https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title</id>
-        <link href="https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title"/>
-        <updated>2025-07-16T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[cloudwave에서 진행했던 idea 회의와 관련된 회고에요. 앞으로 도움이 될 거 같아서 기록 해두어요.]]></summary>
-        <content type="html"><![CDATA[<p>cloudwave에서 진행했던 idea 회의와 관련된 회고에요. 앞으로 도움이 될 거 같아서 기록 해두어요.</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="주제">주제<a href="https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title#%EC%A3%BC%EC%A0%9C" class="hash-link" aria-label="주제에 대한 직접 링크" title="주제에 대한 직접 링크">​</a></h2>
-<p><code>대학생을 위한 완벽한 아침 루틴에 대한 고민</code> 이에요. 이 때 수면을 시간을 잘 지키고 추가적으로 건강한 루틴을 만드는 것이 목표인 것을 잊지 말아야 해요.</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="process">process<a href="https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title#process" class="hash-link" aria-label="process에 대한 직접 링크" title="process에 대한 직접 링크">​</a></h2>
-<ol>
-<li>
-<p><code>07시 기상</code>, <code>09시 자리 착석</code> 해당 2개의 시작점과 끝점은 고정을 한 상태에서 통학 시간이 1시간임을 고려해서 각자의 아침 루틴을 만들어요.
-ex. 기상 -&gt; 식사 -&gt; 옷을 입는다 -&gt; 집을 나간다 -&gt; 지하철을 탄다 -&gt; .. -&gt; 자리에 착석한다.</p>
-<p>이렇게 각자만의 루틴을 만들었어요.</p>
-</li>
-<li>
-<p>각자 만든 루틴들을 팀원들에게 설명을 해요. 이때 팀원들은 모든 질문에 대해서 의문을 가지고 하나하나 물어보는 작업을 진행을 해요.</p>
-</li>
-<li>
-<p>그리고 만든 루틴 중 제일 괜찮다 아니면 해보고 싶다 하는 사람이 손을 들어요. 해당 손을 든 사람은 이제 Product Owner가 돼요.</p>
-</li>
-<li>
-<p>각자 만든 루틴들을 모두 합쳐요. 동일한 카테고리에 대해서는 하나의 문제로 처리를 하고, 분야가 다르면 무조건 분리 시키는게 중요해요.</p>
-</li>
-<li>
-<p>4번에서 만든 결과물을 바탕으로 투표를 진행을 해요. 먼저 PO가 아닌 사람들이 x개의 투표권을 가지고 꼭 있어야 하는 것들에 대해서 투표를 진행해요. 그리고 PO는 투표권의 수와 관계 없이 투표를 하는데 이 때 PO가 선택한 것은 무조건 채택이 되기 때문에 PO의 선택으로 제품의 방향성이 바뀔 수도 있어요.</p>
-</li>
-<li>
-<p>투표를 한 것을 바탕으로 4번에 만든 흐름 밑에 검은 줄을 하나 만들고, 해당 프로세스에서 출발 시간을 07시 30분에 출발하는 것으로 변경을 했을 때, 5번의 결과에서 꼭 필요 없는 것들을 아래 칸으로 내려요. 이 때 PO의 선택은 절대 내리지 않아요.</p>
-</li>
-<li>
-<p>6번의 결과물 밑에 검은 줄을 하나 또 만들고, 그 다음에 해당 프로세스를 출 시간이 07시 50분이라고 했을 때 꼭 필요한 것들만 남기고 나머지는 내리는 작업을 진행을 해요.</p>
-</li>
-</ol>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="우리가-했던-것에-대한-결과물">우리가 했던 것에 대한 결과물<a href="https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title#%EC%9A%B0%EB%A6%AC%EA%B0%80-%ED%96%88%EB%8D%98-%EA%B2%83%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B2%B0%EA%B3%BC%EB%AC%BC" class="hash-link" aria-label="우리가 했던 것에 대한 결과물에 대한 직접 링크" title="우리가 했던 것에 대한 결과물에 대한 직접 링크">​</a></h2>
-<ul>
-<li>
-<p>그러면 총 3개의 영역이 나오게 되는데 이 때 07시 50분일 때 꼭 하는 것이 MVP가 되고 이는 fix가 돼요. 그리고 아리 07시 30분에 진행하는 것이 release 1 되고 그 이후는 release 2가 돼요.</p>
-</li>
-<li>
-<p>우리는 해당 과정을 해오면서 기능을 시간 순으로 표시를 했어요. 왜냐하면 완료 시간은 고정이 되어있기 때문이에요. 또한 발산하는 과정을 거치고, 동일한 카테고리에 대해서 의견을 합치면서 수렴하는 과정을 거쳤어요.</p>
-</li>
-<li>
-<p>여기서 중요한 것은 각 release는 1개의 기능을 해야해요. 즉 자동차를 만드는 MVP가 있었다고 한다면. 다음 release는 바퀴를 만드는 것이 아니라 오토바이나 혹은 다른 기능을 하는 것이 만들어져야 하는 것을 의미해요.</p>
-</li>
-<li>
-<p>또한 여기서 우리는 아직 안정한게 있는데 바로 페르소나에요. 대학생을 타겟으로 했는데 어떤 대학생을 타겟으로 했는지 기준이 없어요. 페르소나가 없다면 제품이 어떠한 방향으로 나아가는지에 대해서 불명확해지고 프로젝트가 원하는 방향성으로 흘러가지 못할 수 있어요.</p>
-</li>
-</ul>]]></content>
-        <author>
-            <name>고현림</name>
-            <uri>https://www.linkedin.com/in/%ED%98%84%EB%A6%BC-%EA%B3%A0-b53602221/</uri>
-        </author>
-        <category label="TIL" term="TIL"/>
-        <category label="Etc" term="Etc"/>
     </entry>
     <entry>
         <title type="html"><![CDATA[Kubernetes Basic(2)]]></title>
@@ -301,6 +364,63 @@ medium: Memory를 설정을 하면 OS의 메모리 기반 파일시스템을 사
         </author>
         <category label="TIL" term="TIL"/>
         <category label="Kubernetes" term="Kubernetes"/>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[개발하기 전 아이디어 회의 이렇게 해보자.]]></title>
+        <id>https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title</id>
+        <link href="https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title"/>
+        <updated>2025-07-16T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[cloudwave에서 진행했던 idea 회의와 관련된 회고에요. 앞으로 도움이 될 거 같아서 기록 해두어요.]]></summary>
+        <content type="html"><![CDATA[<p>cloudwave에서 진행했던 idea 회의와 관련된 회고에요. 앞으로 도움이 될 거 같아서 기록 해두어요.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="주제">주제<a href="https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title#%EC%A3%BC%EC%A0%9C" class="hash-link" aria-label="주제에 대한 직접 링크" title="주제에 대한 직접 링크">​</a></h2>
+<p><code>대학생을 위한 완벽한 아침 루틴에 대한 고민</code> 이에요. 이 때 수면을 시간을 잘 지키고 추가적으로 건강한 루틴을 만드는 것이 목표인 것을 잊지 말아야 해요.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="process">process<a href="https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title#process" class="hash-link" aria-label="process에 대한 직접 링크" title="process에 대한 직접 링크">​</a></h2>
+<ol>
+<li>
+<p><code>07시 기상</code>, <code>09시 자리 착석</code> 해당 2개의 시작점과 끝점은 고정을 한 상태에서 통학 시간이 1시간임을 고려해서 각자의 아침 루틴을 만들어요.
+ex. 기상 -&gt; 식사 -&gt; 옷을 입는다 -&gt; 집을 나간다 -&gt; 지하철을 탄다 -&gt; .. -&gt; 자리에 착석한다.</p>
+<p>이렇게 각자만의 루틴을 만들었어요.</p>
+</li>
+<li>
+<p>각자 만든 루틴들을 팀원들에게 설명을 해요. 이때 팀원들은 모든 질문에 대해서 의문을 가지고 하나하나 물어보는 작업을 진행을 해요.</p>
+</li>
+<li>
+<p>그리고 만든 루틴 중 제일 괜찮다 아니면 해보고 싶다 하는 사람이 손을 들어요. 해당 손을 든 사람은 이제 Product Owner가 돼요.</p>
+</li>
+<li>
+<p>각자 만든 루틴들을 모두 합쳐요. 동일한 카테고리에 대해서는 하나의 문제로 처리를 하고, 분야가 다르면 무조건 분리 시키는게 중요해요.</p>
+</li>
+<li>
+<p>4번에서 만든 결과물을 바탕으로 투표를 진행을 해요. 먼저 PO가 아닌 사람들이 x개의 투표권을 가지고 꼭 있어야 하는 것들에 대해서 투표를 진행해요. 그리고 PO는 투표권의 수와 관계 없이 투표를 하는데 이 때 PO가 선택한 것은 무조건 채택이 되기 때문에 PO의 선택으로 제품의 방향성이 바뀔 수도 있어요.</p>
+</li>
+<li>
+<p>투표를 한 것을 바탕으로 4번에 만든 흐름 밑에 검은 줄을 하나 만들고, 해당 프로세스에서 출발 시간을 07시 30분에 출발하는 것으로 변경을 했을 때, 5번의 결과에서 꼭 필요 없는 것들을 아래 칸으로 내려요. 이 때 PO의 선택은 절대 내리지 않아요.</p>
+</li>
+<li>
+<p>6번의 결과물 밑에 검은 줄을 하나 또 만들고, 그 다음에 해당 프로세스를 출 시간이 07시 50분이라고 했을 때 꼭 필요한 것들만 남기고 나머지는 내리는 작업을 진행을 해요.</p>
+</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="우리가-했던-것에-대한-결과물">우리가 했던 것에 대한 결과물<a href="https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title#%EC%9A%B0%EB%A6%AC%EA%B0%80-%ED%96%88%EB%8D%98-%EA%B2%83%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B2%B0%EA%B3%BC%EB%AC%BC" class="hash-link" aria-label="우리가 했던 것에 대한 결과물에 대한 직접 링크" title="우리가 했던 것에 대한 결과물에 대한 직접 링크">​</a></h2>
+<ul>
+<li>
+<p>그러면 총 3개의 영역이 나오게 되는데 이 때 07시 50분일 때 꼭 하는 것이 MVP가 되고 이는 fix가 돼요. 그리고 아리 07시 30분에 진행하는 것이 release 1 되고 그 이후는 release 2가 돼요.</p>
+</li>
+<li>
+<p>우리는 해당 과정을 해오면서 기능을 시간 순으로 표시를 했어요. 왜냐하면 완료 시간은 고정이 되어있기 때문이에요. 또한 발산하는 과정을 거치고, 동일한 카테고리에 대해서 의견을 합치면서 수렴하는 과정을 거쳤어요.</p>
+</li>
+<li>
+<p>여기서 중요한 것은 각 release는 1개의 기능을 해야해요. 즉 자동차를 만드는 MVP가 있었다고 한다면. 다음 release는 바퀴를 만드는 것이 아니라 오토바이나 혹은 다른 기능을 하는 것이 만들어져야 하는 것을 의미해요.</p>
+</li>
+<li>
+<p>또한 여기서 우리는 아직 안정한게 있는데 바로 페르소나에요. 대학생을 타겟으로 했는데 어떤 대학생을 타겟으로 했는지 기준이 없어요. 페르소나가 없다면 제품이 어떠한 방향으로 나아가는지에 대해서 불명확해지고 프로젝트가 원하는 방향성으로 흘러가지 못할 수 있어요.</p>
+</li>
+</ul>]]></content>
+        <author>
+            <name>고현림</name>
+            <uri>https://www.linkedin.com/in/%ED%98%84%EB%A6%BC-%EA%B3%A0-b53602221/</uri>
+        </author>
+        <category label="TIL" term="TIL"/>
+        <category label="Etc" term="Etc"/>
     </entry>
     <entry>
         <title type="html"><![CDATA[kubernetes Basic (1)]]></title>
