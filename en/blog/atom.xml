@@ -12,8 +12,9 @@
         <id>https://indianapoly.github.io/en/blog/2025/07/19/terraform/terraform-errorHandling-title</id>
         <link href="https://indianapoly.github.io/en/blog/2025/07/19/terraform/terraform-errorHandling-title"/>
         <updated>2025-07-19T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[🚨 문제 상황]]></summary>
-        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="-문제-상황">🚨 문제 상황<a href="https://indianapoly.github.io/en/blog/2025/07/19/terraform/terraform-errorHandling-title#-%EB%AC%B8%EC%A0%9C-%EC%83%81%ED%99%A9" class="hash-link" aria-label="Direct link to 🚨 문제 상황" title="Direct link to 🚨 문제 상황">​</a></h2>
+        <summary type="html"><![CDATA[{/ truncate /}]]></summary>
+        <content type="html"><![CDATA[
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="-문제-상황">🚨 문제 상황<a href="https://indianapoly.github.io/en/blog/2025/07/19/terraform/terraform-errorHandling-title#-%EB%AC%B8%EC%A0%9C-%EC%83%81%ED%99%A9" class="hash-link" aria-label="Direct link to 🚨 문제 상황" title="Direct link to 🚨 문제 상황">​</a></h2>
 <p>Terraform으로 EKS 클러스터를 배포하던 중 다음과 같은 오류들이 연속으로 발생했어요:</p>
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Error: creating EC2 EIP: operation error EC2: AllocateAddress,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">https response error StatusCode: 400, RequestID: &lt;requiest id&gt;,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">api error AddressLimitExceeded: The maximum number of addresses has been reached.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Error: creating KMS Alias (alias/eks/cwave): operation error KMS: CreateAlias,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">https response error StatusCode: 400, RequestID: &lt;requiest id&gt;,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">AlreadyExistsException: An alias with the name arn:aws:kms:ap-northeast-2:368677659737:alias/eks/cwave already exists</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Error: creating EKS Cluster (cwave): operation error EKS: CreateCluster,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">https response error StatusCode: 409, RequestID: &lt;requiest id&gt;,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ResourceInUseException: Cluster already exists with name: cwave</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Error: creating IAM Role (efs-csi): operation error IAM: CreateRole,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">https response error StatusCode: 409, RequestID: &lt;requiest id&gt;,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">EntityAlreadyExists: Role with name efs-csi already exists.</span><br></span></code></pre></div></div>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="-문제-원인-분석">🔍 문제 원인 분석<a href="https://indianapoly.github.io/en/blog/2025/07/19/terraform/terraform-errorHandling-title#-%EB%AC%B8%EC%A0%9C-%EC%9B%90%EC%9D%B8-%EB%B6%84%EC%84%9D" class="hash-link" aria-label="Direct link to 🔍 문제 원인 분석" title="Direct link to 🔍 문제 원인 분석">​</a></h2>
@@ -132,8 +133,9 @@
         <id>https://indianapoly.github.io/en/blog/2025/07/17/kubernetes/kubernetes-basic-3-title</id>
         <link href="https://indianapoly.github.io/en/blog/2025/07/17/kubernetes/kubernetes-basic-3-title"/>
         <updated>2025-07-17T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[Secret]]></summary>
-        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="secret">Secret<a href="https://indianapoly.github.io/en/blog/2025/07/17/kubernetes/kubernetes-basic-3-title#secret" class="hash-link" aria-label="Direct link to Secret" title="Direct link to Secret">​</a></h2>
+        <summary type="html"><![CDATA[{/ truncate /}]]></summary>
+        <content type="html"><![CDATA[
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="secret">Secret<a href="https://indianapoly.github.io/en/blog/2025/07/17/kubernetes/kubernetes-basic-3-title#secret" class="hash-link" aria-label="Direct link to Secret" title="Direct link to Secret">​</a></h2>
 <ul>
 <li>생성하는 방법은 cli로 하거나 .yml 파일을 작성해서 만드는 방법이 있어요.</li>
 </ul>
@@ -240,12 +242,71 @@
         <category label="Kubernetes" term="Kubernetes"/>
     </entry>
     <entry>
+        <title type="html"><![CDATA[개발하기 전 아이디어 회의 이렇게 해보자.]]></title>
+        <id>https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title</id>
+        <link href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title"/>
+        <updated>2025-07-16T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[{/ truncate /}]]></summary>
+        <content type="html"><![CDATA[
+<p>cloudwave에서 진행했던 idea 회의와 관련된 회고에요. 앞으로 도움이 될 거 같아서 기록 해두어요.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="주제">주제<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#%EC%A3%BC%EC%A0%9C" class="hash-link" aria-label="Direct link to 주제" title="Direct link to 주제">​</a></h2>
+<p><code>대학생을 위한 완벽한 아침 루틴에 대한 고민</code> 이에요. 이 때 수면을 시간을 잘 지키고 추가적으로 건강한 루틴을 만드는 것이 목표인 것을 잊지 말아야 해요.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="process">process<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#process" class="hash-link" aria-label="Direct link to process" title="Direct link to process">​</a></h2>
+<ol>
+<li>
+<p><code>07시 기상</code>, <code>09시 자리 착석</code> 해당 2개의 시작점과 끝점은 고정을 한 상태에서 통학 시간이 1시간임을 고려해서 각자의 아침 루틴을 만들어요.
+ex. 기상 -&gt; 식사 -&gt; 옷을 입는다 -&gt; 집을 나간다 -&gt; 지하철을 탄다 -&gt; .. -&gt; 자리에 착석한다.</p>
+<p>이렇게 각자만의 루틴을 만들었어요.</p>
+</li>
+<li>
+<p>각자 만든 루틴들을 팀원들에게 설명을 해요. 이때 팀원들은 모든 질문에 대해서 의문을 가지고 하나하나 물어보는 작업을 진행을 해요.</p>
+</li>
+<li>
+<p>그리고 만든 루틴 중 제일 괜찮다 아니면 해보고 싶다 하는 사람이 손을 들어요. 해당 손을 든 사람은 이제 Product Owner가 돼요.</p>
+</li>
+<li>
+<p>각자 만든 루틴들을 모두 합쳐요. 동일한 카테고리에 대해서는 하나의 문제로 처리를 하고, 분야가 다르면 무조건 분리 시키는게 중요해요.</p>
+</li>
+<li>
+<p>4번에서 만든 결과물을 바탕으로 투표를 진행을 해요. 먼저 PO가 아닌 사람들이 x개의 투표권을 가지고 꼭 있어야 하는 것들에 대해서 투표를 진행해요. 그리고 PO는 투표권의 수와 관계 없이 투표를 하는데 이 때 PO가 선택한 것은 무조건 채택이 되기 때문에 PO의 선택으로 제품의 방향성이 바뀔 수도 있어요.</p>
+</li>
+<li>
+<p>투표를 한 것을 바탕으로 4번에 만든 흐름 밑에 검은 줄을 하나 만들고, 해당 프로세스에서 출발 시간을 07시 30분에 출발하는 것으로 변경을 했을 때, 5번의 결과에서 꼭 필요 없는 것들을 아래 칸으로 내려요. 이 때 PO의 선택은 절대 내리지 않아요.</p>
+</li>
+<li>
+<p>6번의 결과물 밑에 검은 줄을 하나 또 만들고, 그 다음에 해당 프로세스를 출 시간이 07시 50분이라고 했을 때 꼭 필요한 것들만 남기고 나머지는 내리는 작업을 진행을 해요.</p>
+</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="우리가-했던-것에-대한-결과물">우리가 했던 것에 대한 결과물<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#%EC%9A%B0%EB%A6%AC%EA%B0%80-%ED%96%88%EB%8D%98-%EA%B2%83%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B2%B0%EA%B3%BC%EB%AC%BC" class="hash-link" aria-label="Direct link to 우리가 했던 것에 대한 결과물" title="Direct link to 우리가 했던 것에 대한 결과물">​</a></h2>
+<ul>
+<li>
+<p>그러면 총 3개의 영역이 나오게 되는데 이 때 07시 50분일 때 꼭 하는 것이 MVP가 되고 이는 fix가 돼요. 그리고 아리 07시 30분에 진행하는 것이 release 1 되고 그 이후는 release 2가 돼요.</p>
+</li>
+<li>
+<p>우리는 해당 과정을 해오면서 기능을 시간 순으로 표시를 했어요. 왜냐하면 완료 시간은 고정이 되어있기 때문이에요. 또한 발산하는 과정을 거치고, 동일한 카테고리에 대해서 의견을 합치면서 수렴하는 과정을 거쳤어요.</p>
+</li>
+<li>
+<p>여기서 중요한 것은 각 release는 1개의 기능을 해야해요. 즉 자동차를 만드는 MVP가 있었다고 한다면. 다음 release는 바퀴를 만드는 것이 아니라 오토바이나 혹은 다른 기능을 하는 것이 만들어져야 하는 것을 의미해요.</p>
+</li>
+<li>
+<p>또한 여기서 우리는 아직 안정한게 있는데 바로 페르소나에요. 대학생을 타겟으로 했는데 어떤 대학생을 타겟으로 했는지 기준이 없어요. 페르소나가 없다면 제품이 어떠한 방향으로 나아가는지에 대해서 불명확해지고 프로젝트가 원하는 방향성으로 흘러가지 못할 수 있어요.</p>
+</li>
+</ul>]]></content>
+        <author>
+            <name>고현림</name>
+            <uri>https://www.linkedin.com/in/%ED%98%84%EB%A6%BC-%EA%B3%A0-b53602221/</uri>
+        </author>
+        <category label="TIL" term="TIL"/>
+        <category label="Etc" term="Etc"/>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[Kubernetes Basic(2)]]></title>
         <id>https://indianapoly.github.io/en/blog/2025/07/16/kubernetes/kubernetes-basic-2-title</id>
         <link href="https://indianapoly.github.io/en/blog/2025/07/16/kubernetes/kubernetes-basic-2-title"/>
         <updated>2025-07-16T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[volume]]></summary>
-        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="volume">volume<a href="https://indianapoly.github.io/en/blog/2025/07/16/kubernetes/kubernetes-basic-2-title#volume" class="hash-link" aria-label="Direct link to volume" title="Direct link to volume">​</a></h2>
+        <summary type="html"><![CDATA[{/ truncate /}]]></summary>
+        <content type="html"><![CDATA[
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="volume">volume<a href="https://indianapoly.github.io/en/blog/2025/07/16/kubernetes/kubernetes-basic-2-title#volume" class="hash-link" aria-label="Direct link to volume" title="Direct link to volume">​</a></h2>
 <ul>
 <li>
 <p><code>Persistent Volume Access Mode</code>의 모델은 아래 4개의 모드가 있어요.</p>
@@ -366,69 +427,13 @@ medium: Memory를 설정을 하면 OS의 메모리 기반 파일시스템을 사
         <category label="Kubernetes" term="Kubernetes"/>
     </entry>
     <entry>
-        <title type="html"><![CDATA[개발하기 전 아이디어 회의 이렇게 해보자.]]></title>
-        <id>https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title</id>
-        <link href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title"/>
-        <updated>2025-07-16T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[cloudwave에서 진행했던 idea 회의와 관련된 회고에요. 앞으로 도움이 될 거 같아서 기록 해두어요.]]></summary>
-        <content type="html"><![CDATA[<p>cloudwave에서 진행했던 idea 회의와 관련된 회고에요. 앞으로 도움이 될 거 같아서 기록 해두어요.</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="주제">주제<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#%EC%A3%BC%EC%A0%9C" class="hash-link" aria-label="Direct link to 주제" title="Direct link to 주제">​</a></h2>
-<p><code>대학생을 위한 완벽한 아침 루틴에 대한 고민</code> 이에요. 이 때 수면을 시간을 잘 지키고 추가적으로 건강한 루틴을 만드는 것이 목표인 것을 잊지 말아야 해요.</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="process">process<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#process" class="hash-link" aria-label="Direct link to process" title="Direct link to process">​</a></h2>
-<ol>
-<li>
-<p><code>07시 기상</code>, <code>09시 자리 착석</code> 해당 2개의 시작점과 끝점은 고정을 한 상태에서 통학 시간이 1시간임을 고려해서 각자의 아침 루틴을 만들어요.
-ex. 기상 -&gt; 식사 -&gt; 옷을 입는다 -&gt; 집을 나간다 -&gt; 지하철을 탄다 -&gt; .. -&gt; 자리에 착석한다.</p>
-<p>이렇게 각자만의 루틴을 만들었어요.</p>
-</li>
-<li>
-<p>각자 만든 루틴들을 팀원들에게 설명을 해요. 이때 팀원들은 모든 질문에 대해서 의문을 가지고 하나하나 물어보는 작업을 진행을 해요.</p>
-</li>
-<li>
-<p>그리고 만든 루틴 중 제일 괜찮다 아니면 해보고 싶다 하는 사람이 손을 들어요. 해당 손을 든 사람은 이제 Product Owner가 돼요.</p>
-</li>
-<li>
-<p>각자 만든 루틴들을 모두 합쳐요. 동일한 카테고리에 대해서는 하나의 문제로 처리를 하고, 분야가 다르면 무조건 분리 시키는게 중요해요.</p>
-</li>
-<li>
-<p>4번에서 만든 결과물을 바탕으로 투표를 진행을 해요. 먼저 PO가 아닌 사람들이 x개의 투표권을 가지고 꼭 있어야 하는 것들에 대해서 투표를 진행해요. 그리고 PO는 투표권의 수와 관계 없이 투표를 하는데 이 때 PO가 선택한 것은 무조건 채택이 되기 때문에 PO의 선택으로 제품의 방향성이 바뀔 수도 있어요.</p>
-</li>
-<li>
-<p>투표를 한 것을 바탕으로 4번에 만든 흐름 밑에 검은 줄을 하나 만들고, 해당 프로세스에서 출발 시간을 07시 30분에 출발하는 것으로 변경을 했을 때, 5번의 결과에서 꼭 필요 없는 것들을 아래 칸으로 내려요. 이 때 PO의 선택은 절대 내리지 않아요.</p>
-</li>
-<li>
-<p>6번의 결과물 밑에 검은 줄을 하나 또 만들고, 그 다음에 해당 프로세스를 출 시간이 07시 50분이라고 했을 때 꼭 필요한 것들만 남기고 나머지는 내리는 작업을 진행을 해요.</p>
-</li>
-</ol>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="우리가-했던-것에-대한-결과물">우리가 했던 것에 대한 결과물<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#%EC%9A%B0%EB%A6%AC%EA%B0%80-%ED%96%88%EB%8D%98-%EA%B2%83%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B2%B0%EA%B3%BC%EB%AC%BC" class="hash-link" aria-label="Direct link to 우리가 했던 것에 대한 결과물" title="Direct link to 우리가 했던 것에 대한 결과물">​</a></h2>
-<ul>
-<li>
-<p>그러면 총 3개의 영역이 나오게 되는데 이 때 07시 50분일 때 꼭 하는 것이 MVP가 되고 이는 fix가 돼요. 그리고 아리 07시 30분에 진행하는 것이 release 1 되고 그 이후는 release 2가 돼요.</p>
-</li>
-<li>
-<p>우리는 해당 과정을 해오면서 기능을 시간 순으로 표시를 했어요. 왜냐하면 완료 시간은 고정이 되어있기 때문이에요. 또한 발산하는 과정을 거치고, 동일한 카테고리에 대해서 의견을 합치면서 수렴하는 과정을 거쳤어요.</p>
-</li>
-<li>
-<p>여기서 중요한 것은 각 release는 1개의 기능을 해야해요. 즉 자동차를 만드는 MVP가 있었다고 한다면. 다음 release는 바퀴를 만드는 것이 아니라 오토바이나 혹은 다른 기능을 하는 것이 만들어져야 하는 것을 의미해요.</p>
-</li>
-<li>
-<p>또한 여기서 우리는 아직 안정한게 있는데 바로 페르소나에요. 대학생을 타겟으로 했는데 어떤 대학생을 타겟으로 했는지 기준이 없어요. 페르소나가 없다면 제품이 어떠한 방향으로 나아가는지에 대해서 불명확해지고 프로젝트가 원하는 방향성으로 흘러가지 못할 수 있어요.</p>
-</li>
-</ul>]]></content>
-        <author>
-            <name>고현림</name>
-            <uri>https://www.linkedin.com/in/%ED%98%84%EB%A6%BC-%EA%B3%A0-b53602221/</uri>
-        </author>
-        <category label="TIL" term="TIL"/>
-        <category label="Etc" term="Etc"/>
-    </entry>
-    <entry>
         <title type="html"><![CDATA[kubernetes Basic (1)]]></title>
         <id>https://indianapoly.github.io/en/blog/2025/07/15/kubernetes/kubernetes-basic-1-title</id>
         <link href="https://indianapoly.github.io/en/blog/2025/07/15/kubernetes/kubernetes-basic-1-title"/>
         <updated>2025-07-15T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[Deployment]]></summary>
-        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="deployment">Deployment<a href="https://indianapoly.github.io/en/blog/2025/07/15/kubernetes/kubernetes-basic-1-title#deployment" class="hash-link" aria-label="Direct link to Deployment" title="Direct link to Deployment">​</a></h2>
+        <summary type="html"><![CDATA[{/ truncate /}]]></summary>
+        <content type="html"><![CDATA[
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="deployment">Deployment<a href="https://indianapoly.github.io/en/blog/2025/07/15/kubernetes/kubernetes-basic-1-title#deployment" class="hash-link" aria-label="Direct link to Deployment" title="Direct link to Deployment">​</a></h2>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="1-recreate-재가동-방식-v1--v2">1. RECREATE (재가동 방식: v1 → v2)<a href="https://indianapoly.github.io/en/blog/2025/07/15/kubernetes/kubernetes-basic-1-title#1-recreate-%EC%9E%AC%EA%B0%80%EB%8F%99-%EB%B0%A9%EC%8B%9D-v1--v2" class="hash-link" aria-label="Direct link to 1. RECREATE (재가동 방식: v1 → v2)" title="Direct link to 1. RECREATE (재가동 방식: v1 → v2)">​</a></h3>
 <p>특징: 서비스 중단 발생</p>
 <p>장점: 설정이 쉬움</p>
@@ -589,8 +594,9 @@ IP를 할당</strong>합니다. 이는 고가용성(High Availability)을 보장
         <id>https://indianapoly.github.io/en/blog/2025/07/14/docker/docker-basic-1-title</id>
         <link href="https://indianapoly.github.io/en/blog/2025/07/14/docker/docker-basic-1-title"/>
         <updated>2025-07-14T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[cloudwave 6기 수업에서 들은 내용을 정리한 글입니다.]]></summary>
-        <content type="html"><![CDATA[<p>cloudwave 6기 수업에서 들은 내용을 정리한 글입니다.</p>
+        <summary type="html"><![CDATA[{/ truncate /}]]></summary>
+        <content type="html"><![CDATA[
+<p>cloudwave 6기 수업에서 들은 내용을 정리한 글입니다.</p>
 <blockquote>
 <p><a href="https://docs.docker.com/manuals/" target="_blank" rel="noopener noreferrer">Docker DOCS</a></p>
 </blockquote>
@@ -643,8 +649,9 @@ IP를 할당</strong>합니다. 이는 고가용성(High Availability)을 보장
         <id>https://indianapoly.github.io/en/blog/2025/07/10/docker/docker-basic-2-title</id>
         <link href="https://indianapoly.github.io/en/blog/2025/07/10/docker/docker-basic-2-title"/>
         <updated>2025-07-10T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[cloudwave 6기 수업에서 들은 내용을 정리한 글입니다.]]></summary>
-        <content type="html"><![CDATA[<p>cloudwave 6기 수업에서 들은 내용을 정리한 글입니다.</p>
+        <summary type="html"><![CDATA[{/ truncate /}]]></summary>
+        <content type="html"><![CDATA[
+<p>cloudwave 6기 수업에서 들은 내용을 정리한 글입니다.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="docker-network">Docker Network<a href="https://indianapoly.github.io/en/blog/2025/07/10/docker/docker-basic-2-title#docker-network" class="hash-link" aria-label="Direct link to Docker Network" title="Direct link to Docker Network">​</a></h3>
 <p>네트워크를 사용하는 이유는 Data 송수신 및 접근 제어를 하기 위함입니다.</p>
 <div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">docker network create [OPTIONS] NETWORK</span><br></span></code></pre></div></div>
