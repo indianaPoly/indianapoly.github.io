@@ -2,11 +2,109 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://indianapoly.github.io/en/blog</id>
     <title>KO HYEON LIM Blog</title>
-    <updated>2025-07-19T00:00:00.000Z</updated>
+    <updated>2025-07-20T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://indianapoly.github.io/en/blog"/>
     <subtitle>KO HYEON LIM Blog</subtitle>
     <icon>https://indianapoly.github.io/en/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Grafana + Prometheus + MySQL Exporter를 활용한 MySQL 모니터링 설정기]]></title>
+        <id>https://indianapoly.github.io/en/blog/2025/07/20/docker/MYSQL-monioring-setting-title</id>
+        <link href="https://indianapoly.github.io/en/blog/2025/07/20/docker/MYSQL-monioring-setting-title"/>
+        <updated>2025-07-20T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[{/ truncate /}]]></summary>
+        <content type="html"><![CDATA[
+<p>최근에 인프라 관련된 수업을 진행하면서 내 스스로 할 수 있는 프로젝트가 뭔지, 어떻게 하면 오픈소스들을 잘 사용할 수 있을지 고민을 해보았습니다. 그 결과 DB를 만들고 DB에 데이터가 많이 몰리게 되었을 때 관리할 수 있는 흐름을 만들면 좋겠다 생각을 했습니다.</p>
+<p>따라서 MySQL을 모니터링하기 위해 Prometheus와 Grafana를 연동해 대시보드를 구성하는 작업을 진행했습니다. 이 글에서는 그 전체 과정을 정리해봤어요.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="️-전체-아키텍처">🏗️ 전체 아키텍처<a href="https://indianapoly.github.io/en/blog/2025/07/20/docker/MYSQL-monioring-setting-title#%EF%B8%8F-%EC%A0%84%EC%B2%B4-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98" class="hash-link" aria-label="Direct link to 🏗️ 전체 아키텍처" title="Direct link to 🏗️ 전체 아키텍처">​</a></h2>
+<p>추후에 좀 더 복잡한 아키텍처도 만져보면서 계속해서 확장해나가보면 좋을거 같은 생각이듭니다!</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">MySQL ← mysqld_exporter → Prometheus → Grafana</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  ↑</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">phpMyAdmin (관리용)</span><br></span></code></pre></div></div>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="-프로젝트-구조">📁 프로젝트 구조<a href="https://indianapoly.github.io/en/blog/2025/07/20/docker/MYSQL-monioring-setting-title#-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EA%B5%AC%EC%A1%B0" class="hash-link" aria-label="Direct link to 📁 프로젝트 구조" title="Direct link to 📁 프로젝트 구조">​</a></h2>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">grafana/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">├── provisioning/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│   ├── dashboards/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│   │   └── dashboard.yml</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│   └── datasources/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│       └── datasource.yml</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">├── mysql/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│   └── mysql_data/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">├── mysqld-exporter/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│   └── my.cnf</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">├── prometheus/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│   └── prometheus.yml</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">├── .env</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">└── docker-compose.yml</span><br></span></code></pre></div></div>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="-docker-compose-설정">🐳 Docker Compose 설정<a href="https://indianapoly.github.io/en/blog/2025/07/20/docker/MYSQL-monioring-setting-title#-docker-compose-%EC%84%A4%EC%A0%95" class="hash-link" aria-label="Direct link to 🐳 Docker Compose 설정" title="Direct link to 🐳 Docker Compose 설정">​</a></h2>
+<p>전체 스택을 한 번에 관리하기 위해 다음과 같이 docker-compose.yml을 구성했어요.</p>
+<p>볼륨 설정시 파일 위치 실수를 방지하기 위해서 하나의 파일 내에서 관련된 파일들을 모두 관리해주었습니다.(이렇게 하니깐 확실히 상대경로로 관리하기 쉽다는 점이 좋았습니다.) 그리고 $<!-- -->로 표시한 내용에 대해서는 중요파일이기 때문에 .env로 파일을 설정해주었습니다. .env 파일에 대한 내용은 아래에 보면 확인할 수 있어요.</p>
+<div class="language-yaml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-yaml codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">version</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"3.8"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">services</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">mysql</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">image</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> mysql</span><span class="token punctuation" style="color:#393A34">:</span><span class="token number" style="color:#36acaa">8.0</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">container_name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> mysql</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">restart</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> always</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">environment</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">MYSQL_ROOT_PASSWORD</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> $</span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain">MYSQL_ROOT_PASSWORD</span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">MYSQL_DATABASE</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> $</span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain">MYSQL_DATABASE</span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">volumes</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> ./mysql/mysql_data</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain">/var/lib/mysql</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">ports</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"3306:3306"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">phpmyadmin</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">image</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> phpmyadmin/phpmyadmin</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">container_name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> phpmyadmin</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">platform</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> linux/amd64</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">ports</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"8080:80"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">environment</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">PMA_HOST</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> mysql</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">PMA_PORT</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3306</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">depends_on</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> mysql</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">mysqld-exporter</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">image</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> prom/mysqld</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">exporter</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">container_name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> mysqld_exporter</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">volumes</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> ./mysqld</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">exporter/my.cnf</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain">/etc/mysql/my.cnf</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain">ro</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">depends_on</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> mysql</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">ports</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"9104:9104"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">command</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">"--config.my-cnf=/etc/mysql/my.cnf"</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">prometheus</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">image</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> prom/prometheus</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">container_name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> prometheus</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">volumes</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> ./prometheus/prometheus.yml</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain">/etc/prometheus/prometheus.yml</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">ports</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"9090:9090"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">depends_on</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> mysqld</span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain">exporter</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">grafana</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">image</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> grafana/grafana</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">container_name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> grafana</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">environment</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">GF_SECURITY_ADMIN_USER</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> $</span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain">GF_SECURITY_ADMIN_USER</span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">GF_SECURITY_ADMIN_PASSWORD</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> $</span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain">GF_SECURITY_ADMIN_PASSWORD</span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">volumes</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> ./grafana/provisioning/dashboards</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain">/etc/grafana/provisioning/dashboards</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> ./grafana/provisioning/datasources</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain">/etc/grafana/provisioning/datasources</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">ports</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"3000:3000"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">depends_on</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> prometheus</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">volumes</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  mysql_data</span><span class="token punctuation" style="color:#393A34">:</span><br></span></code></pre></div></div>
+<p>.env 설정 파일이에요. MYSQL에서 root로 접근할 때 사용할 수 있는 password와 사용할 database를 지정을 해줍니다. Grafana와 같은 경우에는 비밀번호를 설정해주지 않으면 아이디와 비밀번호가 admin으로 설정이 되어있어요. 그리고 비밀번호를 변경하라는 메세지가 나오는데 docker 컨테이너를 내리고 다시 실행을 하게 되면 계속해서 비밀번호를 설정하라는 창이 나와서 설정해주는게 편했습니다.</p>
+<div class="language-.env codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-.env codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">MYSQL_ROOT_PASSWORD=</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">MYSQL_DATABASE=</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">GF_SECURITY_ADMIN_USER=</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">GF_SECURITY_ADMIN_PASSWORD=</span><br></span></code></pre></div></div>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="-주요-설정-파일들">🔧 주요 설정 파일들<a href="https://indianapoly.github.io/en/blog/2025/07/20/docker/MYSQL-monioring-setting-title#-%EC%A3%BC%EC%9A%94-%EC%84%A4%EC%A0%95-%ED%8C%8C%EC%9D%BC%EB%93%A4" class="hash-link" aria-label="Direct link to 🔧 주요 설정 파일들" title="Direct link to 🔧 주요 설정 파일들">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="1-mysqld_exporter-설정-mycnf">1. mysqld_exporter 설정 (my.cnf)<a href="https://indianapoly.github.io/en/blog/2025/07/20/docker/MYSQL-monioring-setting-title#1-mysqld_exporter-%EC%84%A4%EC%A0%95-mycnf" class="hash-link" aria-label="Direct link to 1. mysqld_exporter 설정 (my.cnf)" title="Direct link to 1. mysqld_exporter 설정 (my.cnf)">​</a></h3>
+<p>여기서 중요한 점은 user와 password는 내가 접근하고자하는 mysql의 내용이어야 돼요. 즉 user에 exporter가 설정이 되어 있지 않으면 access denied가 설정이 될 수 있어요. 이를 유의해서 작성해주어야 해요. 아래 내용에서 이와 관련된 문제 해결을 적어두었습니다.</p>
+<div class="language-ini codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-ini codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">[client]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">user=exporter</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">password=exporter_password</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="2-prometheus-설정-prometheusyml">2. Prometheus 설정 (prometheus.yml)<a href="https://indianapoly.github.io/en/blog/2025/07/20/docker/MYSQL-monioring-setting-title#2-prometheus-%EC%84%A4%EC%A0%95-prometheusyml" class="hash-link" aria-label="Direct link to 2. Prometheus 설정 (prometheus.yml)" title="Direct link to 2. Prometheus 설정 (prometheus.yml)">​</a></h3>
+<p>Prometheus가 타겟으로 하는 mysqld-expoert를 설정을 해주어야 합니다.</p>
+<div class="language-yaml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-yaml codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">global</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">scrape_interval</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> 15s</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">scrape_configs</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">job_name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"mysqld-exporter"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">static_configs</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">targets</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">"mysqld-exporter:9104"</span><span class="token punctuation" style="color:#393A34">]</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="3-grafana-데이터소스-자동-설정-datasourceyml">3. Grafana 데이터소스 자동 설정 (datasource.yml)<a href="https://indianapoly.github.io/en/blog/2025/07/20/docker/MYSQL-monioring-setting-title#3-grafana-%EB%8D%B0%EC%9D%B4%ED%84%B0%EC%86%8C%EC%8A%A4-%EC%9E%90%EB%8F%99-%EC%84%A4%EC%A0%95-datasourceyml" class="hash-link" aria-label="Direct link to 3. Grafana 데이터소스 자동 설정 (datasource.yml)" title="Direct link to 3. Grafana 데이터소스 자동 설정 (datasource.yml)">​</a></h3>
+<p>Grafana를 처음 실행을 하게 되면 data source를 정하는 과정이 있습니다. 이 과정을 하지 않으면 데이터를 가져오지 않기 때문에 당연히 대시보드가 정상적으로 만들어지지 않아요. 아래 파일을 설정을 해주면 Grafana가 실행할 때 자동으로 Prometheus를 설정해줍니다.</p>
+<div class="language-yaml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-yaml codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">apiVersion</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">datasources</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">name</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> Prometheus</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">type</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> prometheus</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">access</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> proxy</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">url</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> http</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain">//prometheus</span><span class="token punctuation" style="color:#393A34">:</span><span class="token number" style="color:#36acaa">9090</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">isDefault</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token boolean important" style="color:#36acaa">true</span><br></span></code></pre></div></div>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="-주요-문제들과-해결책">🚨 주요 문제들과 해결책<a href="https://indianapoly.github.io/en/blog/2025/07/20/docker/MYSQL-monioring-setting-title#-%EC%A3%BC%EC%9A%94-%EB%AC%B8%EC%A0%9C%EB%93%A4%EA%B3%BC-%ED%95%B4%EA%B2%B0%EC%B1%85" class="hash-link" aria-label="Direct link to 🚨 주요 문제들과 해결책" title="Direct link to 🚨 주요 문제들과 해결책">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="1-mysqld_exporter-access-denied-문제-해결">1. mysqld_exporter <code>access denied</code> 문제 해결<a href="https://indianapoly.github.io/en/blog/2025/07/20/docker/MYSQL-monioring-setting-title#1-mysqld_exporter-access-denied-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0" class="hash-link" aria-label="Direct link to 1-mysqld_exporter-access-denied-문제-해결" title="Direct link to 1-mysqld_exporter-access-denied-문제-해결">​</a></h3>
+<p><strong>문제</strong>: mysqld_exporter 실행 시 다음 오류 발생</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">[ERROR] Access denied for user 'exporter'@'localhost'</span><br></span></code></pre></div></div>
+<p><strong>해결책</strong>:</p>
+<p>exporter가 접근할 user와 해당 user의 password를 my.cnf에 잘 설정 해주는 것이 중요합니다. my.cnf에 exporter를 설정을 해두었는데 mysql user에 exporter가 없다면 당연히 에러가 나요.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="2-grafana에서-prometheus-연결-실패">2. Grafana에서 Prometheus 연결 실패<a href="https://indianapoly.github.io/en/blog/2025/07/20/docker/MYSQL-monioring-setting-title#2-grafana%EC%97%90%EC%84%9C-prometheus-%EC%97%B0%EA%B2%B0-%EC%8B%A4%ED%8C%A8" class="hash-link" aria-label="Direct link to 2. Grafana에서 Prometheus 연결 실패" title="Direct link to 2. Grafana에서 Prometheus 연결 실패">​</a></h3>
+<p><strong>문제</strong>: Grafana에서 <code>http://localhost:9090</code>으로 설정했더니 연결 실패</p>
+<p><strong>해결책</strong>: 도커 컨테이너 환경에서는 서비스 이름으로 접근하는 것이 핵심이었습니다.</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">❌ http://localhost:9090</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">✅ http://prometheus:9090</span><br></span></code></pre></div></div>
+<p><strong>이유</strong>: 도커 컨테이너에서 <code>localhost</code>는 자기 자신(컨테이너 내부)을 의미하므로, 같은 네트워크 내의 다른 컨테이너에 접근할 때는 서비스명을 사용해야 합니다!</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="3-grafana-설정-자동화">3. Grafana 설정 자동화<a href="https://indianapoly.github.io/en/blog/2025/07/20/docker/MYSQL-monioring-setting-title#3-grafana-%EC%84%A4%EC%A0%95-%EC%9E%90%EB%8F%99%ED%99%94" class="hash-link" aria-label="Direct link to 3. Grafana 설정 자동화" title="Direct link to 3. Grafana 설정 자동화">​</a></h3>
+<p>2번과 같이 수동 설정으로 설정하는 과정에 있어서 문제가 발생할 수도 있고, 컨테이너가 down 된 상태에서 다시 실행을 한다면 매번 해주는 과정이 귀찮아질 수 있어 data source를 자동화 해줄 수 있습니다.</p>
+<p><code>provisioning</code> 디렉터리를 활용한 자동화 구현:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">./grafana/provisioning/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">├── dashboards/     # 대시보드 자동 로딩</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">└── datasources/    # 데이터소스 자동 설정</span><br></span></code></pre></div></div>
+<p>이렇게 하면 컨테이너 초기 실행 시 모든 설정이 자동으로 적용됨</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="4-phpmyadmin-추가로-관리-편의성-향상">4. phpMyAdmin 추가로 관리 편의성 향상<a href="https://indianapoly.github.io/en/blog/2025/07/20/docker/MYSQL-monioring-setting-title#4-phpmyadmin-%EC%B6%94%EA%B0%80%EB%A1%9C-%EA%B4%80%EB%A6%AC-%ED%8E%B8%EC%9D%98%EC%84%B1-%ED%96%A5%EC%83%81" class="hash-link" aria-label="Direct link to 4. phpMyAdmin 추가로 관리 편의성 향상" title="Direct link to 4. phpMyAdmin 추가로 관리 편의성 향상">​</a></h3>
+<p>터미널 기반 MySQL 관리의 불편함을 해결하기 위해 phpMyAdmin 추가했어요.:</p>
+<ul>
+<li>포트: 8080 (보통 잘 사용하기 때문에 docker ps -a 를 활용해서 해당 포트를 잡고 있는 컨테이너가 있는지 확인해주어야 해요.)</li>
+<li>시각적 테이블 관리</li>
+<li>사용자 권한 설정 간편화</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="5-grafana-mysql-overview-dashboard-데이터-표시-문제">5. Grafana MySQL Overview Dashboard 데이터 표시 문제<a href="https://indianapoly.github.io/en/blog/2025/07/20/docker/MYSQL-monioring-setting-title#5-grafana-mysql-overview-dashboard-%EB%8D%B0%EC%9D%B4%ED%84%B0-%ED%91%9C%EC%8B%9C-%EB%AC%B8%EC%A0%9C" class="hash-link" aria-label="Direct link to 5. Grafana MySQL Overview Dashboard 데이터 표시 문제" title="Direct link to 5. Grafana MySQL Overview Dashboard 데이터 표시 문제">​</a></h3>
+<p><strong>문제</strong>: 모든 패널이 <code>No data</code> 표시</p>
+<p><strong>원인</strong>: 템플릿 변수와 쿼리 간 연동 문제가 있었어요.</p>
+<ul>
+<li><code>$host</code> 변수 설정 오류가 있어 prometheus로 부터 데이터를 가지고 오지 못해서 No data가 보였어요.</li>
+</ul>
+<p><strong>해결책</strong>:</p>
+<ol>
+<li>
+<p><strong>$host 변수 재설정</strong>:</p>
+<ul>
+<li>Query type: <code>Label values</code></li>
+<li>Metric: <code>mysql_global_status_threads_connected</code></li>
+<li>Label: <code>instance</code></li>
+</ul>
+</li>
+<li>
+<p><strong>변수 새로고침 설정</strong>:</p>
+<ul>
+<li><code>On dashboard load</code>로 설정</li>
+<li>또는 패널에서 수동 <code>Run query</code> 실행</li>
+</ul>
+</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="-최종-구성-결과">📊 최종 구성 결과<a href="https://indianapoly.github.io/en/blog/2025/07/20/docker/MYSQL-monioring-setting-title#-%EC%B5%9C%EC%A2%85-%EA%B5%AC%EC%84%B1-%EA%B2%B0%EA%B3%BC" class="hash-link" aria-label="Direct link to 📊 최종 구성 결과" title="Direct link to 📊 최종 구성 결과">​</a></h2>
+<p><a href="https://github.com/indianaPoly/mysql-monitoring" target="_blank" rel="noopener noreferrer">전체 코드 보러 갈래요</a></p>
+<p>설정 완료 후 Grafana 대시보드에서 실시간으로 확인 가능한 지표들은 아래와 같아요:</p>
+<ul>
+<li><strong>MySQL Uptime</strong>: 서버 가동 시간</li>
+<li><strong>Threads Connected/Running</strong>: 연결된 스레드 수</li>
+<li><strong>QPS (Queries per Second)</strong>: 초당 쿼리 수</li>
+<li><strong>InnoDB Buffer Pool</strong>: 버퍼 풀 사용량</li>
+<li><strong>Connections</strong>: 연결 상태</li>
+<li><strong>Table Locks</strong>: 테이블 잠금 현황</li>
+<li><strong>Thread Cache</strong>: 스레드 캐시 상태</li>
+</ul>
+<p>대시보드 새로고침 간격을 <code>5초</code>로 설정하여 실시간에 가까운 모니터링 환경 구축할 수 있었습니다! 아래는 구성 후 결과물입니다.</p>
+<img src="https://indianapoly.github.io/img/blog/docker/2025-07-20/img1.png" width="600">]]></content>
+        <author>
+            <name>고현림</name>
+            <uri>https://www.linkedin.com/in/%ED%98%84%EB%A6%BC-%EA%B3%A0-b53602221/</uri>
+        </author>
+        <category label="TIL" term="TIL"/>
+        <category label="Docker" term="Docker"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Terraform으로 EKS 배포 시 발생하는 리소스 충돌 해결 가이드]]></title>
         <id>https://indianapoly.github.io/en/blog/2025/07/19/terraform/terraform-errorHandling-title</id>
@@ -242,64 +340,6 @@
         <category label="Kubernetes" term="Kubernetes"/>
     </entry>
     <entry>
-        <title type="html"><![CDATA[개발하기 전 아이디어 회의 이렇게 해보자.]]></title>
-        <id>https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title</id>
-        <link href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title"/>
-        <updated>2025-07-16T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[{/ truncate /}]]></summary>
-        <content type="html"><![CDATA[
-<p>cloudwave에서 진행했던 idea 회의와 관련된 회고에요. 앞으로 도움이 될 거 같아서 기록 해두어요.</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="주제">주제<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#%EC%A3%BC%EC%A0%9C" class="hash-link" aria-label="Direct link to 주제" title="Direct link to 주제">​</a></h2>
-<p><code>대학생을 위한 완벽한 아침 루틴에 대한 고민</code> 이에요. 이 때 수면을 시간을 잘 지키고 추가적으로 건강한 루틴을 만드는 것이 목표인 것을 잊지 말아야 해요.</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="process">process<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#process" class="hash-link" aria-label="Direct link to process" title="Direct link to process">​</a></h2>
-<ol>
-<li>
-<p><code>07시 기상</code>, <code>09시 자리 착석</code> 해당 2개의 시작점과 끝점은 고정을 한 상태에서 통학 시간이 1시간임을 고려해서 각자의 아침 루틴을 만들어요.
-ex. 기상 -&gt; 식사 -&gt; 옷을 입는다 -&gt; 집을 나간다 -&gt; 지하철을 탄다 -&gt; .. -&gt; 자리에 착석한다.</p>
-<p>이렇게 각자만의 루틴을 만들었어요.</p>
-</li>
-<li>
-<p>각자 만든 루틴들을 팀원들에게 설명을 해요. 이때 팀원들은 모든 질문에 대해서 의문을 가지고 하나하나 물어보는 작업을 진행을 해요.</p>
-</li>
-<li>
-<p>그리고 만든 루틴 중 제일 괜찮다 아니면 해보고 싶다 하는 사람이 손을 들어요. 해당 손을 든 사람은 이제 Product Owner가 돼요.</p>
-</li>
-<li>
-<p>각자 만든 루틴들을 모두 합쳐요. 동일한 카테고리에 대해서는 하나의 문제로 처리를 하고, 분야가 다르면 무조건 분리 시키는게 중요해요.</p>
-</li>
-<li>
-<p>4번에서 만든 결과물을 바탕으로 투표를 진행을 해요. 먼저 PO가 아닌 사람들이 x개의 투표권을 가지고 꼭 있어야 하는 것들에 대해서 투표를 진행해요. 그리고 PO는 투표권의 수와 관계 없이 투표를 하는데 이 때 PO가 선택한 것은 무조건 채택이 되기 때문에 PO의 선택으로 제품의 방향성이 바뀔 수도 있어요.</p>
-</li>
-<li>
-<p>투표를 한 것을 바탕으로 4번에 만든 흐름 밑에 검은 줄을 하나 만들고, 해당 프로세스에서 출발 시간을 07시 30분에 출발하는 것으로 변경을 했을 때, 5번의 결과에서 꼭 필요 없는 것들을 아래 칸으로 내려요. 이 때 PO의 선택은 절대 내리지 않아요.</p>
-</li>
-<li>
-<p>6번의 결과물 밑에 검은 줄을 하나 또 만들고, 그 다음에 해당 프로세스를 출 시간이 07시 50분이라고 했을 때 꼭 필요한 것들만 남기고 나머지는 내리는 작업을 진행을 해요.</p>
-</li>
-</ol>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="우리가-했던-것에-대한-결과물">우리가 했던 것에 대한 결과물<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#%EC%9A%B0%EB%A6%AC%EA%B0%80-%ED%96%88%EB%8D%98-%EA%B2%83%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B2%B0%EA%B3%BC%EB%AC%BC" class="hash-link" aria-label="Direct link to 우리가 했던 것에 대한 결과물" title="Direct link to 우리가 했던 것에 대한 결과물">​</a></h2>
-<ul>
-<li>
-<p>그러면 총 3개의 영역이 나오게 되는데 이 때 07시 50분일 때 꼭 하는 것이 MVP가 되고 이는 fix가 돼요. 그리고 아리 07시 30분에 진행하는 것이 release 1 되고 그 이후는 release 2가 돼요.</p>
-</li>
-<li>
-<p>우리는 해당 과정을 해오면서 기능을 시간 순으로 표시를 했어요. 왜냐하면 완료 시간은 고정이 되어있기 때문이에요. 또한 발산하는 과정을 거치고, 동일한 카테고리에 대해서 의견을 합치면서 수렴하는 과정을 거쳤어요.</p>
-</li>
-<li>
-<p>여기서 중요한 것은 각 release는 1개의 기능을 해야해요. 즉 자동차를 만드는 MVP가 있었다고 한다면. 다음 release는 바퀴를 만드는 것이 아니라 오토바이나 혹은 다른 기능을 하는 것이 만들어져야 하는 것을 의미해요.</p>
-</li>
-<li>
-<p>또한 여기서 우리는 아직 안정한게 있는데 바로 페르소나에요. 대학생을 타겟으로 했는데 어떤 대학생을 타겟으로 했는지 기준이 없어요. 페르소나가 없다면 제품이 어떠한 방향으로 나아가는지에 대해서 불명확해지고 프로젝트가 원하는 방향성으로 흘러가지 못할 수 있어요.</p>
-</li>
-</ul>]]></content>
-        <author>
-            <name>고현림</name>
-            <uri>https://www.linkedin.com/in/%ED%98%84%EB%A6%BC-%EA%B3%A0-b53602221/</uri>
-        </author>
-        <category label="TIL" term="TIL"/>
-        <category label="Etc" term="Etc"/>
-    </entry>
-    <entry>
         <title type="html"><![CDATA[Kubernetes Basic(2)]]></title>
         <id>https://indianapoly.github.io/en/blog/2025/07/16/kubernetes/kubernetes-basic-2-title</id>
         <link href="https://indianapoly.github.io/en/blog/2025/07/16/kubernetes/kubernetes-basic-2-title"/>
@@ -425,6 +465,64 @@ medium: Memory를 설정을 하면 OS의 메모리 기반 파일시스템을 사
         </author>
         <category label="TIL" term="TIL"/>
         <category label="Kubernetes" term="Kubernetes"/>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[개발하기 전 아이디어 회의 이렇게 해보자.]]></title>
+        <id>https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title</id>
+        <link href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title"/>
+        <updated>2025-07-16T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[{/ truncate /}]]></summary>
+        <content type="html"><![CDATA[
+<p>cloudwave에서 진행했던 idea 회의와 관련된 회고에요. 앞으로 도움이 될 거 같아서 기록 해두어요.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="주제">주제<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#%EC%A3%BC%EC%A0%9C" class="hash-link" aria-label="Direct link to 주제" title="Direct link to 주제">​</a></h2>
+<p><code>대학생을 위한 완벽한 아침 루틴에 대한 고민</code> 이에요. 이 때 수면을 시간을 잘 지키고 추가적으로 건강한 루틴을 만드는 것이 목표인 것을 잊지 말아야 해요.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="process">process<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#process" class="hash-link" aria-label="Direct link to process" title="Direct link to process">​</a></h2>
+<ol>
+<li>
+<p><code>07시 기상</code>, <code>09시 자리 착석</code> 해당 2개의 시작점과 끝점은 고정을 한 상태에서 통학 시간이 1시간임을 고려해서 각자의 아침 루틴을 만들어요.
+ex. 기상 -&gt; 식사 -&gt; 옷을 입는다 -&gt; 집을 나간다 -&gt; 지하철을 탄다 -&gt; .. -&gt; 자리에 착석한다.</p>
+<p>이렇게 각자만의 루틴을 만들었어요.</p>
+</li>
+<li>
+<p>각자 만든 루틴들을 팀원들에게 설명을 해요. 이때 팀원들은 모든 질문에 대해서 의문을 가지고 하나하나 물어보는 작업을 진행을 해요.</p>
+</li>
+<li>
+<p>그리고 만든 루틴 중 제일 괜찮다 아니면 해보고 싶다 하는 사람이 손을 들어요. 해당 손을 든 사람은 이제 Product Owner가 돼요.</p>
+</li>
+<li>
+<p>각자 만든 루틴들을 모두 합쳐요. 동일한 카테고리에 대해서는 하나의 문제로 처리를 하고, 분야가 다르면 무조건 분리 시키는게 중요해요.</p>
+</li>
+<li>
+<p>4번에서 만든 결과물을 바탕으로 투표를 진행을 해요. 먼저 PO가 아닌 사람들이 x개의 투표권을 가지고 꼭 있어야 하는 것들에 대해서 투표를 진행해요. 그리고 PO는 투표권의 수와 관계 없이 투표를 하는데 이 때 PO가 선택한 것은 무조건 채택이 되기 때문에 PO의 선택으로 제품의 방향성이 바뀔 수도 있어요.</p>
+</li>
+<li>
+<p>투표를 한 것을 바탕으로 4번에 만든 흐름 밑에 검은 줄을 하나 만들고, 해당 프로세스에서 출발 시간을 07시 30분에 출발하는 것으로 변경을 했을 때, 5번의 결과에서 꼭 필요 없는 것들을 아래 칸으로 내려요. 이 때 PO의 선택은 절대 내리지 않아요.</p>
+</li>
+<li>
+<p>6번의 결과물 밑에 검은 줄을 하나 또 만들고, 그 다음에 해당 프로세스를 출 시간이 07시 50분이라고 했을 때 꼭 필요한 것들만 남기고 나머지는 내리는 작업을 진행을 해요.</p>
+</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="우리가-했던-것에-대한-결과물">우리가 했던 것에 대한 결과물<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#%EC%9A%B0%EB%A6%AC%EA%B0%80-%ED%96%88%EB%8D%98-%EA%B2%83%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B2%B0%EA%B3%BC%EB%AC%BC" class="hash-link" aria-label="Direct link to 우리가 했던 것에 대한 결과물" title="Direct link to 우리가 했던 것에 대한 결과물">​</a></h2>
+<ul>
+<li>
+<p>그러면 총 3개의 영역이 나오게 되는데 이 때 07시 50분일 때 꼭 하는 것이 MVP가 되고 이는 fix가 돼요. 그리고 아리 07시 30분에 진행하는 것이 release 1 되고 그 이후는 release 2가 돼요.</p>
+</li>
+<li>
+<p>우리는 해당 과정을 해오면서 기능을 시간 순으로 표시를 했어요. 왜냐하면 완료 시간은 고정이 되어있기 때문이에요. 또한 발산하는 과정을 거치고, 동일한 카테고리에 대해서 의견을 합치면서 수렴하는 과정을 거쳤어요.</p>
+</li>
+<li>
+<p>여기서 중요한 것은 각 release는 1개의 기능을 해야해요. 즉 자동차를 만드는 MVP가 있었다고 한다면. 다음 release는 바퀴를 만드는 것이 아니라 오토바이나 혹은 다른 기능을 하는 것이 만들어져야 하는 것을 의미해요.</p>
+</li>
+<li>
+<p>또한 여기서 우리는 아직 안정한게 있는데 바로 페르소나에요. 대학생을 타겟으로 했는데 어떤 대학생을 타겟으로 했는지 기준이 없어요. 페르소나가 없다면 제품이 어떠한 방향으로 나아가는지에 대해서 불명확해지고 프로젝트가 원하는 방향성으로 흘러가지 못할 수 있어요.</p>
+</li>
+</ul>]]></content>
+        <author>
+            <name>고현림</name>
+            <uri>https://www.linkedin.com/in/%ED%98%84%EB%A6%BC-%EA%B3%A0-b53602221/</uri>
+        </author>
+        <category label="TIL" term="TIL"/>
+        <category label="Etc" term="Etc"/>
     </entry>
     <entry>
         <title type="html"><![CDATA[kubernetes Basic (1)]]></title>
