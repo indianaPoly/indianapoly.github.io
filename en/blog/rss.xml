@@ -4,10 +4,637 @@
         <title>KO HYEON LIM Blog</title>
         <link>https://indianapoly.github.io/en/blog</link>
         <description>KO HYEON LIM Blog</description>
-        <lastBuildDate>Sun, 20 Jul 2025 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 24 Jul 2025 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[AWS basic (4)]]></title>
+            <link>https://indianapoly.github.io/en/blog/2025/07/24/aws/AWS-basic-3-title</link>
+            <guid>https://indianapoly.github.io/en/blog/2025/07/24/aws/AWS-basic-3-title</guid>
+            <pubDate>Thu, 24 Jul 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[Network Connectivity]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="network-connectivity">Network Connectivity<a href="https://indianapoly.github.io/en/blog/2025/07/24/aws/AWS-basic-3-title#network-connectivity" class="hash-link" aria-label="Direct link to Network Connectivity" title="Direct link to Network Connectivity">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="route-53">Route 53<a href="https://indianapoly.github.io/en/blog/2025/07/24/aws/AWS-basic-3-title#route-53" class="hash-link" aria-label="Direct link to Route 53" title="Direct link to Route 53">​</a></h3>
+<ul>
+<li>AWS에서 제공하는 완전 관리형 DNS 서버입니다. 도메인 구입 및 도메인 호스팅 관리릴 지원해요. 외부 도메인을 AWS Route53의 Hosted Zone에 등록하여 사용할 수 있습니다.</li>
+<li>DNS Routing Policy를 통해 트래픽을 적합한 EndPoint로 라우팅합니다. 또한, 도메인 및 연결된 리소스에 대한 Health Check 기능을 제공해줍니다.</li>
+<li>Route 53의 Public / Private Hosted Zone<!-- -->
+<ul>
+<li>Public Hosted Zone : 인터넷에 연결된 모든 리소스에 접근 가능한 DNS 서비스를 제공해요.</li>
+<li>Private Hosted Zone : 특정 VPC 내부 리소스만 접근 가능한 Local DNS 서비스를 제공합니다. VPC 내부 리소스 간 통신을 위한 맞춤형 도메인을 제공해요.</li>
+</ul>
+</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-24/img1.png" width="600">
+<p><strong>Public Hosted Zone</strong></p>
+<ul>
+<li>인터넷에 연결된 리소스의 DNS Record를 관리하는 저장소에요.</li>
+<li>AWS 또는 외부에서 구매한 도메인을 등록하여 사용 가능해요. (반나절 저도의 시간을 ㄱ)</li>
+</ul>
+<p><strong>Private Hosted Zone</strong></p>
+<ul>
+<li>VPC 내부 네트워크 리소스의 DNS Record를 관리하는 저장소에요.</li>
+<li>VPC 내부 통신에만 사용되며, 인터넷에서 접근이 불가능합니다. Private DNS 이름을 사용해 내부 애플리케이션 간 통신을 최적화 할 수 있어요.</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-24/img2.png" width="600">
+<ul>
+<li>Route 53에서 지원되는 DNS Records type은 아래와 같아요.<!-- -->
+<ul>
+<li>A : 도메인 주소와 IPv4 주소를 직접 할당해요.</li>
+<li>AAAA : 도메인 주소와 IPv6 주소를 직접 할당해요.</li>
+<li>CNAME(Canonical Name Record) : 도메인 주소를 다른 도메인 주소에 할당해줘요.</li>
+<li>MX : 도메인 주소를 이메일 서버에 할당해줘요. 등록 도메인 주소 정보를 이메일 주소로 사용합니다.</li>
+<li>NS : Name Server, 구매한 도메인을 관리하는 네임 서버 정보입니다.</li>
+<li>SOA : Start of Authority, 구입한 도메인에 대한 기본 정보가 담긴 레코드에요. Open Search로 로그를 검색, 분석, 시각화를 합니다.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Policy</strong></p>
+<ol>
+<li>Simple Policy</li>
+</ol>
+<ul>
+<li>단순한 방식으로 도메인에 대한 트래픽 리소스를 전달하는 방식입니다.</li>
+<li>1개의 레코드에 Multi value 설정이 가능해요.</li>
+<li>Health Check 기능 사용은 할 수 없습니다.</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-24/img3.png" width="600">
+<ol start="2">
+<li>Weighted</li>
+</ol>
+<ul>
+<li>단순한 방식으로 도메인에 대한 트래픽을 리소스로 전달하는 방식이에요.</li>
+<li>도메인에 등록된 리소스 마다 가중치를 적용해 트래픽의 양을 조절합니다. 레코드의 유형과 레코드의 이름을 동일하게 구성하고 각 레코드에 가중치를 설정합니다.</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-24/img4.png" width="600">
+<ol start="3">
+<li>Latency</li>
+</ol>
+<ul>
+<li>응답 지연시간이 가장 적은 리소스의 정보를 반환하는 방식으로 사용합니다. 일정 기간 측정된 결과 값을 기준으로 라우팅해요.</li>
+<li>시간이 지남에 따라 다른 값을 반환 받을 수도 있습니다. 다중 리전 환경에서 클라이언트와 가장 근접한 리소스로 연결될 확률이 높아요.</li>
+<li>Private Hosted Zone에 등록된 레코드에도 적용이 가능합니다.</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-24/img5.png" width="600">
+<ol start="4">
+<li>Failover</li>
+</ol>
+<ul>
+<li>Route 53에서 제공하는 상태 검사기를 이용해 정상 리소스 값을 반환하는 방식이에요. 하나의 기본 레코드와 보조 레코드로 구성합니다.</li>
+</ul>
+<ol start="5">
+<li>Geolocation</li>
+</ol>
+<ul>
+<li>Client의 위치 정보를 기반으로 가장 가까운 리전의 리소스 정보를 반환하는 방식이에요. 위치 정보와 레코드 반환 값을 Mapping하여 구성합니다.</li>
+<li>EDNS(RFC 7871) 기능을 지원하는 않는 경우에 예상과 달리 동작할 수 있습니다.</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="developer-tools">Developer Tools<a href="https://indianapoly.github.io/en/blog/2025/07/24/aws/AWS-basic-3-title#developer-tools" class="hash-link" aria-label="Direct link to Developer Tools" title="Direct link to Developer Tools">​</a></h2>]]></content:encoded>
+            <category>TIL</category>
+            <category>AWS</category>
+        </item>
+        <item>
+            <title><![CDATA[AWS basic (3)]]></title>
+            <link>https://indianapoly.github.io/en/blog/2025/07/23/aws/AWS-basic-3-title</link>
+            <guid>https://indianapoly.github.io/en/blog/2025/07/23/aws/AWS-basic-3-title</guid>
+            <pubDate>Wed, 23 Jul 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[{/ truncate /}]]></description>
+            <content:encoded><![CDATA[
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="database-service">Database Service<a href="https://indianapoly.github.io/en/blog/2025/07/23/aws/AWS-basic-3-title#database-service" class="hash-link" aria-label="Direct link to Database Service" title="Direct link to Database Service">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="aws-rds개요">AWS RDS개요<a href="https://indianapoly.github.io/en/blog/2025/07/23/aws/AWS-basic-3-title#aws-rds%EA%B0%9C%EC%9A%94" class="hash-link" aria-label="Direct link to AWS RDS개요" title="Direct link to AWS RDS개요">​</a></h3>
+<ul>
+<li>관계형 데이터베이스를 완전관리형으로 제공하는 서비스입니다.</li>
+<li>RDS 서버 시스템을 직접 접속이 불가능해요.</li>
+<li>VPC 내부에 배치해서 사용하며 VPC 환경을 이용한 보안 환경 구성 외에도 IAM, Secret Manager 등의 서비스를 통해 데이터베이스 보안을 강화할 수 있어요.</li>
+</ul>
+<p>AWS RDS DBMS engine type은 아래와 같습니다.</p>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-23/img1.png" width="600">
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="백업">백업<a href="https://indianapoly.github.io/en/blog/2025/07/23/aws/AWS-basic-3-title#%EB%B0%B1%EC%97%85" class="hash-link" aria-label="Direct link to 백업" title="Direct link to 백업">​</a></h3>
+<p>자동 백업과 수동 백업으로 나누어져있어요:</p>
+<ul>
+<li>
+<p>자동 백업</p>
+<ul>
+<li>스냅샷과 트랜잭션 로그를 참고해서 데이터를 백업하는 방식으로 기본적으로 default로 활성화 됩니다. 특정 시점 데이터 상태로 복구할 수 있어요.</li>
+<li>원본 DBMS가 삭제되면 함께 삭제 되는 데이터에요.</li>
+</ul>
+</li>
+<li>
+<p>수동 백업</p>
+<ul>
+<li>사용자가 수동으로 원하는 시점에 스냅샷을 생성하는 방식이에요. 원본 DBMS가 삭제돼도 스냅샷은 삭제되지 않고 S3에 보관이 됩니다.</li>
+<li>다른 리전으로 복제를 하거나 다른 계정에 공유할 수 있어요.</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="aws-rds-read-replica">AWS RDS Read Replica<a href="https://indianapoly.github.io/en/blog/2025/07/23/aws/AWS-basic-3-title#aws-rds-read-replica" class="hash-link" aria-label="Direct link to AWS RDS Read Replica" title="Direct link to AWS RDS Read Replica">​</a></h3>
+<ul>
+<li>대규모 서비스 트래픽을 분산처리하기 위해서 데이터베이스 읽기 작업만 지원하는 복제 데이터 베이스 입니다.</li>
+<li>최대 15개의 읽기 전용 복제 본을 리전, 가용영역에 걸쳐 구성 가능해요. 읽기 전용 복제본은 원본 데이터베이스 시스템이 다운될 경우 별도의 독립된 DB 인스턴스로 수동 승격이 가능해요.</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-23/img2.png" width="600">
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="aws-rds-multi-az가용영역">AWS RDS Multi AZ(가용영역)<a href="https://indianapoly.github.io/en/blog/2025/07/23/aws/AWS-basic-3-title#aws-rds-multi-az%EA%B0%80%EC%9A%A9%EC%98%81%EC%97%AD" class="hash-link" aria-label="Direct link to AWS RDS Multi AZ(가용영역)" title="Direct link to AWS RDS Multi AZ(가용영역)">​</a></h3>
+<ul>
+<li>Write Database를 Active-StanBy 형태로 이중화 구성이 되어있어 장애 대비 자동 복구 대응을 할 수 있어요.</li>
+<li>Read Replica의 쓰기 전용 데이터베이스 승격과 유사하지만 다운타임이 없어요.</li>
+<li>예비용 인스턴스를 하나 더 생성하기 때문에 기존 대비 비용이 2배 증가합니다.</li>
+<li>성능향상에 대한 이점보다는 고가용성을 확보하기 위한 옵션이에요.</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-23/img3.png" width="600">
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="storage-auto-scaling">Storage Auto-Scaling<a href="https://indianapoly.github.io/en/blog/2025/07/23/aws/AWS-basic-3-title#storage-auto-scaling" class="hash-link" aria-label="Direct link to Storage Auto-Scaling" title="Direct link to Storage Auto-Scaling">​</a></h3>
+<ul>
+<li>운영관리 과정에 디스크가 부족해지는 경우 자동으로 용량을 확장할 수 있도록 지원하는 기능입니다.</li>
+<li>전체 용량 중 여유 공간이 10% 미만인 상태가 5분 이상 지속되고 &amp;&amp; 지난 6시간 동안 저장소가 변경된 이력이 없을 경우에 자동으로 확장됩니다.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="rds-storage-structure">RDS Storage Structure<a href="https://indianapoly.github.io/en/blog/2025/07/23/aws/AWS-basic-3-title#rds-storage-structure" class="hash-link" aria-label="Direct link to RDS Storage Structure" title="Direct link to RDS Storage Structure">​</a></h3>
+<ul>
+<li>Aurora에 저장되는 데이터는 최소 3개의 가용영역에서 데이터를 복제하여 6개의 사본으로 저장해요 (4/6 Quorum 방식)</li>
+<li>내부에서 데이터 손실이 발생해도 자체적으로 사본을 통해 자동 복구를 합니다.</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-23/img4.png" width="600">
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="aurora-storage-read-replica-auto-scaling">Aurora Storage, Read Replica, Auto-Scaling<a href="https://indianapoly.github.io/en/blog/2025/07/23/aws/AWS-basic-3-title#aurora-storage-read-replica-auto-scaling" class="hash-link" aria-label="Direct link to Aurora Storage, Read Replica, Auto-Scaling" title="Direct link to Aurora Storage, Read Replica, Auto-Scaling">​</a></h3>
+<ul>
+<li>데이터의 저장공간은 10GB ~ 128TB 까지 자동으로 사용하는 만큼 확장할 수 있어요.</li>
+<li>읽기 전용 복제본은 최대 15개 까지 Auto Scaling 설정이 가능해요. Writter instance에는 적용이 불가능해요.</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="management-service">Management Service<a href="https://indianapoly.github.io/en/blog/2025/07/23/aws/AWS-basic-3-title#management-service" class="hash-link" aria-label="Direct link to Management Service" title="Direct link to Management Service">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="cloud-formation">Cloud Formation<a href="https://indianapoly.github.io/en/blog/2025/07/23/aws/AWS-basic-3-title#cloud-formation" class="hash-link" aria-label="Direct link to Cloud Formation" title="Direct link to Cloud Formation">​</a></h3>
+<p>개요</p>
+<ul>
+<li>인프라를 코드로 관리하게 해주는 서비스로, AWS 리소스의 생성, 관리, 업데이트를 자동화해줘요.</li>
+<li>코드를 템플릿 형태로 만들어서 관리하고, 템플릿을 통해 STACK을 생성하여 코드 내용을 기반으로 인프라를 생성합니다.</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-23/img5.png" width="600">
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="cloud-watch">Cloud Watch<a href="https://indianapoly.github.io/en/blog/2025/07/23/aws/AWS-basic-3-title#cloud-watch" class="hash-link" aria-label="Direct link to Cloud Watch" title="Direct link to Cloud Watch">​</a></h3>
+<p>개요</p>
+<ul>
+<li>AWS 리소스나 Application의 모니터링 서비스입니다.</li>
+<li>운영 데이터를 수집, 분석, 시각화, 관리를 위한 통합 서비스에요</li>
+</ul>
+<p>주요구성은 아래와 같습니다.</p>
+<ul>
+<li>Metrics : AWS 리소스에서 생성되는 Metric 수집 및 저장을 해요. Custom Metric 구성 및 수집/저장이 가능합니다. ex. EC2 CPU 사용률 등<!-- -->
+<ul>
+<li>거의 모든 리소스에서 대한 지표를 기본으로 제공해줘요.</li>
+<li>Metrics의 주요 구성 요소는 NameSpace, Metric Name, Dimension, Period가 있어요.</li>
+</ul>
+</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-23/img6.png" width="600">
+<ul>
+<li>Logs : AWS 리소스에서 생성되는 Log 수집 및 저장을 해요. Custom 설정으로 Application, System, Log 추가 수집 및 저장 가능해요.<!-- -->
+<ul>
+<li>Standard, Infrequent Access 2개의 클래스를 지원합니다.</li>
+<li>로그의 주요 구성요소에는 Log Event, Log Stream, Log Group, Retention Period, Metrics Filter, Subscription Filter 이렇게 있어요.</li>
+</ul>
+</li>
+<li>Dashboards : Metric, Log를 시각화해요.</li>
+<li>Alarms : Metric 데이터를 기준으로 Alarms를 설정합니다. 임계치 초과 시 SNS를 만들어 알림을 전송할 수 있어요.</li>
+<li>CloudWatch Events : 이벤트를 수집하고 특정 리소스로 라우팅합니다. 기타 서비스와 연동하여 특정 작업을 자동으로 수행합니다.</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-23/img7.png" width="600">
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="network-connectivity">Network Connectivity<a href="https://indianapoly.github.io/en/blog/2025/07/23/aws/AWS-basic-3-title#network-connectivity" class="hash-link" aria-label="Direct link to Network Connectivity" title="Direct link to Network Connectivity">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="vpc-peering">VPC Peering<a href="https://indianapoly.github.io/en/blog/2025/07/23/aws/AWS-basic-3-title#vpc-peering" class="hash-link" aria-label="Direct link to VPC Peering" title="Direct link to VPC Peering">​</a></h3>
+<p>개요</p>
+<ul>
+<li>서로 격리 되어 있는 2개 이상의 VPC의 네트워크를 연결하는 서비스입니다.</li>
+<li>동일 리전, 가용영역에서 발생하는 데이터 트래픽은 무료이지만 리전, 가용영역을 교차하는 데이터의 경우에는 트래픽에 따른 금액이 발생해요.</li>
+<li>전이적 피어링이 불가능하며, CIDR block이 겹치는 경우에도 VPC Peering 구성이 불가능해요.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="vpc-endpoint">VPC Endpoint<a href="https://indianapoly.github.io/en/blog/2025/07/23/aws/AWS-basic-3-title#vpc-endpoint" class="hash-link" aria-label="Direct link to VPC Endpoint" title="Direct link to VPC Endpoint">​</a></h3>
+<p>개요</p>
+<ul>
+<li>VPC 내부 리소스가 AWS Service에 접근할 때 Private Link를 사용해 사설 통신을 가능하게 해주는 서비스입니다.</li>
+<li>인터넷 게이트웨어, NAT 게이터으웨, VPN, Direct Connect를 사용하지 않고 사설 통신 구간을 이용해 AWS 서비스와 통신합니다.</li>
+</ul>
+<p><strong>Gateway Endpoint</strong>
+S3, DynamoDB 서비스를 대상으로 private 연결을 제공, Routing Table을 통해 연결합니다. 무료로 사용 가능합니다.</p>
+<p><strong>Interface Endpoint</strong>
+Private Link를 지원하는 서비스를 대상으로 Private 연결을 제공합니다. 지정한 VPC 내부에 Elastic Network Interface를 생성하여 통신을 지원해요.
+ENI와 AWS 서비스와 연결하여 Private 통신 구간이 활성화되는 구조이며, 트래픽에 따른 통신이 가능합니다.</p>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-23/img8.png" width="600">]]></content:encoded>
+            <category>TIL</category>
+            <category>AWS</category>
+        </item>
+        <item>
+            <title><![CDATA[AWS basic (2)]]></title>
+            <link>https://indianapoly.github.io/en/blog/2025/07/22/aws/AWS-basic-2-title</link>
+            <guid>https://indianapoly.github.io/en/blog/2025/07/22/aws/AWS-basic-2-title</guid>
+            <pubDate>Tue, 22 Jul 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[{/ truncate /}]]></description>
+            <content:encoded><![CDATA[
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="elastic-load-balancer-elb">Elastic Load Balancer (ELB)<a href="https://indianapoly.github.io/en/blog/2025/07/22/aws/AWS-basic-2-title#elastic-load-balancer-elb" class="hash-link" aria-label="Direct link to Elastic Load Balancer (ELB)" title="Direct link to Elastic Load Balancer (ELB)">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="개요">개요<a href="https://indianapoly.github.io/en/blog/2025/07/22/aws/AWS-basic-2-title#%EA%B0%9C%EC%9A%94" class="hash-link" aria-label="Direct link to 개요" title="Direct link to 개요">​</a></h3>
+<p>클라이언트의 서비스 요청 트래픽을 여러 서버로 분산시켜 주는 서비스입니다. 부하로 인한 서비스 중단 및 성능 저하를 방지할 수 있어요.</p>
+<ul>
+<li>처리 방식은 아래와 같아요:<!-- -->
+<ol>
+<li>EC2를 타겟 그룹에 할당하고 로드 밸런서가 타겟 그룹을 연동하여 구성해요.</li>
+<li>타겟 그룹에서 상태 검사를 통해 정상적인 서버에게만 요청 전달합니다.</li>
+<li>수 십대의 서버가 구성되어 있어도 클라이언트는 단일 웹 서비스 endpoint로 접근할 수 있어요.</li>
+</ol>
+</li>
+</ul>
+<p>완전 관리형 서비스여서 트래픽 요청이 많으면 ELB 시스템도 내부적으로 자동으로 확장해요. 시스템에 대한 업그레이드, 가용성. 관리 등은 AWS에서 지원을 해줘요.</p>
+<p>다른 AWS 서비스와 연계 지원도 합니다. AWS ACM 인증서와 연동하여 HTTPS 암호화 통신을 지원합니다. EC2, Auto-Scaling, Lambda, ECS, EKS 와 같은 컴퓨팅 서비스와 연계 사용할 수 있어요.</p>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-22/img1.png" width="600">
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="구성-요소">구성 요소<a href="https://indianapoly.github.io/en/blog/2025/07/22/aws/AWS-basic-2-title#%EA%B5%AC%EC%84%B1-%EC%9A%94%EC%86%8C" class="hash-link" aria-label="Direct link to 구성 요소" title="Direct link to 구성 요소">​</a></h3>
+<ul>
+<li>
+<p>Listener</p>
+<ul>
+<li>프로토콜, 포트를 기준으로 클라이언트 요청 수신 -&gt; 요청 내용 검사 후 결과에 따라서 적절한 Target Group으로 전달합니다.</li>
+<li>최소 1개 이상의 리스너가 필요하고, 최대 10개까지 설정할 수 있어요. SSL 인증서로 HTTPS를 적용 가능합니다.</li>
+</ul>
+</li>
+<li>
+<p>Rule</p>
+<ul>
+<li>구성요소는 우선순위, 조건, 동작으로 구성되어 있어요.</li>
+<li>요청 검사 과정에서 설정된 조건에 따라 지정된 동작을 수행합니다.</li>
+</ul>
+</li>
+<li>
+<p>Target Group</p>
+<ul>
+<li>EC2, Lambda, IP Address 등으로 구성되어 있습니다.</li>
+<li>서버의 Health Check를 통해 서버 상태를 모니터링 합니다.</li>
+</ul>
+</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-22/img2.png" width="600">
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="loadbalancer-종류">LoadBalancer 종류<a href="https://indianapoly.github.io/en/blog/2025/07/22/aws/AWS-basic-2-title#loadbalancer-%EC%A2%85%EB%A5%98" class="hash-link" aria-label="Direct link to LoadBalancer 종류" title="Direct link to LoadBalancer 종류">​</a></h3>
+<ul>
+<li>로드밸런서의 종류에는 크게 4개가 있어요:<!-- -->
+<ul>
+<li>Application Load Balancer:
+Application Layer (layer 7)에서 사용되는 LB 에요.
+SSL Offload 기능을 제공해요.(클라이언트가 암호화해서 보냈는데 서버로 보낼 때는 plain text로 보냅니다. 암호화된 것을 복호화하는 과정에서 연산이 많이 일어나기 때문에 사용되는 개념이에요.)</li>
+<li>Network Load Balancer:
+Elastic IP 적용이 가능하며 초당 수백만 건 요청 처리가 가능해서 ALB보다 성능이 좋아요.
+S-NAT이 비활성화 상태에서 트래픽이 들어온다면 클라이언트 IP가 LB에서 변경된 채로 들어오는 것이 아니라 그대로 들어오기 때문에 서버에 도착을 하면 LB로 다시 응답을 보내주는 것이 아닌 NAT GW로 가서 클라이언트에게 전달이 돼요. (LB가 하는 역할이 하나가 되기 때문에 훨씬 성능이 좋아요.)<!-- -->
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">## DSR</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">client -&gt; NLB -&gt; Target Group -&gt; NAT Gateway -&gt; client </span><br></span></code></pre></div></div>
+</li>
+<li>Gateway Load Balancer</li>
+</ul>
+</li>
+</ul>
+<p>주로 사용하는 것은 ALB, NLB 이렇게 2개를 주로 사용합니다. Classic Load Balancer는 사용을 하는 곳은 있지만 단종된 서비스 입니다.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="auto-scaling">Auto Scaling<a href="https://indianapoly.github.io/en/blog/2025/07/22/aws/AWS-basic-2-title#auto-scaling" class="hash-link" aria-label="Direct link to Auto Scaling" title="Direct link to Auto Scaling">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="구성요소">구성요소<a href="https://indianapoly.github.io/en/blog/2025/07/22/aws/AWS-basic-2-title#%EA%B5%AC%EC%84%B1%EC%9A%94%EC%86%8C" class="hash-link" aria-label="Direct link to 구성요소" title="Direct link to 구성요소">​</a></h3>
+<ul>
+<li>Auto Scaling Group (ASG)<!-- -->
+<ul>
+<li>관리 대상 인스턴스를 논리적으로 모아 놓은 집합이에요.</li>
+<li>최소 크기, 최대 크기, 희망 용량을 설정하고 이 범위 내에서 인스턴스를 생성 제거 합니다.</li>
+<li>로드 밸런서의 특정 Target Group으로 포함되도록 지정 가능해요.</li>
+</ul>
+</li>
+<li>Launch Template<!-- -->
+<ul>
+<li>auto Scaling을 통해서 새로 생성할 인스턴스의 설정 값의 모음입니다.</li>
+<li>AMI, TYPE, Security Group, Key-Pair, User Data 등을 정의해요.</li>
+<li>수정이 불가능하고, 새로운 버전을 생성한 뒤에 ASG 설정에서 버전 업데이트가 필요합니다.</li>
+</ul>
+</li>
+<li>Scaling Policies<!-- -->
+<ul>
+<li>인스턴스를 조정하는 기준, 조건을 설정하는 요소에요.</li>
+<li>Scheduled, Dynamic, Predicitive Scaling 방식을 지원합니다.</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="동작-과정">동작 과정<a href="https://indianapoly.github.io/en/blog/2025/07/22/aws/AWS-basic-2-title#%EB%8F%99%EC%9E%91-%EA%B3%BC%EC%A0%95" class="hash-link" aria-label="Direct link to 동작 과정" title="Direct link to 동작 과정">​</a></h3>
+<ol>
+<li>ALB(Application)에서 EC2 상태 검사를 수행합니다.</li>
+<li>Unhealthy 상태 EC2가 발견이 되면 ASG로 전달합니다.</li>
+<li>Launch Template 를 Trigger 합니다.</li>
+<li>EC2 생성 및 ASG, Target Group에 등록합니다.</li>
+<li>인스턴스 매트릭을 수빚하고 CloudWatch로 전달합니다.</li>
+<li>Scaling Policy 조건을 충족하면 알람이 울립니다.</li>
+<li>Launch Template를 Trigger 합니다.</li>
+<li>EC2 생성 및 ASG, Target Group에 등록합니다.</li>
+</ol>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-22/img3.png" width="600">
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="storage-service">Storage Service<a href="https://indianapoly.github.io/en/blog/2025/07/22/aws/AWS-basic-2-title#storage-service" class="hash-link" aria-label="Direct link to Storage Service" title="Direct link to Storage Service">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="block-storage">Block Storage<a href="https://indianapoly.github.io/en/blog/2025/07/22/aws/AWS-basic-2-title#block-storage" class="hash-link" aria-label="Direct link to Block Storage" title="Direct link to Block Storage">​</a></h3>
+<p>대표적으로 AMAZON EBS(Elastic Block Store)</p>
+<p>데이터를 일정한 크기의 블록 단위로 저장해요. 블록의 고유 주소로 접근하여 빠른 접근이 가능합니다. 또한, 서로 다른 OS에서 접근가능해요.</p>
+<p><strong>Elastic Block Store</strong></p>
+<ul>
+<li>EC2 인스턴스에 연결해 사용할 수 있는 네트워크 기반 Block Storage 서비스입니다.<!-- -->
+<ul>
+<li>직접적으로 연결이 되어있지 않아요. 그래서 VM이 끊겨도 주소 기반이기 때문에 접근할 수 있습니다.</li>
+</ul>
+</li>
+<li>Data volume, snapshot에 대한 암호화를 지원해줘요.</li>
+<li>하나의 인스턴스에 연결해 사용하며, EC2 인스턴스와 별개로 관리가 됩니다.<!-- -->
+<ul>
+<li>하나의 인스턴스에 2개 이상의 EBS 볼륨이 연결이 가능합니다.</li>
+<li>볼륨 타입이 io1, 2 타입인 경우네는 동일한 가용영역 내에서 여러 인스턴스에 연결이 가능해요.</li>
+<li>연결되어 있던 EBS가 분리된 후에 다른 인스턴스에 연결할 수 있어요.</li>
+</ul>
+</li>
+<li>특정 가용영역안에서만 생성되기 때문에 가용영역간 EBS 볼륨 공유가 불가능해요.<!-- -->
+<ul>
+<li>만약 정보가 다른 가용영역에 필요로 한다면 스냅샷을 활용해 사용할 수 있어요.</li>
+</ul>
+</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-22/img4.png" width="600">
+<p><strong>Instance Store</strong></p>
+<ul>
+<li>호스트 컴퓨터의 디스크를 직접 연결해요. 가장 빠른 소곧의 디스크 타입입니다.</li>
+<li>비영구적 저장소(휘발성)이어서 인스턴스 중지 및 종료 시에 하드웨어가 바뀌면서 데이터를 손실할 수 있습니다.</li>
+<li>연결해지가 불가능하고, 인스턴스 패밀리에 따라 디스크의 종류와 사이즈가 달라요.</li>
+<li>대표적으로 카산드라와 같은 것들이 사용해요.</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-22/img5.png" width="600">
+<p><strong>EBS Snapshot</strong></p>
+<ul>
+<li>특정 시점에서 EBS 볼륨에 저장된 데이터를 복사해둔 데이터를 의미해요.</li>
+<li>증분 방식 저장(로그와 같은 값들을 저장, 특정 시점으로 맞춰줄 수 있어요.)을 통해서 저장 용량을 효율적으로 관리할 수 있어요.</li>
+<li>snapshot은 S3 버킷에 보관돼요. (ec2 인스턴스에서만 볼 수 있고, S3에서는 보이지 않아요.)</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="file-storage">File Storage<a href="https://indianapoly.github.io/en/blog/2025/07/22/aws/AWS-basic-2-title#file-storage" class="hash-link" aria-label="Direct link to File Storage" title="Direct link to File Storage">​</a></h3>
+<p>대표적으로 AMAZON EFS, AMAZON FSx 가 있어요.</p>
+<p>파일과 폴더의 계충 구조로 저장되어 있어요. 파일, 폴더가 많아질 수록 파일 탐색 성능이 저하돼요.</p>
+<p>파일 시스템(프로토콜)에 따라서 OS 접근이 안될 수 있어요.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="object-storage">Object Storage<a href="https://indianapoly.github.io/en/blog/2025/07/22/aws/AWS-basic-2-title#object-storage" class="hash-link" aria-label="Direct link to Object Storage" title="Direct link to Object Storage">​</a></h3>
+<p>대표적으로 S3가 있어요.</p>
+<p>오브젝트 단위로 데이터를 저장하고 Application 단에서 동작합니다. 물리적 제약이 적어 원하는 만큼 확장 가능합니다.</p>
+<p>오브젝트 별로 KEY<!-- -->:VAULE<!-- --> 형태로 구성 되어있습니다.</p>
+<p><strong>Simple Storage Service</strong></p>
+<ul>
+<li>
+<p>웹 서비스를 이용해 어디서나 접근 가능한 object storage에요. 용량 제한 없이 무제한 확장 가능한 스토리지 입니다. 사용한 만큼 과금이 되요.</p>
+</li>
+<li>
+<p>웹 브라우저 GUI를 이용하거나, REST API를 이용해 데이터를 관리합니다. 단순 데이터 저장소로 동작하며, 프로그램 설치 작업은 제한돼요.</p>
+</li>
+<li>
+<p>정적 웹 호스팅을 지원해요.</p>
+</li>
+<li>
+<p>버킷을 생성할 때는 고유한 이름으로 생성해야하며, 생성되는 위치 지정이 필요합니다.</p>
+</li>
+<li>
+<p>버킷 내 저장되는 Object마다 KEY VALUE 로 맵핑이 됩니다.</p>
+</li>
+<li>
+<p>객체를 저장하게 되면 S3 URI(AWS 내부 작업용 식별자), Object URL(http 기반의 외부 접속용 식별자) 정보를 할당해줍니다.</p>
+<ul>
+<li>Object을 브라우저에서 띄울 때 사용합니다. (조회용으로 사용해요.)</li>
+</ul>
+</li>
+</ul>
+<p>S3 Bucket은 아래와 같아요.</p>
+<ul>
+<li>Effect : Action에 명시된 작업 권환을 Allow 하거나 Deny 합니다.</li>
+<li>Principal : 명시된 대상에 접근을 허용할 보안주체 (User, Role 등등)을 지정해요.</li>
+<li>Action : 서비스명과 행위 형태로 구성이 되어있어요.</li>
+<li>Resource : 정책 적용대상의 ARN 정보를 입력해요.</li>
+<li>Condition: 정책이 적용될 조건을 지정해줘요.</li>
+</ul>
+<div class="language-JSON language-json codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-json codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token property" style="color:#36acaa">"Statement"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            </span><span class="token property" style="color:#36acaa">"Effect"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"Allow"</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token comment" style="color:#999988;font-style:italic">// or "Deny"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            </span><span class="token property" style="color:#36acaa">"Principal"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                </span><span class="token property" style="color:#36acaa">"AWS"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"arn:...:user"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            </span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            </span><span class="token property" style="color:#36acaa">"Action"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"s3:GetObejct"</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            </span><span class="token property" style="color:#36acaa">"Resource"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"arn:...:my_bucket/*"</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            </span><span class="token property" style="color:#36acaa">"Condition"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                </span><span class="token property" style="color:#36acaa">"IpAddress"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                    </span><span class="token property" style="color:#36acaa">"aws:SourceIp"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                        </span><span class="token string" style="color:#e3116c">"100.10.1.1/32"</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                        </span><span class="token string" style="color:#e3116c">"10.0.0.0/16"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                    </span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></span></code></pre></div></div>
+<ul>
+<li>S3 public Access Block<!-- -->
+<ul>
+<li>bucket policy, s3 access control list 설정보다는 public access block이 우선입니다.</li>
+<li>기본적으로 버킷은 private 상태로 생성되지만, 데이터를 안전하게 보호하기 위해서 public 접근 허용 정책이 적용되는 것을 방지하기 위한 도구입니다.</li>
+<li>Bucket policy, access control list 등에서 public 접근 권한을 허용하는 설정을 무시하거나 차단합니다.</li>
+</ul>
+</li>
+</ul>]]></content:encoded>
+            <category>TIL</category>
+            <category>AWS</category>
+        </item>
+        <item>
+            <title><![CDATA[AWS basic (1)]]></title>
+            <link>https://indianapoly.github.io/en/blog/2025/07/21/aws/AWS-basic-1-title</link>
+            <guid>https://indianapoly.github.io/en/blog/2025/07/21/aws/AWS-basic-1-title</guid>
+            <pubDate>Mon, 21 Jul 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[{/ truncate /}]]></description>
+            <content:encoded><![CDATA[
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="네이밍-컨벤션">네이밍 컨벤션<a href="https://indianapoly.github.io/en/blog/2025/07/21/aws/AWS-basic-1-title#%EB%84%A4%EC%9D%B4%EB%B0%8D-%EC%BB%A8%EB%B2%A4%EC%85%98" class="hash-link" aria-label="Direct link to 네이밍 컨벤션" title="Direct link to 네이밍 컨벤션">​</a></h2>
+<p>회사마다 기준이 있기도 하고, 자신마다 목표를 세워두고 진행할 수 있어요.</p>
+<ul>
+<li>
+<p>시스템 개발 환경
+dev(development), stg(staging), qa, prd</p>
+</li>
+<li>
+<p>시스템 명칭
+erp, crm, ecommerce, bank</p>
+</li>
+<li>
+<p>리소스 명칭
+ec2, rds, dynamodb, redis</p>
+</li>
+<li>
+<p>시스템 역할
+web, was, aip, bastion</p>
+</li>
+<li>
+<p>a + 넘버링
+pub01a, pri01c</p>
+</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="identity-and-access-management">Identity and Access Management<a href="https://indianapoly.github.io/en/blog/2025/07/21/aws/AWS-basic-1-title#identity-and-access-management" class="hash-link" aria-label="Direct link to Identity and Access Management" title="Direct link to Identity and Access Management">​</a></h2>
+<p>누가(Identity) 어떤 것을 이용할 수 있는지 없는지에 대한 것입니다.</p>
+<p>Root User는 개정 생성시 발급이 되는데 초기 설정 이후에는 사용하지 않는 것을 권장해요</p>
+<ol>
+<li>Root User MFA 설정</li>
+<li>Password Policy 설정</li>
+<li>대체 연락처 설정</li>
+<li>Admin User 생성 (여기서 작업을 하는 것이 좋다.)</li>
+</ol>
+<p>=&gt; 해당 작업을 제외한 모든 작업에서 Root User 사용을 제한하는 것이 좋아요. 만약 Root User와 동일한 권한을 행세하고 싶으면 아래와 같이 진행을 주면 돼요.</p>
+<p>아래 사진을 보게 되면 IAM에 접속하여 사용자를 하나 생성을 해주는데 이 때 AdministratorAccess를 지정해주면 Root 계정이 아닌 다른 계정에 전체 권한을 부여할 수 있도록 해줍니다.
+Admin의 Policy(json)은 아래와 같이 구성이 되어있어요.</p>
+<div class="language-JSON language-json codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-json codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token property" style="color:#36acaa">"Version"</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"2012-10-17"</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token property" style="color:#36acaa">"Statement"</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token property" style="color:#36acaa">"Effect"</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"Allow"</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token property" style="color:#36acaa">"Action"</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"*"</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token property" style="color:#36acaa">"Resource"</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"*"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></span></code></pre></div></div>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-21/img2.png" width="600">
+<ul>
+<li>
+<p>Identity (보안 주체, Principal)</p>
+<ul>
+<li>Root User : 모든 권한을 소유, 초기 설정 후에 사용을 지양, 등록된 이메일 주소로 접근</li>
+<li>IAM User : 부여된 권한만 행사, 장기자격증명, 생성된 자격(ID, PW)로 접근</li>
+<li>IAM Role : 부여된 권한만 행사, 임시자격증명, AWS API를 사용해 접근</li>
+<li>AWS Service(application) : 사용자 대신 작업 수행, IAM User / IAM Role을 이용해서 작업을 대신 수행</li>
+</ul>
+</li>
+<li>
+<p>Access Management</p>
+<ul>
+<li>IAM은 JSON 구조로 구성된 정책(policy) 문서를 기반으로 사용자의 권한을 관리</li>
+</ul>
+</li>
+</ul>
+<div class="language-JSON language-json codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-json codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token property" style="color:#36acaa">"누가"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"IAM User / AWS Service .."</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token property" style="color:#36acaa">"무엇을 (대상)"</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"S3 / EC2 / DynamoDB .."</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token property" style="color:#36acaa">"어떻게 (행위)"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"GET / DELETE / CREATE .."</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token property" style="color:#36acaa">"할 수 있다/없다"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"true/false"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></span></code></pre></div></div>
+<p>JSON 정책 -&gt; Role에게 부여하고 이것을 다시 Service에 줄 수 있어요. EC2 인스턴스에 동일한 IAM 정책을 부여하고 싶으면 Role에 역할을 부여하고 해당 역할을 부여해주면 돼요.</p>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-21/img1.png" width="600">
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="network-baseline">Network Baseline<a href="https://indianapoly.github.io/en/blog/2025/07/21/aws/AWS-basic-1-title#network-baseline" class="hash-link" aria-label="Direct link to Network Baseline" title="Direct link to Network Baseline">​</a></h2>
+<p>네트워크 3가지 설계 포인트</p>
+<ul>
+<li>
+<p>segmentation : private 환경을 만들어 두는 것입니다.</p>
+<ul>
+<li>CIDR-Subnetting, Public &amp; Private ...</li>
+</ul>
+</li>
+<li>
+<p>connectivity : private 환경과 연결이 되는 것을 말합니다.</p>
+<ul>
+<li>IGW, NAT, Elastic IP, Site to Site VPN ...</li>
+</ul>
+</li>
+<li>
+<p>security : 열린 것들을 안전하게 방어하는 것입니다.</p>
+<ul>
+<li>보안 그룹, Network-ACL, WAF ...</li>
+</ul>
+</li>
+</ul>
+<p>Private IP 주소 대역은 아래 사진과 같이 RFC 1918 문서에 표준으로 지정하고 있습니다. 따라서 VPC 네트워크를 설정하게 된다면 사진과 같은 네트워크를 설정하면 됩니다.</p>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-21/img1.png" width="600">
+<p>AWS에서는 예약된 IP 5개를 제외한 나머지를 자유롭게 사용할 수 있어요.</p>
+<ul>
+<li>x.x.x.0 : Network Address</li>
+<li>x.x.x.255 : Broadcast Address</li>
+<li>x.x.x.1 : VPC Router</li>
+<li>x.x.x.2 : DNS server</li>
+<li>x.x.x.3 : Futuer use</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="vpc-virtual-private-cloud">VPC (Virtual Private Cloud)<a href="https://indianapoly.github.io/en/blog/2025/07/21/aws/AWS-basic-1-title#vpc-virtual-private-cloud" class="hash-link" aria-label="Direct link to VPC (Virtual Private Cloud)" title="Direct link to VPC (Virtual Private Cloud)">​</a></h2>
+<p>VPC는 다른 네트워크 환경 및 외부와 격리된 가상의 사설 네트워크를 말해요.</p>
+<ul>
+<li>
+<p>AWS 안에서는 최소 /28 ~ 최대 /16 생성할 수 있어요.</p>
+</li>
+<li>
+<p>VPC는 최대 5개 생성 가능하며, 더 추가를 하기 위해서는 AWS에 요청을 해주면 돼요.</p>
+</li>
+<li>
+<p>CIDR은 한 번 설정하면 수정이 불가능합니다.</p>
+<ul>
+<li>추가하고 싶으면 Secondary를 추가해서 네트워크 확장을 할 수 있어요. 이것도 최대 5개인데 5개 초과해서 사용하기 위해서는 AWS에 요청을 해주면 됩니다.</li>
+</ul>
+</li>
+<li>
+<p>VPC는 특정 Region에 종속 리소스 (리전안에서만 활동이 가능함)에요.</p>
+<ul>
+<li>1개의 VPC로 모든 Region을 커버하는 것을 불가능합니다.</li>
+</ul>
+</li>
+<li>
+<p>외부와 격리된 VPC는 Internet GateWay를 통해서만 인터넷과 통신을 가능해요.</p>
+<ul>
+<li>Internet Gateway는 생성 후 VPC에 할당하여 사용합니다.</li>
+<li>1개의 VPC에는 1개의 Internet Gateway만 할당 가능합니다.</li>
+</ul>
+</li>
+<li>
+<p>격리된 network 간에 통신이 가능하도록 Routing Table을 설정해주면 됩니다.</p>
+</li>
+<li>
+<p>NAT Gateway vs Routing Table</p>
+<ul>
+<li>Private Subnet의 리소스들이 Nat Gateway의 Public IP를 공유해 인터넷을 이용합니다. 내부 리소스가 외부로 접근하는 경우에만 허용해요.</li>
+<li>외부에서 내부로 접속하는 트래픽은 처리할 수 없어요.</li>
+</ul>
+</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-21/img4.png" width="600">
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-21/img5.png" width="600">
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="network-security">Network Security<a href="https://indianapoly.github.io/en/blog/2025/07/21/aws/AWS-basic-1-title#network-security" class="hash-link" aria-label="Direct link to Network Security" title="Direct link to Network Security">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="network-acl">Network ACL<a href="https://indianapoly.github.io/en/blog/2025/07/21/aws/AWS-basic-1-title#network-acl" class="hash-link" aria-label="Direct link to Network ACL" title="Direct link to Network ACL">​</a></h3>
+<ul>
+<li>서브넷에 접근 허용할 트래픽 정보를 관리하는 가상의 방화벽이에요. (서브넷 단위로 적용 가능합니다.)</li>
+<li>1개의 NACL에 여러 개의 서브넷을 적용하는 것은 가능하나 그 반대는 불가능해요.</li>
+<li>상태 비저장 방식이어서 In-bound와 Out-bound 모두 규칙을 적용해주어야 해요.</li>
+<li>모든 트래픅을 허용하고, 차단할 IP 주소나 Port를 지정해서 차단하는 방식이라고 생각하면 편해요.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="보안-그룹">보안 그룹<a href="https://indianapoly.github.io/en/blog/2025/07/21/aws/AWS-basic-1-title#%EB%B3%B4%EC%95%88-%EA%B7%B8%EB%A3%B9" class="hash-link" aria-label="Direct link to 보안 그룹" title="Direct link to 보안 그룹">​</a></h3>
+<ul>
+<li>리소스에 접근 허용할 트래픽 정보를 관리하는 가상의 방화벽이에요.</li>
+<li>Elastic Network Interface에 여러 개의 보안 그룹 적용이 가능해요.</li>
+<li>In-bound / Out-bound 트래픽의 허용 규칙만을 정의해요. 기본적으로는 다 막아두지만 특정한 것에 대해서 허용해요.</li>
+<li>보안 그룹은 상태 저장 방식의 방화벽이기 때문에 In-bound 허용 규칙이 적용이 되어있으면, Out-bound 허용 규칙이 없어도 통과할 수 있어요.</li>
+<li>리소스 단위로 각 허용되어야할 Protocol, Port를 세부적으로 지정하는 방식이라고 알고 있으면 돼요.</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="elastic-compute-cloud-ec2">Elastic Compute Cloud (EC2)<a href="https://indianapoly.github.io/en/blog/2025/07/21/aws/AWS-basic-1-title#elastic-compute-cloud-ec2" class="hash-link" aria-label="Direct link to Elastic Compute Cloud (EC2)" title="Direct link to Elastic Compute Cloud (EC2)">​</a></h2>
+<p>가상화된 컴퓨팅 자원(인스턴스를 제공)을 빌려줘요.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="naming-rule">Naming Rule<a href="https://indianapoly.github.io/en/blog/2025/07/21/aws/AWS-basic-1-title#naming-rule" class="hash-link" aria-label="Direct link to Naming Rule" title="Direct link to Naming Rule">​</a></h3>
+<p>EC2 instance Type은 instance family, generation, attributes, size로 구성이 되어있어요.</p>
+<div class="language-txt codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-txt codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">ex. t4g. 2xlarge 를 보면 t(instance family) | 4(instance generation) | g(attributes) | 2xlarge(size)</span><br></span></code></pre></div></div>
+<ul>
+<li>instance family: 기능 별로 그룹으로 묶어 패밀리 단위로 구분해요.</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-21/img6.png" width="600">
+<ul>
+<li>
+<p>instance generation</p>
+<ul>
+<li>주기적으로 최신 기술을 반영한 인스턴스 세대를 출시해요.</li>
+<li>이전 세대 인스턴스 대비 비용이 낮아지거나 성능이 향상돼요.</li>
+<li>리전, 가용영역(AZ) 별로 지원되는 인스턴스 세대가 달라요.</li>
+</ul>
+</li>
+<li>
+<p>attributes</p>
+<ul>
+<li>추가 지원되는 기능에 따라 attributes가 붙어요.</li>
+</ul>
+</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-21/img7.png" width="600">
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="amazon-machine-imageami">Amazon Machine Image(AMI)<a href="https://indianapoly.github.io/en/blog/2025/07/21/aws/AWS-basic-1-title#amazon-machine-imageami" class="hash-link" aria-label="Direct link to Amazon Machine Image(AMI)" title="Direct link to Amazon Machine Image(AMI)">​</a></h3>
+<ul>
+<li>
+<p>EC2 인스턴스를 실행하는데 필요한 설정 정보를 모은 단위입니다.</p>
+</li>
+<li>
+<p>AMI 구성 요소 아래와 3가지에요:</p>
+<ul>
+<li>루트 볼륨 템플릿: 인스턴스 루트 볼륨에 사용되는 템플릿 (ex. 아마존 리눅스2, 우분투 리눅스 등)</li>
+<li>인스턴스 시작 설정 값 : 인스턴스 타입, 네트워크 설정, 스토리지 구성</li>
+<li>AMI 권환 관리 정보(Permission): public / private</li>
+</ul>
+</li>
+<li>
+<p>리전 단위로 저장되며, 사용하려면 리전에 AMI가 없으면 리전 간 복사를 진행해요.</p>
+</li>
+<li>
+<p>AMI 데이터 자체는 S3에 저장이 되며 저장 비용이 발생해요.</p>
+</li>
+<li>
+<p>실제 사용하는 사례는 아래와 같아요:</p>
+<ol>
+<li>DevOps CI/CD 환경에서 개발 환경이 사전 구성된 AMI로 테스트 환경을 구성해요.</li>
+<li>Autu Scaling을 통해 동일한 설정을 가진 인스턴스를 복제 생성해요.</li>
+<li>사내 지정된 보안 소프트웨어가 설치된 AMI 인스턴스를 생성할 때 사용해요.</li>
+<li>인스턴스 장애 발생 상황에서 사전에 백업한 인스턴스 AMI 이용하여 시스템을 복원해요.</li>
+</ol>
+</li>
+<li>
+<p>AMI 의 종류는 아래와 같이 있어요:</p>
+<ol>
+<li>AWS AMI : AWS가 기본적으로 제공하는 이미지입니다.</li>
+<li>Marketplace AMI : third-party vender가 생성한 이미지입니다.</li>
+<li>Community AMI : aws 사용자가 생성한 이미지이고 사용 전 보안과 안정성 검토가 필수에요.</li>
+<li>Sharing AMI : 특정 사용자 간에 공유하는 이미지로, 조직 내 협업, 특정 프로젝트에서 사용돼요.</li>
+</ol>
+</li>
+</ul>
+<img src="https://indianapoly.github.io/img/blog/aws/2025-07-21/img8.png" width="600">
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ip">IP<a href="https://indianapoly.github.io/en/blog/2025/07/21/aws/AWS-basic-1-title#ip" class="hash-link" aria-label="Direct link to IP" title="Direct link to IP">​</a></h3>
+<p>public IP는 서브넷에 생성할 때 자동 할당 되는 IP에요. 최근에는 IPv4 IP갯수가 부족해서 돈을 받아요.</p>
+<p>Elastic IP는 영구적인 IP로 인스턴스 중지 후에 다시 시작해도 같은 값을 유지해요.</p>]]></content:encoded>
+            <category>TIL</category>
+            <category>AWS</category>
+        </item>
         <item>
             <title><![CDATA[Grafana + Prometheus + MySQL Exporter를 활용한 MySQL 모니터링 설정기]]></title>
             <link>https://indianapoly.github.io/en/blog/2025/07/20/docker/MYSQL-monioring-setting-title</link>
