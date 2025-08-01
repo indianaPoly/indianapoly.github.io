@@ -4,10 +4,99 @@
         <title>KO HYEON LIM Blog</title>
         <link>https://indianapoly.github.io/blog</link>
         <description>KO HYEON LIM Blog</description>
-        <lastBuildDate>Sun, 27 Jul 2025 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 01 Aug 2025 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>ko</language>
+        <item>
+            <title><![CDATA[Terraform Basic(1)]]></title>
+            <link>https://indianapoly.github.io/blog/2025/08/01/terraform/traform-basic-1-title</link>
+            <guid>https://indianapoly.github.io/blog/2025/08/01/terraform/traform-basic-1-title</guid>
+            <pubDate>Fri, 01 Aug 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[{/ truncate /}]]></description>
+            <content:encoded><![CDATA[
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="개념-학습">개념 학습<a href="https://indianapoly.github.io/blog/2025/08/01/terraform/traform-basic-1-title#%EA%B0%9C%EB%85%90-%ED%95%99%EC%8A%B5" class="hash-link" aria-label="개념 학습에 대한 직접 링크" title="개념 학습에 대한 직접 링크">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="태라폼-소개">태라폼 소개<a href="https://indianapoly.github.io/blog/2025/08/01/terraform/traform-basic-1-title#%ED%83%9C%EB%9D%BC%ED%8F%BC-%EC%86%8C%EA%B0%9C" class="hash-link" aria-label="태라폼 소개에 대한 직접 링크" title="태라폼 소개에 대한 직접 링크">​</a></h3>
+<ul>
+<li>구성 파일을 사용하여 버전 관리와 재사용 및 공유 기능을 제공해요. 클라우드 및 온프레미스 리소스를 모두 정의할 수 있는 코드형 인프라 관리 도구입니다.</li>
+<li>테라폼으로 리소스를 프로비저닝하면 프로비저닝된 것을 ansible과 같은 것들로 관리를 해줄 수가 있어요.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="프로비저닝-도구">프로비저닝 도구<a href="https://indianapoly.github.io/blog/2025/08/01/terraform/traform-basic-1-title#%ED%94%84%EB%A1%9C%EB%B9%84%EC%A0%80%EB%8B%9D-%EB%8F%84%EA%B5%AC" class="hash-link" aria-label="프로비저닝 도구에 대한 직접 링크" title="프로비저닝 도구에 대한 직접 링크">​</a></h3>
+<p>프로비저닝 도구는 서버 자체를 생성합니다. 도구를 사용하면 서버 뿐만 아니라 모든 측면을 생성할 수 있어요.</p>
+<p>아래는 테라폼의 예시 있다 웹 서버를 배표하는 코드에요. 해당 코드에서는 ami와 user_data에 집중하면 좋아요.</p>
+<ul>
+<li>ami는 서버에서 배포할 ami의 id를 지정해요.</li>
+<li>user_data는 웹 서버가 부팅될 때 실행되는 bash 스크립트에요.</li>
+</ul>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">resource  "aws_instance" "app" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  instance_type      =  "t2.micro"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  availability_zone  =  "us-east-2a"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  ami                =  "ami-0fb653ca2d3203ac1"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  user_data  =  &lt;&lt;-EOF</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                #!/bin/bash</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                sudo  service  apache 2  start</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                EOF</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="테라폼-동작-방법">테라폼 동작 방법<a href="https://indianapoly.github.io/blog/2025/08/01/terraform/traform-basic-1-title#%ED%85%8C%EB%9D%BC%ED%8F%BC-%EB%8F%99%EC%9E%91-%EB%B0%A9%EB%B2%95" class="hash-link" aria-label="테라폼 동작 방법에 대한 직접 링크" title="테라폼 동작 방법에 대한 직접 링크">​</a></h3>
+<p>테라폼은 기본적으로 Go 프로그래밍 언어로 작성된 오픈 소스 도구에요. 따라서 terraform이라는 컴파일된 바이너리를 실행하기만 하면 추가 인프라 실행 없이 인프라를 배포할 수 있어요.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="테라폼-리소스-생성">테라폼 리소스 생성<a href="https://indianapoly.github.io/blog/2025/08/01/terraform/traform-basic-1-title#%ED%85%8C%EB%9D%BC%ED%8F%BC-%EB%A6%AC%EC%86%8C%EC%8A%A4-%EC%83%9D%EC%84%B1" class="hash-link" aria-label="테라폼 리소스 생성에 대한 직접 링크" title="테라폼 리소스 생성에 대한 직접 링크">​</a></h3>
+<p>테라폼에서 리소스 생성은 아래와 같이 템플릿을 활용해 작성할 수 있어요.</p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">resource  "&lt;PROVIDER&gt;_&lt;TYPE&gt;" "&lt;NAME&gt;"  {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  [ CONFIG  ... ]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<ul>
+<li>PROVIDER는 aws와 같은 것이고</li>
+<li>TYPE은 해당 공급자에서 생성할 리소스 유형 (인스턴스와 같은 것들) 이에요.</li>
+<li>Name은 테라폼 코드에서 해당 리소스를 참조하는데 사용하는 식별자입니다.</li>
+<li>CONFIG는 해당 리소스와 관련된 하나 이상의 인수로 구성돼요.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="코드-동기화">코드 동기화<a href="https://indianapoly.github.io/blog/2025/08/01/terraform/traform-basic-1-title#%EC%BD%94%EB%93%9C-%EB%8F%99%EA%B8%B0%ED%99%94" class="hash-link" aria-label="코드 동기화에 대한 직접 링크" title="코드 동기화에 대한 직접 링크">​</a></h3>
+<p>terraform으로 구축해놓은 것을 동기화하기 위해서는 작성한 .tf 파일들과 .terraform.lock.hcl 파일만 깃헙에 올리면 돼요.</p>
+<div class="language-.gitignore codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-.gitignore codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">.terraform</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">*.tfstate</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">*.tfstate.backup</span><br></span></code></pre></div></div>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="실습">실습<a href="https://indianapoly.github.io/blog/2025/08/01/terraform/traform-basic-1-title#%EC%8B%A4%EC%8A%B5" class="hash-link" aria-label="실습에 대한 직접 링크" title="실습에 대한 직접 링크">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="테라폼-초기-세팅-방법">테라폼 초기 세팅 방법<a href="https://indianapoly.github.io/blog/2025/08/01/terraform/traform-basic-1-title#%ED%85%8C%EB%9D%BC%ED%8F%BC-%EC%B4%88%EA%B8%B0-%EC%84%B8%ED%8C%85-%EB%B0%A9%EB%B2%95" class="hash-link" aria-label="테라폼 초기 세팅 방법에 대한 직접 링크" title="테라폼 초기 세팅 방법에 대한 직접 링크">​</a></h3>
+<ol>
+<li>IAM 사용자를 만들어줍니다. 원래는 최소한의 권한만 주지만 실습을 진행하기 위해서 권한을 <code>AdministratorAccess</code> 로 설정 후 만들어줍니다.</li>
+<li>만든 사용자로 들어가서 개발을 access key를 설정해줍니다. 이 때 access key와 secret access key를 잘 보관해둡니다. 이때 AWS CLI를 선택하여 키를 만들어줍니다.</li>
+</ol>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="테러폼-셋팅">테러폼 셋팅<a href="https://indianapoly.github.io/blog/2025/08/01/terraform/traform-basic-1-title#%ED%85%8C%EB%9F%AC%ED%8F%BC-%EC%85%8B%ED%8C%85" class="hash-link" aria-label="테러폼 셋팅에 대한 직접 링크" title="테러폼 셋팅에 대한 직접 링크">​</a></h3>
+<p>현재 저는 아마존 리눅스 환경에서 진행을 하기 때문에 yum을 활용해 개발을 진행</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">sudo yum install -y yum-utils</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">sudo yum -y install terraform</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="aws-인스턴스-생성">AWS 인스턴스 생성<a href="https://indianapoly.github.io/blog/2025/08/01/terraform/traform-basic-1-title#aws-%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4-%EC%83%9D%EC%84%B1" class="hash-link" aria-label="AWS 인스턴스 생성에 대한 직접 링크" title="AWS 인스턴스 생성에 대한 직접 링크">​</a></h3>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">provider "aws" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    region      =  "ap-northeast-2"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">resource "aws_instance" "example" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    {/* ami id 값은 aws ec2 창의 ami에서 찾으면 나옵니다! */}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    ami           = "ami-.."</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    instance_type = "t2.micro"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p>이렇게 작업을 진행해준 다음에 아래 명령를 입력을 해줍니다.</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform init</span><br></span></code></pre></div></div>
+<p>그려먼 .terraform이라는 파일이 하나 생성이 됩니다. 공급자의 코드는 여기에 다운로드가 됩니다. .terraform 디렉토리는 git에 따로 올리지 않아요. 만약 다른 사람이 사용하고 싶으면 .terraform.lock.hcl 공유를 받고 실행하면 멱등성으로 인해 안전하게 실행할 수 있습니다.</p>
+<p>위 작업이 정상적으로 끝이 나면 <code>Terraform has been successfully initialized!</code>가 뜹니다. 그리고 아래 명령어를 입력줘요.</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform plan</span><br></span></code></pre></div></div>
+<p>해당 명령을 실행하면 실제로 반영하기 전에 수행할 작업들을 확인할 수 있어요. + 는 모두 생성되고 -는 모두 삭제가 돼요.</p>
+<p>정상적으로 확인이 되고 나면 아래 명령어를 실행줍니다.</p>
+<ul>
+<li>--auto-approve는 중간에 yes 과정을 없애고 바로 진행할 수 있어요.</li>
+</ul>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform apply --auto-approve</span><br></span></code></pre></div></div>
+<p>만약 기본 VPC가 없다면 정상적으로 인스턴스가 생성이 안될거에요. 그럴 때는 AWS VPC로 들어가서 기본 VPC를 하나 만들어주면 됩니다.</p>
+<p>정상적으로 완료가 되면 <code>Apply complete!</code>를 확인할 수 있어요.</p>
+<p>해당 리소스를 지우기 위해서는 destroy를 활용해서 명령어를 지우실 수 있습니다.</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform destroy --auto-approve</span><br></span></code></pre></div></div>
+<p>해당 명령어 역시 정상적으로 수행을 하고 나면 <code>Destroy complete!</code>를 확인할 수 있어요.</p>
+<p>위 상태에서 실행을 하게 되면 인스턴스 이름이 없는 상태로 나와요. 이름을 지정하기 위해서는 tags에서 Name을 추가해주면 돼요.</p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">resource "aws_instance" "example" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    {/* ami id 값은 aws ec2 창의 ami에서 찾으면 나옵니다! */}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    ami           = "ami-.."</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    instance_type = "t2.micro"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    tags          = {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        Name = "terraform-exmaple"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p>그리고 다시 <code>terraform apply --auto-approve</code>를 하게 되면 기존의 인스턴스를 삭제하지 않고 change가 됩니다.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="aws-httpd-서버-띄우기">AWS httpd 서버 띄우기<a href="https://indianapoly.github.io/blog/2025/08/01/terraform/traform-basic-1-title#aws-httpd-%EC%84%9C%EB%B2%84-%EB%9D%84%EC%9A%B0%EA%B8%B0" class="hash-link" aria-label="AWS httpd 서버 띄우기에 대한 직접 링크" title="AWS httpd 서버 띄우기에 대한 직접 링크">​</a></h3>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">resource "aws_instance" "example" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    {/* ami id 값은 aws ec2 창의 ami에서 찾으면 나옵니다! */}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    ami           = "ami-.."</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    instance_type = "t2.micro"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    user_data     = &lt;&lt;- EOF</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                    #!/bin/bash</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                    echo "hi" &gt; index.html</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                    nohub busybox httpd -f -p 8080 &amp;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                    EOF</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    user_data_replace_on_chage</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    tags          = {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        Name = "terraform-exmaple"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<ul>
+<li>user_data를 활용해서 shell script를 전달해줄 수 있습니다. 이 때 <code>&lt;&lt;-EOF ... EOF</code> 구문을 활용해서 여러 줄 문자열을 생성할 수 있어요.</li>
+<li>user_data_replace_on_chage를 활용하면 원래 인스턴스를 종료하고 새로운 인스턴스를 새롭게 생성합니다.</li>
+</ul>
+<p>하지만 이렇게만 해서는 퍼블릭 IP로 접속을 할 수 없어요. 왜냐하면 보안그룹을 설정하지 않았기 때문이에요. 따라서 테라폼을 활용해서 보안그룹을 생성하면 이 문제를 해결할 수 있어요.</p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">resource  "aws_security_group" "instance"  {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  name  =  "terraform-example-instance"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  ingress  {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    from_port    =  8080</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    to_port      =  8080</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    protocol     =  "tcp"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    cidr_blocks  =  [ "0.0.0.0/0" ]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p>이렇게 만들었다고 해서 인스턴스와 보안그룹이 자동으로 연결이 되지 않아요. 따라서 Terraform 표현식을 통해서 연결을 해줄 수가 있습니다!</p>
+<p>표현식의 기본적인 구조는 <code>&lt;PROVIDER&gt;_&lt;TYPE&gt; . &lt;NAME&gt; . &lt;ATTRIBUTE&gt;</code>에요. 여기서 ATTRIBUTE는</p>
+<ul>
+<li>해당 리소소 인수</li>
+<li>리소스에서 내보낸 속성</li>
+</ul>
+<p>이거 2개 중 하나라고 알고 있으면 돼요.</p>
+<p>보안 그룹은 id라는 속성을 내보내기 때문에 <code>aws_security_group.instance.id</code> 로 해줄 수 있어요. 해당 값을 인스턴스 코드에 넣어주시고 apply를 해주시면 연결이 됩니다.</p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">resource "aws_instance" "example" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    ...기존의 코드들</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    vpc_security_group_ids = [aws_security_group.id]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p>apply가 되면 최종적으로 public ip에 정상적으로 접속이 된 것을 확인할 수 있어요.</p>
+<p>그리고 코드를 보게 되면 port를 확인하게 되면 동일하게 사용이 되는 것은 변수로 처리해 줄 수 있어요. 지정된 변수들은 var. 으로 접근하여서 사용해줄 수 있습니다.</p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">variable "server_port" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    description = "The port the ..."</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    type = number</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    default = 8080</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">resource "aws_security_group" "instance" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    name  =  "terraform-example-instance"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    ingress  {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        from_port    =  var.server_port</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        to_port      =  var.server_port</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        protocol     =  "tcp"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        cidr_blocks  =  [ "0.0.0.0/0" ]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>]]></content:encoded>
+            <category>TIL</category>
+            <category>Terraform</category>
+        </item>
         <item>
             <title><![CDATA[Next JS + gh Pages 배포 삽질 후기]]></title>
             <link>https://indianapoly.github.io/blog/2025/07/27/etc/nextjs_export-title</link>
@@ -973,60 +1062,6 @@ Admin의 Policy(json)은 아래와 같이 구성이 되어있어요.</p>
             <category>Kubernetes</category>
         </item>
         <item>
-            <title><![CDATA[개발하기 전 아이디어 회의 이렇게 해보자.]]></title>
-            <link>https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title</link>
-            <guid>https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title</guid>
-            <pubDate>Wed, 16 Jul 2025 00:00:00 GMT</pubDate>
-            <description><![CDATA[{/ truncate /}]]></description>
-            <content:encoded><![CDATA[
-<p>cloudwave에서 진행했던 idea 회의와 관련된 회고에요. 앞으로 도움이 될 거 같아서 기록 해두어요.</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="주제">주제<a href="https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title#%EC%A3%BC%EC%A0%9C" class="hash-link" aria-label="주제에 대한 직접 링크" title="주제에 대한 직접 링크">​</a></h2>
-<p><code>대학생을 위한 완벽한 아침 루틴에 대한 고민</code> 이에요. 이 때 수면을 시간을 잘 지키고 추가적으로 건강한 루틴을 만드는 것이 목표인 것을 잊지 말아야 해요.</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="process">process<a href="https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title#process" class="hash-link" aria-label="process에 대한 직접 링크" title="process에 대한 직접 링크">​</a></h2>
-<ol>
-<li>
-<p><code>07시 기상</code>, <code>09시 자리 착석</code> 해당 2개의 시작점과 끝점은 고정을 한 상태에서 통학 시간이 1시간임을 고려해서 각자의 아침 루틴을 만들어요.
-ex. 기상 -&gt; 식사 -&gt; 옷을 입는다 -&gt; 집을 나간다 -&gt; 지하철을 탄다 -&gt; .. -&gt; 자리에 착석한다.</p>
-<p>이렇게 각자만의 루틴을 만들었어요.</p>
-</li>
-<li>
-<p>각자 만든 루틴들을 팀원들에게 설명을 해요. 이때 팀원들은 모든 질문에 대해서 의문을 가지고 하나하나 물어보는 작업을 진행을 해요.</p>
-</li>
-<li>
-<p>그리고 만든 루틴 중 제일 괜찮다 아니면 해보고 싶다 하는 사람이 손을 들어요. 해당 손을 든 사람은 이제 Product Owner가 돼요.</p>
-</li>
-<li>
-<p>각자 만든 루틴들을 모두 합쳐요. 동일한 카테고리에 대해서는 하나의 문제로 처리를 하고, 분야가 다르면 무조건 분리 시키는게 중요해요.</p>
-</li>
-<li>
-<p>4번에서 만든 결과물을 바탕으로 투표를 진행을 해요. 먼저 PO가 아닌 사람들이 x개의 투표권을 가지고 꼭 있어야 하는 것들에 대해서 투표를 진행해요. 그리고 PO는 투표권의 수와 관계 없이 투표를 하는데 이 때 PO가 선택한 것은 무조건 채택이 되기 때문에 PO의 선택으로 제품의 방향성이 바뀔 수도 있어요.</p>
-</li>
-<li>
-<p>투표를 한 것을 바탕으로 4번에 만든 흐름 밑에 검은 줄을 하나 만들고, 해당 프로세스에서 출발 시간을 07시 30분에 출발하는 것으로 변경을 했을 때, 5번의 결과에서 꼭 필요 없는 것들을 아래 칸으로 내려요. 이 때 PO의 선택은 절대 내리지 않아요.</p>
-</li>
-<li>
-<p>6번의 결과물 밑에 검은 줄을 하나 또 만들고, 그 다음에 해당 프로세스를 출 시간이 07시 50분이라고 했을 때 꼭 필요한 것들만 남기고 나머지는 내리는 작업을 진행을 해요.</p>
-</li>
-</ol>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="우리가-했던-것에-대한-결과물">우리가 했던 것에 대한 결과물<a href="https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title#%EC%9A%B0%EB%A6%AC%EA%B0%80-%ED%96%88%EB%8D%98-%EA%B2%83%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B2%B0%EA%B3%BC%EB%AC%BC" class="hash-link" aria-label="우리가 했던 것에 대한 결과물에 대한 직접 링크" title="우리가 했던 것에 대한 결과물에 대한 직접 링크">​</a></h2>
-<ul>
-<li>
-<p>그러면 총 3개의 영역이 나오게 되는데 이 때 07시 50분일 때 꼭 하는 것이 MVP가 되고 이는 fix가 돼요. 그리고 아리 07시 30분에 진행하는 것이 release 1 되고 그 이후는 release 2가 돼요.</p>
-</li>
-<li>
-<p>우리는 해당 과정을 해오면서 기능을 시간 순으로 표시를 했어요. 왜냐하면 완료 시간은 고정이 되어있기 때문이에요. 또한 발산하는 과정을 거치고, 동일한 카테고리에 대해서 의견을 합치면서 수렴하는 과정을 거쳤어요.</p>
-</li>
-<li>
-<p>여기서 중요한 것은 각 release는 1개의 기능을 해야해요. 즉 자동차를 만드는 MVP가 있었다고 한다면. 다음 release는 바퀴를 만드는 것이 아니라 오토바이나 혹은 다른 기능을 하는 것이 만들어져야 하는 것을 의미해요.</p>
-</li>
-<li>
-<p>또한 여기서 우리는 아직 안정한게 있는데 바로 페르소나에요. 대학생을 타겟으로 했는데 어떤 대학생을 타겟으로 했는지 기준이 없어요. 페르소나가 없다면 제품이 어떠한 방향으로 나아가는지에 대해서 불명확해지고 프로젝트가 원하는 방향성으로 흘러가지 못할 수 있어요.</p>
-</li>
-</ul>]]></content:encoded>
-            <category>TIL</category>
-            <category>Etc</category>
-        </item>
-        <item>
             <title><![CDATA[Kubernetes Basic(2)]]></title>
             <link>https://indianapoly.github.io/blog/2025/07/16/kubernetes/kubernetes-basic-2-title</link>
             <guid>https://indianapoly.github.io/blog/2025/07/16/kubernetes/kubernetes-basic-2-title</guid>
@@ -1150,7 +1185,61 @@ medium: Memory를 설정을 하면 OS의 메모리 기반 파일시스템을 사
             <category>Kubernetes</category>
         </item>
         <item>
-            <title><![CDATA[kubernetes Basic (1)]]></title>
+            <title><![CDATA[개발하기 전 아이디어 회의 이렇게 해보자.]]></title>
+            <link>https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title</link>
+            <guid>https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title</guid>
+            <pubDate>Wed, 16 Jul 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[{/ truncate /}]]></description>
+            <content:encoded><![CDATA[
+<p>cloudwave에서 진행했던 idea 회의와 관련된 회고에요. 앞으로 도움이 될 거 같아서 기록 해두어요.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="주제">주제<a href="https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title#%EC%A3%BC%EC%A0%9C" class="hash-link" aria-label="주제에 대한 직접 링크" title="주제에 대한 직접 링크">​</a></h2>
+<p><code>대학생을 위한 완벽한 아침 루틴에 대한 고민</code> 이에요. 이 때 수면을 시간을 잘 지키고 추가적으로 건강한 루틴을 만드는 것이 목표인 것을 잊지 말아야 해요.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="process">process<a href="https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title#process" class="hash-link" aria-label="process에 대한 직접 링크" title="process에 대한 직접 링크">​</a></h2>
+<ol>
+<li>
+<p><code>07시 기상</code>, <code>09시 자리 착석</code> 해당 2개의 시작점과 끝점은 고정을 한 상태에서 통학 시간이 1시간임을 고려해서 각자의 아침 루틴을 만들어요.
+ex. 기상 -&gt; 식사 -&gt; 옷을 입는다 -&gt; 집을 나간다 -&gt; 지하철을 탄다 -&gt; .. -&gt; 자리에 착석한다.</p>
+<p>이렇게 각자만의 루틴을 만들었어요.</p>
+</li>
+<li>
+<p>각자 만든 루틴들을 팀원들에게 설명을 해요. 이때 팀원들은 모든 질문에 대해서 의문을 가지고 하나하나 물어보는 작업을 진행을 해요.</p>
+</li>
+<li>
+<p>그리고 만든 루틴 중 제일 괜찮다 아니면 해보고 싶다 하는 사람이 손을 들어요. 해당 손을 든 사람은 이제 Product Owner가 돼요.</p>
+</li>
+<li>
+<p>각자 만든 루틴들을 모두 합쳐요. 동일한 카테고리에 대해서는 하나의 문제로 처리를 하고, 분야가 다르면 무조건 분리 시키는게 중요해요.</p>
+</li>
+<li>
+<p>4번에서 만든 결과물을 바탕으로 투표를 진행을 해요. 먼저 PO가 아닌 사람들이 x개의 투표권을 가지고 꼭 있어야 하는 것들에 대해서 투표를 진행해요. 그리고 PO는 투표권의 수와 관계 없이 투표를 하는데 이 때 PO가 선택한 것은 무조건 채택이 되기 때문에 PO의 선택으로 제품의 방향성이 바뀔 수도 있어요.</p>
+</li>
+<li>
+<p>투표를 한 것을 바탕으로 4번에 만든 흐름 밑에 검은 줄을 하나 만들고, 해당 프로세스에서 출발 시간을 07시 30분에 출발하는 것으로 변경을 했을 때, 5번의 결과에서 꼭 필요 없는 것들을 아래 칸으로 내려요. 이 때 PO의 선택은 절대 내리지 않아요.</p>
+</li>
+<li>
+<p>6번의 결과물 밑에 검은 줄을 하나 또 만들고, 그 다음에 해당 프로세스를 출 시간이 07시 50분이라고 했을 때 꼭 필요한 것들만 남기고 나머지는 내리는 작업을 진행을 해요.</p>
+</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="우리가-했던-것에-대한-결과물">우리가 했던 것에 대한 결과물<a href="https://indianapoly.github.io/blog/2025/07/16/etc/idea_meeting-title#%EC%9A%B0%EB%A6%AC%EA%B0%80-%ED%96%88%EB%8D%98-%EA%B2%83%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B2%B0%EA%B3%BC%EB%AC%BC" class="hash-link" aria-label="우리가 했던 것에 대한 결과물에 대한 직접 링크" title="우리가 했던 것에 대한 결과물에 대한 직접 링크">​</a></h2>
+<ul>
+<li>
+<p>그러면 총 3개의 영역이 나오게 되는데 이 때 07시 50분일 때 꼭 하는 것이 MVP가 되고 이는 fix가 돼요. 그리고 아리 07시 30분에 진행하는 것이 release 1 되고 그 이후는 release 2가 돼요.</p>
+</li>
+<li>
+<p>우리는 해당 과정을 해오면서 기능을 시간 순으로 표시를 했어요. 왜냐하면 완료 시간은 고정이 되어있기 때문이에요. 또한 발산하는 과정을 거치고, 동일한 카테고리에 대해서 의견을 합치면서 수렴하는 과정을 거쳤어요.</p>
+</li>
+<li>
+<p>여기서 중요한 것은 각 release는 1개의 기능을 해야해요. 즉 자동차를 만드는 MVP가 있었다고 한다면. 다음 release는 바퀴를 만드는 것이 아니라 오토바이나 혹은 다른 기능을 하는 것이 만들어져야 하는 것을 의미해요.</p>
+</li>
+<li>
+<p>또한 여기서 우리는 아직 안정한게 있는데 바로 페르소나에요. 대학생을 타겟으로 했는데 어떤 대학생을 타겟으로 했는지 기준이 없어요. 페르소나가 없다면 제품이 어떠한 방향으로 나아가는지에 대해서 불명확해지고 프로젝트가 원하는 방향성으로 흘러가지 못할 수 있어요.</p>
+</li>
+</ul>]]></content:encoded>
+            <category>TIL</category>
+            <category>Etc</category>
+        </item>
+        <item>
+            <title><![CDATA[kubernetes Basic(1)]]></title>
             <link>https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title</link>
             <guid>https://indianapoly.github.io/blog/2025/07/15/kubernetes/kubernetes-basic-1-title</guid>
             <pubDate>Tue, 15 Jul 2025 00:00:00 GMT</pubDate>
