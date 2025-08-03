@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunktil=self.webpackChunktil||[]).push([[4422],{4305:t=>{t.exports=JSON.parse('{"tag":{"label":"Etc","permalink":"/en/blog/tags/etc","allTagsPath":"/en/blog/tags","count":2,"unlisted":false},"listMetadata":{"permalink":"/en/blog/tags/etc","page":1,"postsPerPage":10,"totalPages":1,"totalCount":2,"blogDescription":"Blog","blogTitle":"Blog"}}')}}]);
