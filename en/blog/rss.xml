@@ -4,10 +4,168 @@
         <title>KO HYEON LIM Blog</title>
         <link>https://indianapoly.github.io/en/blog</link>
         <description>KO HYEON LIM Blog</description>
-        <lastBuildDate>Sun, 03 Aug 2025 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 06 Aug 2025 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[Next.js 서버 컴포넌트와 HTML 렌더링에 대한 정확한 이해]]></title>
+            <link>https://indianapoly.github.io/en/blog/2025/08/06/frontend/nextjs_server_component_rendering-title</link>
+            <guid>https://indianapoly.github.io/en/blog/2025/08/06/frontend/nextjs_server_component_rendering-title</guid>
+            <pubDate>Wed, 06 Aug 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[{/ truncate /}]]></description>
+            <content:encoded><![CDATA[
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="서버에서-html을-만들어서-클라이언트에-보낸다">"서버에서 HTML을 만들어서 클라이언트에 보낸다"<a href="https://indianapoly.github.io/en/blog/2025/08/06/frontend/nextjs_server_component_rendering-title#%EC%84%9C%EB%B2%84%EC%97%90%EC%84%9C-html%EC%9D%84-%EB%A7%8C%EB%93%A4%EC%96%B4%EC%84%9C-%ED%81%B4%EB%9D%BC%EC%9D%B4%EC%96%B8%ED%8A%B8%EC%97%90-%EB%B3%B4%EB%82%B8%EB%8B%A4" class="hash-link" aria-label="Direct link to &quot;서버에서 HTML을 만들어서 클라이언트에 보낸다&quot;" title="Direct link to &quot;서버에서 HTML을 만들어서 클라이언트에 보낸다&quot;">​</a></h2>
+<p>이 표현은 전통적인 SSR(서버사이드 렌더링) 방식에선 적절하지만, **Next.js의 서버 컴포넌트(Server Components)**에선 정확하지 않아요.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="정확한-표현은-nextjs-rsc-기준">정확한 표현은? (Next.js RSC 기준)<a href="https://indianapoly.github.io/en/blog/2025/08/06/frontend/nextjs_server_component_rendering-title#%EC%A0%95%ED%99%95%ED%95%9C-%ED%91%9C%ED%98%84%EC%9D%80-nextjs-rsc-%EA%B8%B0%EC%A4%80" class="hash-link" aria-label="Direct link to 정확한 표현은? (Next.js RSC 기준)" title="Direct link to 정확한 표현은? (Next.js RSC 기준)">​</a></h2>
+<blockquote>
+<p>서버는 React 컴포넌트 트리를 실행하여 RSC Payload라는 직렬화된 데이터 스트림을 생성하고, 브라우저는 이를 기반으로 HTML을 점진적으로 구성하며, 클라이언트 컴포넌트는 hydration 과정을 통해 상호작용을 담당해요.</p>
+</blockquote>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="비교-전통-ssr-vs-서버-컴포넌트-기반-렌더링">비교: 전통 SSR vs 서버 컴포넌트 기반 렌더링<a href="https://indianapoly.github.io/en/blog/2025/08/06/frontend/nextjs_server_component_rendering-title#%EB%B9%84%EA%B5%90-%EC%A0%84%ED%86%B5-ssr-vs-%EC%84%9C%EB%B2%84-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8-%EA%B8%B0%EB%B0%98-%EB%A0%8C%EB%8D%94%EB%A7%81" class="hash-link" aria-label="Direct link to 비교: 전통 SSR vs 서버 컴포넌트 기반 렌더링" title="Direct link to 비교: 전통 SSR vs 서버 컴포넌트 기반 렌더링">​</a></h2>
+<table><thead><tr><th>항목</th><th>전통 SSR</th><th>RSC (Server Components)</th></tr></thead><tbody><tr><td>HTML 생성 위치</td><td>서버에서 완성된 HTML 생성</td><td>서버에서 React 트리 직렬화</td></tr><tr><td>전송 형태</td><td>완성된 HTML</td><td>HTML 뼈대 + RSC Payload + JS 번들</td></tr><tr><td>동작 방식</td><td>한 번에 완성된 문서 전달</td><td><code>&lt;script&gt;</code>로 chunked 페이로드 전달</td></tr><tr><td>hydration</td><td>전체 또는 부분 hydration</td><td>클라이언트 컴포넌트만 hydration</td></tr><tr><td>브라우저 역할</td><td>렌더된 HTML 표시</td><td>HTML 구성 + hydration 수행</td></tr></tbody></table>
+<p>표와 같이 쉽게 이해를 할 수 있어요.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="rsc-payload란">RSC Payload란?<a href="https://indianapoly.github.io/en/blog/2025/08/06/frontend/nextjs_server_component_rendering-title#rsc-payload%EB%9E%80" class="hash-link" aria-label="Direct link to RSC Payload란?" title="Direct link to RSC Payload란?">​</a></h2>
+<ul>
+<li>서버 컴포넌트의 React 트리 렌더링 결과를 직렬화한 특수한 데이터 형식를 의미해요.</li>
+<li>브라우저는 <code>&lt;script&gt;self.__next_f.push(...)&lt;/script&gt;</code> 형식으로 이를 받아 처리해줍니다.</li>
+<li>이 Payload에는 아래와 같은 내용이 포함이 돼요.<!-- -->
+<ul>
+<li>서버 컴포넌트의 결과</li>
+<li>클라이언트 컴포넌트 위치 정보</li>
+<li>전달된 props 정보 등이 포함됨</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="실제-네트워크-동작">실제 네트워크 동작<a href="https://indianapoly.github.io/en/blog/2025/08/06/frontend/nextjs_server_component_rendering-title#%EC%8B%A4%EC%A0%9C-%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC-%EB%8F%99%EC%9E%91" class="hash-link" aria-label="Direct link to 실제 네트워크 동작" title="Direct link to 실제 네트워크 동작">​</a></h2>
+<ul>
+<li>초기 진입 시 <code>document</code> 요청에 HTML + RSC Payload + JS 번들이 포함돼요.</li>
+<li>이후 탐색 시엔 <code>.rsc</code> 또는 <code>/_next/data/...</code> 등을 통해 RSC Payload만 전송해요.</li>
+<li>DevTools &gt; Network &gt; <code>document</code> &gt; Response 에서 <code>&lt;script&gt;self.__next_f.push(...)&lt;/script&gt;</code> 블록을 확인할 수 있어요.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="-결론">🧠 결론<a href="https://indianapoly.github.io/en/blog/2025/08/06/frontend/nextjs_server_component_rendering-title#-%EA%B2%B0%EB%A1%A0" class="hash-link" aria-label="Direct link to 🧠 결론" title="Direct link to 🧠 결론">​</a></h2>
+<blockquote>
+<p>Next.js RSC는 "서버에서 HTML을 만든다"는 개념이 아니라, <strong>"React 트리의 결과를 직렬화하여 스트리밍"</strong> 한다는 것이 핵심이에요.</p>
+</blockquote>]]></content:encoded>
+            <category>TIL</category>
+            <category>Frontend</category>
+        </item>
+        <item>
+            <title><![CDATA[Terraform Basic(2)]]></title>
+            <link>https://indianapoly.github.io/en/blog/2025/08/03/terraform/terraform-basic-2-title</link>
+            <guid>https://indianapoly.github.io/en/blog/2025/08/03/terraform/terraform-basic-2-title</guid>
+            <pubDate>Sun, 03 Aug 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[{/ truncate /}]]></description>
+            <content:encoded><![CDATA[
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="상태-관리">상태 관리<a href="https://indianapoly.github.io/en/blog/2025/08/03/terraform/terraform-basic-2-title#%EC%83%81%ED%83%9C-%EA%B4%80%EB%A6%AC" class="hash-link" aria-label="Direct link to 상태 관리" title="Direct link to 상태 관리">​</a></h2>
+<p>테라폼은 자신이 담당하는 인프라가 무엇인지 어떻게 알까요? 그것을 한 번 알아보고자 합니다.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="테라폼의-상태란">테라폼의 상태란?<a href="https://indianapoly.github.io/en/blog/2025/08/03/terraform/terraform-basic-2-title#%ED%85%8C%EB%9D%BC%ED%8F%BC%EC%9D%98-%EC%83%81%ED%83%9C%EB%9E%80" class="hash-link" aria-label="Direct link to 테라폼의 상태란?" title="Direct link to 테라폼의 상태란?">​</a></h3>
+<p>테라폼을 실행할 때마다 테라폼 상태 파일에 생성된 인프라에 대한 정보가 같이 기록이 돼요.</p>
+<p><code>/foo/bar</code> 폴더 내부의 .tf 파일을 실행을 하게 되면 해당 폴더 내부에 <code>/terraform.tfstate</code> 파일을 생성해요. 해당 파일에는 trrraform 리소스에서 실제 소스 표현으로의 매핑을 기록이 되어있어요.</p>
+<div class="language-tf codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-tf codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">resource "aws_instance" "example" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    ami = "ami-..."</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    instance_type = "t2.micro"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p>해당 테라폼 코드를 실행을 하고 .tfstate 파일을 확인해보면</p>
+<div class="language-json codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-json codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token property" style="color:#36acaa">"instance"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token property" style="color:#36acaa">"attributes"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token property" style="color:#36acaa">"ami"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"ami-..."</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token property" style="color:#36acaa">"id"</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"i-..."</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></span></code></pre></div></div>
+<p>이런식으로 json이 작성이 된 것을 확인할 수 있어요. 이 때 아이디는 실제 aws ec2 인스턴스의 아이디를 의미해요. 따라서 테라폼을 실행할 때마다 aws에서 ec2 인스턴스의 최신 상태를 가져오고 이를 테라폼 구성의 내용과 비교하여 적용해야 할 변경 사항을 결정할 수 있어요.</p>
+<p>상태 파일은 비공개 API에요. 이를 직접적으로 편집하거나 직접 읽는 코드를 작성하면 안돼요. 조작해야하는 경우에는 <code>terraform import</code>, <code>terraform state</code> 명령을 사용해주면 돼요.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="tfstate-공유">.tfstate 공유<a href="https://indianapoly.github.io/en/blog/2025/08/03/terraform/terraform-basic-2-title#tfstate-%EA%B3%B5%EC%9C%A0" class="hash-link" aria-label="Direct link to .tfstate 공유" title="Direct link to .tfstate 공유">​</a></h3>
+<p>테라폼을 개인 프로젝트에서 사용을 하면 문제가 없는데, 실제 제품에서 팀으로 테라폼을 사용하게 되면 아래와 같은 문제에 직면해요.</p>
+<ol>
+<li>상태 파일을 위한 공유 저장소 : 테라폼을 사용하여 인프라를 업데이트하려면 각 팀 구성원이 동일한 테라폼 상태 파일에 액세스 해야해요. 이는 해당 파일을 공유 위치에 <code>저장</code> 해야하는 것을 의미해요.</li>
+<li>상태 파일 잠금 : 잠금 없이 팀 구성원이 동시에 테라폼 코드를 실행하는 경우 테라폼 프로세스가 동시에 업데이트하여 충돌할 수 있어요.</li>
+<li>상태 파일 격리 : 인프라를 변경할 때는 다양한 환경을 격리하는 것이 모범적이에요.</li>
+</ol>
+<p>해당 문제에 대해서 아래와 같이 해결 할 수가 있어요.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="상태-파일을-위한-공유-저장소">상태 파일을 위한 공유 저장소<a href="https://indianapoly.github.io/en/blog/2025/08/03/terraform/terraform-basic-2-title#%EC%83%81%ED%83%9C-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EC%9C%84%ED%95%9C-%EA%B3%B5%EC%9C%A0-%EC%A0%80%EC%9E%A5%EC%86%8C" class="hash-link" aria-label="Direct link to 상태 파일을 위한 공유 저장소" title="Direct link to 상태 파일을 위한 공유 저장소">​</a></h2>
+<p>보통은 공통된 것에 엑세스를 할 때는 git과 같은 것에 두는게 좋아요. 하지만 테라폼 코드를 버전 제어에 저장하는 것은 아래와 같은 이유로 좋지 않아요:\</p>
+<ul>
+<li>수동작업에 대한 오류<!-- -->
+<ul>
+<li>테라폼을 실행하기 전 버전 제어에서 최신 변경 사항을 풀다운하거나, 실행한 이후에 최신 변경사항을 푸쉬하는 것을 잊어버리기 쉬워요. 팀의 누군가가 오래된 파일을 실행하여 이전 배포로 롤백하거나 할 수 있기 때문이에요.</li>
+</ul>
+</li>
+<li>잠금<!-- -->
+<ul>
+<li>대부분의 버전 제어 시스템들은 동일한 상태 파일에 대해서 apply하는 것을 방지해주지 않아요.</li>
+</ul>
+</li>
+<li>비밀<!-- -->
+<ul>
+<li>테라폼의 상태 파일은 기본적으로 일반 텍스트로 저장이 되기 때문에 민감한 데이터가 들어갈 수도 있어요.</li>
+</ul>
+</li>
+</ul>
+<p>버전 제이 시스템을 사용하는 것보다 제일 좋은 방법은 <code>원격 백엔드</code>를 사용하는게 좋아요. 기본 백엔드는 로컬 디스크에 상태 파일을 저장하는 로컬 백엔드이고 원격 백엔드는 원격 공유 저장소에 저장할 수 있어요.</p>
+<p>대표적으로는 AWS S#, Azure Storage, Google Cloud Storage 가 있어요.</p>
+<p>원격 백엔드를 사용을 하면 위의 문제를 해결할 수 있어요.</p>
+<ul>
+<li>수동작업에 대한 오류<!-- -->
+<ul>
+<li>원격 백엔드를 구성하고 plan 혹은 apply를 하면 해당 백엔드에 상태 파일을 자동으로 로드하고 상태파일을 저장해주기 때문에 오류가 발생할 가능성이 없어요.</li>
+</ul>
+</li>
+<li>잠금<!-- -->
+<ul>
+<li>원격 백엔드는 기본적으로 잠금을 지원요. terraform apply를 실행하기 위해 테라폼은 자동으로 잠금이 됩니다.</li>
+</ul>
+</li>
+<li>비밀<!-- -->
+<ul>
+<li>원격 백엔드는 기본적으로 전송 ㅅ중 암호화와 나머지 상태 파일 암호화를 지원해줍니다.</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="실습">실습<a href="https://indianapoly.github.io/en/blog/2025/08/03/terraform/terraform-basic-2-title#%EC%8B%A4%EC%8A%B5" class="hash-link" aria-label="Direct link to 실습" title="Direct link to 실습">​</a></h3>
+<div class="language-tf codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-tf codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">provider "aws" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    region = "ap-northeast-2"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">resoure "aws_s3_bucket" "terraform_state" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    bucket = "terraform-state-alias"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    lifecycle {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        prevent_destroy = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p>버킷 이름을 지정하고 <code>prevent_destroy</code> 설정을 두어 삭제를 방지해줄 수 있어요.</p>
+<p>그다음에 몇 가지 보호 계층을 추가해줍니다.</p>
+<ol>
+<li>버저닝 리소스를 사용하면 버킷의 파일을 업데이트 할 대마다 해당 파일의 새 버전이 생성돼요. 이를 통해서 이전 버전으로 돌릴 수 있어요.</li>
+<li>server_side_encryption_configuration을 사용하여 기록되는 모든 데이터에 대해서 서버 측 암호화를 활성화 해요.</li>
+<li>public_access_block을 사용해서 모든 퍼블릭 엑세스를 차단합니다.</li>
+</ol>
+<div class="language-tf codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-tf codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">resource "aws_s3_bucket_versioning" "enabled" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    bucket = aws_s3_bucket.terraform_state.id</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    versioning_configuration {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        status = "Enabled"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">resource "aws_s3_bucket_server_side_encryption_configuration" "default" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    bucket = aws_s3_bucket.terraform_state.id</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    rule {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        apply_server_side_encryption_by_default {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            sse_algorithm = "AES256"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">resource "aws_s3_bucket_public_access_block" "public_access" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    bucket = aws_s3_bucket.terraform_state.id</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    block_public_acls = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    block_public_policy = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    ignore_public_acls = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    restrict_public_buckets = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p>그 다음에는 dynamoDB를 생성해줍니다. dynamoDB는 NoSQL DB의 일종으로 동시에 여러 사용자가 실행했을 때 발생할 수 있는 충돌을 방지해줍니다.</p>
+<div class="language-tf codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-tf codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">resource "aws_dynamodb_table" "terraform_locks" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  name = "terraform-locks"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  billing_mode = "PAY_PER_REQUEST"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  hash_key = "LockID"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  attribute {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    name = "LockID"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    type = "S"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p>기초적인 작업은 모두 마무리했어요. 그런데 해당 상태로만 지정을 해두고 실행을 하면 아직은 로컬 백엔드 환경이에요. 이제 원격 백엔드로 지정을 해주도록 해볼께요.</p>
+<p>해당 코드는 제일 최상단에 지정해주면 돼요. 여기에 들어가는 값들은 위에서 지정한 이름들을 하드코딩해주면 됩니다. (더 좋은 방법 충분히 있다고 생각해요.)</p>
+<div class="language-tf codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-tf codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    backend "s3" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        bucket = "terraform-state"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        key = "global/s3/terraform.tfstate"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        region = "ap-northeast-2"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        dynamodb_table = "terraform-locks"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        encrypt = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p>삭제를 하기 위해서는</p>
+<ol>
+<li>백엔드 구성을 제거하고 init을 실행합니다.</li>
+<li>terraform destroy를 실행하여 리소스를 삭제합니다.</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="상태-파일-격리">상태 파일 격리<a href="https://indianapoly.github.io/en/blog/2025/08/03/terraform/terraform-basic-2-title#%EC%83%81%ED%83%9C-%ED%8C%8C%EC%9D%BC-%EA%B2%A9%EB%A6%AC" class="hash-link" aria-label="Direct link to 상태 파일 격리" title="Direct link to 상태 파일 격리">​</a></h2>
+<p>위와 같이 진행을 해준다면 협업에서는 문제가 안돼요. 하지만 격리 부분에 있어서는 문제가 있습니다.</p>
+<p>단일 파일 내에서 모든 리소스를 관리를 하게 되버리면 스테이징 단꼐에서 배포를 시도하다가 프로덕션 단계에서 앱이 중된될 수도 있고, 버그로 인해 모든 리소스가 손상될 수도 있어요.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="작업-공간을-통한-격리">작업 공간을 통한 격리<a href="https://indianapoly.github.io/en/blog/2025/08/03/terraform/terraform-basic-2-title#%EC%9E%91%EC%97%85-%EA%B3%B5%EA%B0%84%EC%9D%84-%ED%86%B5%ED%95%9C-%EA%B2%A9%EB%A6%AC" class="hash-link" aria-label="Direct link to 작업 공간을 통한 격리" title="Direct link to 작업 공간을 통한 격리">​</a></h3>
+<p>terraform workspace를 사용하면 테라폼 상태를 별도의 이름이 지정된 여러 작업 공간에 저장할 수 있어요.</p>
+<p>작업 공간을 명시하지 않으면 기본 작업 공간이 전체 시간 동안 사용돼요.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="실습-1">실습<a href="https://indianapoly.github.io/en/blog/2025/08/03/terraform/terraform-basic-2-title#%EC%8B%A4%EC%8A%B5-1" class="hash-link" aria-label="Direct link to 실습" title="Direct link to 실습">​</a></h3>
+<p>앞서 작업한 부분에서 key를 workspaces-example/terraform.tfstate로 만 수정을 해줍니다.</p>
+<div class="language-tf codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-tf codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    backend "s3" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        bucket = "terraform-state"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        key = "workspaces-example/terraform.tfstate"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        region = "us-east-2"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        dynamodb_table = "terraform-locks"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        encrypt = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform init</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform apply</span><br></span></code></pre></div></div>
+<p>위 명령으로 코드를 배포해줍니다.</p>
+<p>그 다음에</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform workspace new example1</span><br></span></code></pre></div></div>
+<p>을 실행시켜 새 작업 공간을 만들어요 그리고 <code>terraform plan</code> 명령을 실행하면 새로운 ec2를 처음부터 생성하는 것을 확인할 수 있어요.</p>
+<p><code>terraform apply</code>를 실행하면 새 작업 공간에 인스턴스가 배포된 것을 확인할 수 있어요.</p>
+<p>아래 명령어를 통해서 작업 공간을 바꾸어줄 수 있어요.</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform workspace select default</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="파일-레이아웃을-통한-격리">파일 레이아웃을 통한 격리<a href="https://indianapoly.github.io/en/blog/2025/08/03/terraform/terraform-basic-2-title#%ED%8C%8C%EC%9D%BC-%EB%A0%88%EC%9D%B4%EC%95%84%EC%9B%83%EC%9D%84-%ED%86%B5%ED%95%9C-%EA%B2%A9%EB%A6%AC" class="hash-link" aria-label="Direct link to 파일 레이아웃을 통한 격리" title="Direct link to 파일 레이아웃을 통한 격리">​</a></h3>
+<p>환경을 완전히 격리하려면 다음과 같이 수행해주면 돼요.</p>
+<ol>
+<li>각 환경의 테라폼 구성 파일을 별도의 폴더에 넣어요.</li>
+<li>서로 다른 인증 매커니즘과 액세스 제어를 사용하여 각 환경에 대한 서로 다른 백엔드를 구성해주어요.</li>
+</ol>
+<p>테라폼 프로젝트는 환경 -&gt; 구성요소 -&gt; 구성파일의 계층 구조로 관리를 진행해요</p>
+<div class="language-md codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-md codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token title important punctuation" style="color:#393A34">##</span><span class="token title important"> 최상위 환경 디렉토리</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token list punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token code-snippet code keyword" style="color:#00009f">`global`</span><span class="token plain"> : 모든 환경에서 공통 사용 (예: S3, IAM)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token list punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token code-snippet code keyword" style="color:#00009f">`mgmt`</span><span class="token plain"> : DevOps 도구 및 인프라 관리 (예: 배스천, CI 서버)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token list punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token code-snippet code keyword" style="color:#00009f">`stage`</span><span class="token plain"> : 테스트/사전 프로덕션 환경</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token list punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token code-snippet code keyword" style="color:#00009f">`prod`</span><span class="token plain"> : 실제 운영 환경</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token title important punctuation" style="color:#393A34">##</span><span class="token title important"> 환경 내 구성요소 디렉토래</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token list punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token code-snippet code keyword" style="color:#00009f">`vpc/`</span><span class="token plain"> : 네트워크 토폴로지 정의</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token list punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token code-snippet code keyword" style="color:#00009f">`services/`</span><span class="token plain"> : 서비스 또는 앱 (예: 웹 서버, API 등)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token list punctuation" style="color:#393A34">-</span><span class="token plain"> ex. </span><span class="token code-snippet code keyword" style="color:#00009f">`services/frontend/`</span><span class="token plain">, </span><span class="token code-snippet code keyword" style="color:#00009f">`services/backend/`</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token list punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token code-snippet code keyword" style="color:#00009f">`data-storage/`</span><span class="token plain"> : 데이터 저장소</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token list punctuation" style="color:#393A34">-</span><span class="token plain"> ex. </span><span class="token code-snippet code keyword" style="color:#00009f">`data-storage/mysql/`</span><span class="token plain">, </span><span class="token code-snippet code keyword" style="color:#00009f">`data-storage/redis/`</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token title important punctuation" style="color:#393A34">##</span><span class="token title important"> 구성 요소 내 파일 구성</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token table table-header-row punctuation" style="color:#393A34">|</span><span class="token table table-header-row table-header important"> 파일명            </span><span class="token table table-header-row punctuation" style="color:#393A34">|</span><span class="token table table-header-row table-header important"> 역할                          </span><span class="token table table-header-row punctuation" style="color:#393A34">|</span><span class="token table table-header-row"></span><br></span><span class="token-line" style="color:#393A34"><span class="token table table-header-row"></span><span class="token table table-line punctuation" style="color:#393A34">|</span><span class="token table table-line"> </span><span class="token table table-line punctuation" style="color:#393A34">-----------------</span><span class="token table table-line"> </span><span class="token table table-line punctuation" style="color:#393A34">|</span><span class="token table table-line"> </span><span class="token table table-line punctuation" style="color:#393A34">-----------------------------</span><span class="token table table-line"> </span><span class="token table table-line punctuation" style="color:#393A34">|</span><span class="token table table-line"></span><br></span><span class="token-line" style="color:#393A34"><span class="token table table-line"></span><span class="token table table-data-rows punctuation" style="color:#393A34">|</span><span class="token table table-data-rows table-data"> </span><span class="token table table-data-rows table-data code-snippet code keyword" style="color:#00009f">`main.tf`</span><span class="token table table-data-rows table-data">         </span><span class="token table table-data-rows punctuation" style="color:#393A34">|</span><span class="token table table-data-rows table-data"> 주요 리소스 정의              </span><span class="token table table-data-rows punctuation" style="color:#393A34">|</span><span class="token table table-data-rows"></span><br></span><span class="token-line" style="color:#393A34"><span class="token table table-data-rows"></span><span class="token table table-data-rows punctuation" style="color:#393A34">|</span><span class="token table table-data-rows table-data"> </span><span class="token table table-data-rows table-data code-snippet code keyword" style="color:#00009f">`variables.tf`</span><span class="token table table-data-rows table-data">    </span><span class="token table table-data-rows punctuation" style="color:#393A34">|</span><span class="token table table-data-rows table-data"> 입력 변수 정의                </span><span class="token table table-data-rows punctuation" style="color:#393A34">|</span><span class="token table table-data-rows"></span><br></span><span class="token-line" style="color:#393A34"><span class="token table table-data-rows"></span><span class="token table table-data-rows punctuation" style="color:#393A34">|</span><span class="token table table-data-rows table-data"> </span><span class="token table table-data-rows table-data code-snippet code keyword" style="color:#00009f">`outputs.tf`</span><span class="token table table-data-rows table-data">      </span><span class="token table table-data-rows punctuation" style="color:#393A34">|</span><span class="token table table-data-rows table-data"> 출력 변수 정의                </span><span class="token table table-data-rows punctuation" style="color:#393A34">|</span><span class="token table table-data-rows"></span><br></span><span class="token-line" style="color:#393A34"><span class="token table table-data-rows"></span><span class="token table table-data-rows punctuation" style="color:#393A34">|</span><span class="token table table-data-rows table-data"> </span><span class="token table table-data-rows table-data code-snippet code keyword" style="color:#00009f">`providers.tf`</span><span class="token table table-data-rows table-data">    </span><span class="token table table-data-rows punctuation" style="color:#393A34">|</span><span class="token table table-data-rows table-data"> provider 설정 정의            </span><span class="token table table-data-rows punctuation" style="color:#393A34">|</span><span class="token table table-data-rows"></span><br></span><span class="token-line" style="color:#393A34"><span class="token table table-data-rows"></span><span class="token table table-data-rows punctuation" style="color:#393A34">|</span><span class="token table table-data-rows table-data"> </span><span class="token table table-data-rows table-data code-snippet code keyword" style="color:#00009f">`dependencies.tf`</span><span class="token table table-data-rows table-data"> </span><span class="token table table-data-rows punctuation" style="color:#393A34">|</span><span class="token table table-data-rows table-data"> 외부 데이터 소스 및 참조 정의 </span><span class="token table table-data-rows punctuation" style="color:#393A34">|</span><br></span></code></pre></div></div>]]></content:encoded>
+            <category>TIL</category>
+            <category>Terraform</category>
+        </item>
         <item>
             <title><![CDATA[Next.js 프로젝트 회고 및 서버 컴포넌트와 클라이언트 컴포넌트]]></title>
             <link>https://indianapoly.github.io/en/blog/2025/08/03/frontend/nextjs_15-title</link>
@@ -1128,60 +1286,6 @@ Admin의 Policy(json)은 아래와 같이 구성이 되어있어요.</p>
             <category>Kubernetes</category>
         </item>
         <item>
-            <title><![CDATA[개발하기 전 아이디어 회의 이렇게 해보자.]]></title>
-            <link>https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title</link>
-            <guid>https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title</guid>
-            <pubDate>Wed, 16 Jul 2025 00:00:00 GMT</pubDate>
-            <description><![CDATA[{/ truncate /}]]></description>
-            <content:encoded><![CDATA[
-<p>cloudwave에서 진행했던 idea 회의와 관련된 회고에요. 앞으로 도움이 될 거 같아서 기록 해두어요.</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="주제">주제<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#%EC%A3%BC%EC%A0%9C" class="hash-link" aria-label="Direct link to 주제" title="Direct link to 주제">​</a></h2>
-<p><code>대학생을 위한 완벽한 아침 루틴에 대한 고민</code> 이에요. 이 때 수면을 시간을 잘 지키고 추가적으로 건강한 루틴을 만드는 것이 목표인 것을 잊지 말아야 해요.</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="process">process<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#process" class="hash-link" aria-label="Direct link to process" title="Direct link to process">​</a></h2>
-<ol>
-<li>
-<p><code>07시 기상</code>, <code>09시 자리 착석</code> 해당 2개의 시작점과 끝점은 고정을 한 상태에서 통학 시간이 1시간임을 고려해서 각자의 아침 루틴을 만들어요.
-ex. 기상 -&gt; 식사 -&gt; 옷을 입는다 -&gt; 집을 나간다 -&gt; 지하철을 탄다 -&gt; .. -&gt; 자리에 착석한다.</p>
-<p>이렇게 각자만의 루틴을 만들었어요.</p>
-</li>
-<li>
-<p>각자 만든 루틴들을 팀원들에게 설명을 해요. 이때 팀원들은 모든 질문에 대해서 의문을 가지고 하나하나 물어보는 작업을 진행을 해요.</p>
-</li>
-<li>
-<p>그리고 만든 루틴 중 제일 괜찮다 아니면 해보고 싶다 하는 사람이 손을 들어요. 해당 손을 든 사람은 이제 Product Owner가 돼요.</p>
-</li>
-<li>
-<p>각자 만든 루틴들을 모두 합쳐요. 동일한 카테고리에 대해서는 하나의 문제로 처리를 하고, 분야가 다르면 무조건 분리 시키는게 중요해요.</p>
-</li>
-<li>
-<p>4번에서 만든 결과물을 바탕으로 투표를 진행을 해요. 먼저 PO가 아닌 사람들이 x개의 투표권을 가지고 꼭 있어야 하는 것들에 대해서 투표를 진행해요. 그리고 PO는 투표권의 수와 관계 없이 투표를 하는데 이 때 PO가 선택한 것은 무조건 채택이 되기 때문에 PO의 선택으로 제품의 방향성이 바뀔 수도 있어요.</p>
-</li>
-<li>
-<p>투표를 한 것을 바탕으로 4번에 만든 흐름 밑에 검은 줄을 하나 만들고, 해당 프로세스에서 출발 시간을 07시 30분에 출발하는 것으로 변경을 했을 때, 5번의 결과에서 꼭 필요 없는 것들을 아래 칸으로 내려요. 이 때 PO의 선택은 절대 내리지 않아요.</p>
-</li>
-<li>
-<p>6번의 결과물 밑에 검은 줄을 하나 또 만들고, 그 다음에 해당 프로세스를 출 시간이 07시 50분이라고 했을 때 꼭 필요한 것들만 남기고 나머지는 내리는 작업을 진행을 해요.</p>
-</li>
-</ol>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="우리가-했던-것에-대한-결과물">우리가 했던 것에 대한 결과물<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#%EC%9A%B0%EB%A6%AC%EA%B0%80-%ED%96%88%EB%8D%98-%EA%B2%83%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B2%B0%EA%B3%BC%EB%AC%BC" class="hash-link" aria-label="Direct link to 우리가 했던 것에 대한 결과물" title="Direct link to 우리가 했던 것에 대한 결과물">​</a></h2>
-<ul>
-<li>
-<p>그러면 총 3개의 영역이 나오게 되는데 이 때 07시 50분일 때 꼭 하는 것이 MVP가 되고 이는 fix가 돼요. 그리고 아리 07시 30분에 진행하는 것이 release 1 되고 그 이후는 release 2가 돼요.</p>
-</li>
-<li>
-<p>우리는 해당 과정을 해오면서 기능을 시간 순으로 표시를 했어요. 왜냐하면 완료 시간은 고정이 되어있기 때문이에요. 또한 발산하는 과정을 거치고, 동일한 카테고리에 대해서 의견을 합치면서 수렴하는 과정을 거쳤어요.</p>
-</li>
-<li>
-<p>여기서 중요한 것은 각 release는 1개의 기능을 해야해요. 즉 자동차를 만드는 MVP가 있었다고 한다면. 다음 release는 바퀴를 만드는 것이 아니라 오토바이나 혹은 다른 기능을 하는 것이 만들어져야 하는 것을 의미해요.</p>
-</li>
-<li>
-<p>또한 여기서 우리는 아직 안정한게 있는데 바로 페르소나에요. 대학생을 타겟으로 했는데 어떤 대학생을 타겟으로 했는지 기준이 없어요. 페르소나가 없다면 제품이 어떠한 방향으로 나아가는지에 대해서 불명확해지고 프로젝트가 원하는 방향성으로 흘러가지 못할 수 있어요.</p>
-</li>
-</ul>]]></content:encoded>
-            <category>TIL</category>
-            <category>Etc</category>
-        </item>
-        <item>
             <title><![CDATA[Kubernetes Basic(2)]]></title>
             <link>https://indianapoly.github.io/en/blog/2025/07/16/kubernetes/kubernetes-basic-2-title</link>
             <guid>https://indianapoly.github.io/en/blog/2025/07/16/kubernetes/kubernetes-basic-2-title</guid>
@@ -1303,6 +1407,60 @@ medium: Memory를 설정을 하면 OS의 메모리 기반 파일시스템을 사
 </ul>]]></content:encoded>
             <category>TIL</category>
             <category>Kubernetes</category>
+        </item>
+        <item>
+            <title><![CDATA[개발하기 전 아이디어 회의 이렇게 해보자.]]></title>
+            <link>https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title</link>
+            <guid>https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title</guid>
+            <pubDate>Wed, 16 Jul 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[{/ truncate /}]]></description>
+            <content:encoded><![CDATA[
+<p>cloudwave에서 진행했던 idea 회의와 관련된 회고에요. 앞으로 도움이 될 거 같아서 기록 해두어요.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="주제">주제<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#%EC%A3%BC%EC%A0%9C" class="hash-link" aria-label="Direct link to 주제" title="Direct link to 주제">​</a></h2>
+<p><code>대학생을 위한 완벽한 아침 루틴에 대한 고민</code> 이에요. 이 때 수면을 시간을 잘 지키고 추가적으로 건강한 루틴을 만드는 것이 목표인 것을 잊지 말아야 해요.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="process">process<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#process" class="hash-link" aria-label="Direct link to process" title="Direct link to process">​</a></h2>
+<ol>
+<li>
+<p><code>07시 기상</code>, <code>09시 자리 착석</code> 해당 2개의 시작점과 끝점은 고정을 한 상태에서 통학 시간이 1시간임을 고려해서 각자의 아침 루틴을 만들어요.
+ex. 기상 -&gt; 식사 -&gt; 옷을 입는다 -&gt; 집을 나간다 -&gt; 지하철을 탄다 -&gt; .. -&gt; 자리에 착석한다.</p>
+<p>이렇게 각자만의 루틴을 만들었어요.</p>
+</li>
+<li>
+<p>각자 만든 루틴들을 팀원들에게 설명을 해요. 이때 팀원들은 모든 질문에 대해서 의문을 가지고 하나하나 물어보는 작업을 진행을 해요.</p>
+</li>
+<li>
+<p>그리고 만든 루틴 중 제일 괜찮다 아니면 해보고 싶다 하는 사람이 손을 들어요. 해당 손을 든 사람은 이제 Product Owner가 돼요.</p>
+</li>
+<li>
+<p>각자 만든 루틴들을 모두 합쳐요. 동일한 카테고리에 대해서는 하나의 문제로 처리를 하고, 분야가 다르면 무조건 분리 시키는게 중요해요.</p>
+</li>
+<li>
+<p>4번에서 만든 결과물을 바탕으로 투표를 진행을 해요. 먼저 PO가 아닌 사람들이 x개의 투표권을 가지고 꼭 있어야 하는 것들에 대해서 투표를 진행해요. 그리고 PO는 투표권의 수와 관계 없이 투표를 하는데 이 때 PO가 선택한 것은 무조건 채택이 되기 때문에 PO의 선택으로 제품의 방향성이 바뀔 수도 있어요.</p>
+</li>
+<li>
+<p>투표를 한 것을 바탕으로 4번에 만든 흐름 밑에 검은 줄을 하나 만들고, 해당 프로세스에서 출발 시간을 07시 30분에 출발하는 것으로 변경을 했을 때, 5번의 결과에서 꼭 필요 없는 것들을 아래 칸으로 내려요. 이 때 PO의 선택은 절대 내리지 않아요.</p>
+</li>
+<li>
+<p>6번의 결과물 밑에 검은 줄을 하나 또 만들고, 그 다음에 해당 프로세스를 출 시간이 07시 50분이라고 했을 때 꼭 필요한 것들만 남기고 나머지는 내리는 작업을 진행을 해요.</p>
+</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="우리가-했던-것에-대한-결과물">우리가 했던 것에 대한 결과물<a href="https://indianapoly.github.io/en/blog/2025/07/16/etc/idea_meeting-title#%EC%9A%B0%EB%A6%AC%EA%B0%80-%ED%96%88%EB%8D%98-%EA%B2%83%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B2%B0%EA%B3%BC%EB%AC%BC" class="hash-link" aria-label="Direct link to 우리가 했던 것에 대한 결과물" title="Direct link to 우리가 했던 것에 대한 결과물">​</a></h2>
+<ul>
+<li>
+<p>그러면 총 3개의 영역이 나오게 되는데 이 때 07시 50분일 때 꼭 하는 것이 MVP가 되고 이는 fix가 돼요. 그리고 아리 07시 30분에 진행하는 것이 release 1 되고 그 이후는 release 2가 돼요.</p>
+</li>
+<li>
+<p>우리는 해당 과정을 해오면서 기능을 시간 순으로 표시를 했어요. 왜냐하면 완료 시간은 고정이 되어있기 때문이에요. 또한 발산하는 과정을 거치고, 동일한 카테고리에 대해서 의견을 합치면서 수렴하는 과정을 거쳤어요.</p>
+</li>
+<li>
+<p>여기서 중요한 것은 각 release는 1개의 기능을 해야해요. 즉 자동차를 만드는 MVP가 있었다고 한다면. 다음 release는 바퀴를 만드는 것이 아니라 오토바이나 혹은 다른 기능을 하는 것이 만들어져야 하는 것을 의미해요.</p>
+</li>
+<li>
+<p>또한 여기서 우리는 아직 안정한게 있는데 바로 페르소나에요. 대학생을 타겟으로 했는데 어떤 대학생을 타겟으로 했는지 기준이 없어요. 페르소나가 없다면 제품이 어떠한 방향으로 나아가는지에 대해서 불명확해지고 프로젝트가 원하는 방향성으로 흘러가지 못할 수 있어요.</p>
+</li>
+</ul>]]></content:encoded>
+            <category>TIL</category>
+            <category>Etc</category>
         </item>
         <item>
             <title><![CDATA[kubernetes Basic(1)]]></title>
